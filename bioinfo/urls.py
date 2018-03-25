@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('macaca/', include('macaca.urls')),
+    path('', include('big.urls')),
+    path('macsnpdb/', include('macaca.urls')),
     path('admin/', admin.site.urls),
 ]

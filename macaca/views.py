@@ -1,33 +1,33 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Individual, Variant, Chromosome, Species, Snp, Group
-from .models import GroupSpecific, SpeciesSpecific, Mutation
+from .models import *
 
 # Create your views here.
-def index(request):
-	return render(request, 'index.html')
+def home(request):
+	return render(request, 'macaca/home.html')
 
 def organism(request):
 	samples = Individual.objects.all()
-	return render(request, 'organism.html', {
+	return render(request, 'macaca/organism.html', {
 		'samples': samples,
 	})
 
 def species(request, sid):
 	one = Species.objects.get(id=sid)
-	return render(request, 'species.html', {
+	return render(request, 'macaca/species.html', {
 		'species': one,
 	})
 
 
 def group(request, gid):
 	one = Group.objects.get(id=gid)
-	return render(request, 'group.html', {
+	return render(request, 'macaca/group.html', {
 		'group': one,
 	})
 
@@ -65,7 +65,7 @@ def variants(request):
 	except EmptyPage:
 		snps = paginator.page(paginator.num_pages)
 
-	return render(request, 'variants.html', {
+	return render(request, 'macaca/variants.html', {
 		'snps': snps,
 		'chromos': chromos,
 		'species': species,
@@ -78,7 +78,7 @@ def snp(request, sid):
 	genes = one.snp.gannot_set.all()
 	transcripts = one.snp.tannot_set.all()
 	others = Variant.objects.filter(snp__id=one.snp.id).exclude(id=sid)
-	return render(request, 'snp.html', {
+	return render(request, 'macaca/snp.html', {
 		'snp': one,
 		'genes': genes,
 		'transcripts': transcripts,
@@ -89,19 +89,26 @@ def snp(request, sid):
 def snpid(request, indiv, sid):
 	indiv = int(indiv)
 	sid = int(sid)
-	snp = Snp.objects.get(id=sid)
-	one = Variant.get_sharding_model(indiv, snp.chromosome.id).objects.get(snp__id=sid)
+	try:
+		snp = Snp.objects.get(id=sid)
+		one = Variant.get_sharding_model(indiv, snp.chromosome.id).objects.get(snp__id=sid)
+	except ObjectDoesNotExist:
+		raise Http404('MACSNP%03d%09d does not exists in this database' % (indiv, sid))
 	genes = one.snp.gannot_set.all()
 	transcripts = one.snp.tannot_set.all()
 	others = []
-	#for i in range(1, 21):
-	#	if i == indiv:
-	#		continue
-	#	other = Variant.get_sharding_model(i, snp.chromosome.id).objects.get(snp__id=sid)
-	#	if other:
-	#		others.append(other)
+	for i in range(1, 21):
+		if i == indiv:
+			continue
+		
+		try:
+			other = Variant.get_sharding_model(i, snp.chromosome.id).objects.get(snp__id=sid)
+		except ObjectDoesNotExist:
+			pass
+		else:
+			others.append(other)
 
-	return render(request, 'snp.html', {
+	return render(request, 'macaca/snp.html', {
 		'snp': one,
 		'genes': genes,
 		'transcripts': transcripts,
@@ -110,59 +117,22 @@ def snpid(request, indiv, sid):
 
 
 def search(request):
-	tag = request.GET.get('search')
-	if tag.startswith('MACSNP'):
-		i = int(tag[6:9])
-		s = int(tag[9:])
-		return snpid(request, i, s)
+	q = request.GET.get('q')
+	if q.startswith(('MACSNP', 'ENSMMUG')) and len(q) != 18:
+		raise Http404("%s is not right SNP ID" % q)
+
+	if q.startswith(('MACSNPG', 'MACSNPS')):
+		cat, cid, sid = q[6], q[7:9], q[9:]
+		return redirect('snpspec', cat, cid, sid)
+
+	elif q.startswith('MACSNP'):
+		indiv, sid= q[6:9], q[9:]
+		return redirect('snpid', indiv, sid)
+
+	elif q.startswith('ENSMMUG'):
+		return redirect('gene', q)
+
 	
-	chr_id = int(tag[3:5])
-	start, end = map(int,tag.split(':')[1].split('-'))
-
-	species = Individual.objects.all()
-	chrom = Chromosome.objects.get(id=chr_id)
-	paras = dict(
-		chrname = chrom.name,
-		start = start,
-		end = end,
-		tag = request.GET.get('search'),
-		page = int(request.GET.get('page', 1)),
-		records = int(request.GET.get('records', 10)),
-		sample = int(request.GET.get('sample', 0)),
-		feature = int(request.GET.get('feature', 0)),
-		genotype = int(request.GET.get('genotype', 0)),
-		mutation = int(request.GET.get('mutation', 0))
-	)
-
-	snps = Variant.objects.filter(snp__chromosome=chr_id).filter(snp__position__range=(start, end))
-
-	if paras['sample']:
-		snps = snps.filter(individual=paras['sample'])
-
-	if paras['genotype']:
-		snps = snps.filter(genotype=paras['genotype'])
-
-	if paras['mutation']:
-		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
-
-	if paras['feature']:
-		snps = snps.filter(snp__gannot__feature=paras['feature'])
-
-
-	paginator = Paginator(snps, paras['records'])
-
-	try:
-		snps = paginator.page(paras['page'])
-	except PageNotAnInteger:
-		snps = paginator.page(1)
-	except EmptyPage:
-		snps = paginator.page(paginator.num_pages)
-
-	return render(request, 'search.html', {
-		'snps': snps,
-		'species': species,
-		'paras': paras,
-	})
 
 def specific(request):
 	groups = Group.objects.all()
@@ -170,7 +140,7 @@ def specific(request):
 	paras = dict(
 		page = int(request.GET.get('page', 1)),
 		records = int(request.GET.get('records', 10)),
-		chromosome = int(request.GET.get('chr', 0)),
+		chromosome = int(request.GET.get('chr', 1)),
 		feature = int(request.GET.get('feature', 0)),
 		mutation = int(request.GET.get('mutation', 0)),
 		group = int(request.GET.get('group', -1)),
@@ -181,21 +151,18 @@ def specific(request):
 		if paras['group'] == 0:
 			snps = GroupSpecific.objects.all()
 		else:
-			snps = GroupSpecific.objects.filter(group=paras['group'])
+			snps = GroupSpecific.objects.filter(group=paras['group'], chromosome=paras['chromosome'])
 	elif paras['species'] >= 0:
 		if paras['species'] == 0:
 			snps = SpeciesSpecific.objects.all()
 		else:
-			snps = SpeciesSpecific.objects.filter(species=paras['species'])
+			snps = SpeciesSpecific.objects.filter(species=paras['species'], chromosome=paras['chromosome'])
 
 	if paras['mutation']:
 		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
 
 	if paras['feature']:
 		snps = snps.filter(snp__gannot__feature=paras['feature'])
-
-	if paras['chromosome']:
-		snps = snps.filter(snp__chromosome=paras['chromosome'])
 	
 	paginator = Paginator(snps, paras['records'])
 
@@ -206,7 +173,7 @@ def specific(request):
 	except EmptyPage:
 		snps = paginator.page(paginator.num_pages)
 
-	return render(request, 'specific.html', {
+	return render(request, 'macaca/specific.html', {
 		'snps': snps,
 		'groups': groups,
 		'species': species,
@@ -223,7 +190,7 @@ def snpspec(request, cat, cid, sid):
 	snp = Snp.objects.get(id=sid)
 	genes = snp.gannot_set.all()
 	transcripts = snp.tannot_set.all()
-	return render(request, 'snpspec.html', {
+	return render(request, 'macaca/snpspec.html', {
 		'cat': cat,
 		'snp': snp,
 		'category': category,
@@ -236,7 +203,7 @@ def retrieve(request):
 		individuals = Individual.objects.all()
 		groups = Group.objects.all()
 		species = Species.objects.all()
-		return render(request, 'retrieve.html', {
+		return render(request, 'macaca/retrieve.html', {
 			'individuals': individuals,
 			'groups': groups,
 			'species': species,
@@ -294,7 +261,7 @@ def retrieve(request):
 	except EmptyPage:
 		snps = paginator.page(paginator.num_pages)
 
-	return render(request, 'download.html', {
+	return render(request, 'macaca/download.html', {
 		'snps': snps,
 		'paras': paras,
 	})
@@ -337,7 +304,23 @@ def download(request):
 	return HttpResponse('<pre>'+''.join(contents)+'</pre>')
 
 def gene(request, gid):
-	pass
+	gene = Gene.objects.get(ensembl=gid)
+	transcripts = gene.transcript_set.all()
+	gos = gene.funcannot_set.filter(function__source=1)
+	keggs = gene.funcannot_set.filter(function__source=2)
+	ips = gene.funcannot_set.filter(function__source=3)
+	pfams = gene.funcannot_set.filter(function__source=4)
+
+	return render(request, 'macaca/gene.html', {
+		'gene': gene,
+		'transcripts': transcripts,
+		'gos': gos,
+		'keggs': keggs,
+		'ips': ips,
+		'pfams': pfams,
+	})
+
+	
 
 def pileup(request, sid):
 	snp = Snp.objects.get(id=sid)
@@ -354,9 +337,44 @@ def pileup(request, sid):
 
 	vcf = "{1}".format(header, line)
 
-	return render(request, 'pileup.html', {
+	return render(request, 'macaca/pileup.html', {
 		'vcf': vcf,
 		'chromosome': snp.chromosome.name,
 		'position': snp.position,
 	})
+
+def statistics(request):
+	paras = dict(
+		feature = int(request.GET.get('feature', 0)),
+		genotype = int(request.GET.get('genotype', 0)),
+		mutation = int(request.GET.get('mutation', 0))
+	)
+
+	stat = Statistics.objects.filter(
+		feature = paras['feature'],
+		genotype = paras['genotype'],
+		mutation = paras['mutation']
+	).order_by('individual', 'chromosome')
+
+	rows = []
+	row = []
+	indiv = 1
+	for s in stat:
+		if s.individual.id != indiv:
+			rows.append(row)
+			row = []
+			indiv = s.individual.id
+
+		if not row:
+			row.append(s.individual.code)
+		
+		row.append(s.counts)
+
+	rows.append(row)
+
+	return render(request, 'macaca/statistics.html', {
+		'paras': paras,
+		'rows': rows,
+	})
+
 	

@@ -21,11 +21,11 @@ class Individual(models.Model):
 	code = models.CharField(max_length=5,help_text="Custom code number for species")
 	sample = models.CharField(max_length=20, help_text="sample seria number")
 	location = models.CharField(max_length=100, help_text="Where the sample collected")
-	non_variant = models.IntegerField(help_text = "The number of non-variant sites")
+	non_variant = models.BigIntegerField(help_text = "The number of non-variant sites")
 	heterozygous = models.IntegerField(help_text="The number of heterozygous sites")
 	homozygous = models.IntegerField(help_text="The number of homozygous sites")
 	variants = models.IntegerField(help_text="The number of total variant sites")
-	useable = models.IntegerField(help_text="The number of total useable sites")
+	useable = models.BigIntegerField(help_text="The number of total useable sites")
 	heterozygosity = models.FloatField(help_text="heterozygosity")
 	snv_rate = models.FloatField(help_text="SNV rate")
 	pcr_duplicate = models.FloatField(help_text="PCR duplicates (%)")
@@ -48,13 +48,14 @@ class Variant(models.Model):
 	def get_sharding_model(cls, individual, chrom):
 		class Meta:
 			db_table = 'variant_{0}_{1}'.format(individual, chrom)
+			ordering = ['id']
 
 		attrs = {
 			'__module__': cls.__module__,
 			'Meta': Meta,
 		}
 
-		return type(str('Variant{0}{1}'.format(individual, chrom)), (cls,), attrs)
+		return type(str('Variant_{0}_{1}'.format(individual, chrom)), (cls,), attrs)
 
 	GENOTYPES = (
 		(1, 'Homozygote'),
@@ -84,7 +85,7 @@ class Gene(models.Model):
 		(6, 'miscRNA'),
 		(7, 'snoRNA')
 	)
-	ensembl = models.CharField(max_length=18, help_text="Ensembl gene id")
+	ensembl = models.CharField(max_length=18, db_index=True, help_text="Ensembl gene id")
 	name = models.CharField(max_length=20, help_text="Gene name")
 	description = models.CharField(max_length=200, help_text="Gene description")
 	biotype = models.IntegerField(choices=CODING_TYPES, help_text="Gene coding types")
@@ -170,18 +171,37 @@ class Funcannot(models.Model):
 		index_together = ['function', 'gene']
 
 class GroupSpecific(models.Model):
+	#the order of foreinkey field is sorted by alphabet
+	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	group = models.ForeignKey(Group, on_delete=models.CASCADE)
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
 
 	class Meta:
 		ordering = ['id']
-		index_together = ['group', 'snp']
+		index_together = [
+			['snp', 'group'],
+			['snp', 'chromosome'],
+			['snp', 'group', 'chromosome']
+		]
 
 class SpeciesSpecific(models.Model):
+	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
 	species = models.ForeignKey(Species, on_delete=models.CASCADE)
-
+	
 	class Meta:
 		ordering = ['id']
-		index_together = ['species', 'snp']
+		index_together = [
+			['snp', 'species'],
+			['snp', 'chromosome'],
+			['snp', 'species', 'chromosome']
+		]
+
+class Statistics(models.Model):
+	feature = models.IntegerField()
+	genotype = models.IntegerField()
+	mutation = models.IntegerField()
+	counts = models.IntegerField()
+	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
+	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
 	

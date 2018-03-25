@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %}{% endblock %}</title>
+	<script src="{{ static('macaca/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ static('macaca/semantic/semantic.min.js') }}"></script>
+	<link rel="stylesheet" href="{{ static('macaca/semantic/semantic.min.css') }}">
+  {% block head %}{% endblock %}
+	<script src="{{ static('macaca/action.js') }}"></script>
+  <link rel="stylesheet" href="{{ static('macaca/style.css') }}">
+</head>
+<body>
+<div class="ui brown inverted attached secondary huge menu">
+		<div class="ui container">
+			<div class="header">
+				<a href="{{ url('home') }}"><img src="{{ static('macaca/images/logo.png') }}" width="190" height="80"></a>
+			</div>
+      <div class="right menu">
+  			<a class="item {% if urlname=='home' %} active {% endif %}" href="{{ url('home') }}">Home</a>
+  			<a class="item {% if urlname=='variants' %} active {% endif %}" href="{{ url('variants') }}" title="Browse All SNPs">Variants</a>
+        <a class="item {% if urlname=='statistics' %} active {% endif %}" href="{{ url('statistics') }}" title="Statistical table">Statistics</a>
+  			<a class="item {% if urlname=='specific' %} active {% endif %}" href="{{ url('specific') }}" title="Group or Species Specific SNPs">Specific</a>
+        <a class="item {% if urlname=='retrieve' %} active {% endif %}" href="{{ url('retrieve') }}" title="Search and Download SNPs">Retrieve</a>
+        <div class="ui dropdown item">
+          Help<i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" href="">User Guide</a>
+            <a class="item" href="">Process pipeline</a>
+            <div class="divider"></div>
+            <a class="item" href="{{ url('organism') }}">Individual information</a>
+          </div>
+        </div>
+      </div>
+		</div>
+</div>
+
+{% block headbar %}{% endblock %}
+
+<div class="ui main container">
+{% block main %}{% endblock %}
+</div>
+
+<div class="ui inverted brown vertical footer segment">
+	<div class="ui center aligned container">
+      <div class="ui stackable inverted divided grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 1</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Link One</a>
+            <a href="#" class="item">Link Two</a>
+            <a href="#" class="item">Link Three</a>
+            <a href="#" class="item">Link Four</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 2</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Link One</a>
+            <a href="#" class="item">Link Two</a>
+            <a href="#" class="item">Link Three</a>
+            <a href="#" class="item">Link Four</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 3</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Link One</a>
+            <a href="#" class="item">Link Two</a>
+            <a href="#" class="item">Link Three</a>
+            <a href="#" class="item">Link Four</a>
+          </div>
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header">Footer Header</h4>
+          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <!--<img src="assets/images/logo.png" class="ui centered mini image">-->
+      <div class="ui horizontal inverted small divided link list">
+        <a class="item" href="#">Site Map</a>
+        <a class="item" href="#">Contact Us</a>
+        <a class="item" href="#">Terms and Conditions</a>
+        <a class="item" href="#">Privacy Policy</a>
+      </div>
+    </div>
+</div>
+
+</body>
+{% block footer %}{% endblock %}
+
+</html>
