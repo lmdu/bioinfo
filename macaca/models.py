@@ -204,4 +204,29 @@ class Statistics(models.Model):
 	counts = models.IntegerField()
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
+
+class Orthology(models.Model):
+	human_ensembl = models.CharField(max_length=18, help_text="human ensembl gene id")
+	human_hgnc = models.CharField(max_length=10, help_text="human gene hgnc id")
+	human_name = models.CharField(max_length=200, help_text="human gene name")
+	human_symbol = models.CharField(max_length=20, help_text="human gene symbol")
+	swissport = models.CharField(max_length=10, help_text="Swissport gene id")
+	support = models.CharField(max_length=255, help_text="orthology support database")
+	gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
+
+class Drug(models.Model):
+	DRUG_TYPES = (
+		(1, 'biotech'),
+		(2, 'small molecule')
+	)
+	partner = models.CharField(max_length=10, help_text="drugbank target gene id")
+	drug_id = models.CharField(max_length=7, help_text="drugbank durg id")
+	drug_name = models.CharField(max_length=255, help_text="drugbank drug name")
+	drug_type = models.IntegerField(choices=DRUG_TYPES, help_text="drugbank drug type")
+	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
+
+class Disease(models.Model):
+	omim_id = models.IntegerField(help_text="omim id")
+	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
+
 	
