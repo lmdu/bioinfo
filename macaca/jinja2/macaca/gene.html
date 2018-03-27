@@ -1,11 +1,13 @@
+{% set urlname="gene" %}
 {% extends "macaca/base.html" %}
+
 {% block main %}
 
 <h2 class="ui brown header">{{ gene.ensembl }}</h2>
 <h3 class="ui header">Gene Information</h3>
 <table class="ui table">
 	<thead>
-		<tr><th>Gene ID</th><th>Gene Name</th><th>Description</th><th>Biotype</th><th>Strand</th><th>Location</th></tr>
+		<tr><th>Gene ID</th><th>Gene Symbol</th><th>Gene Name</th><th>Biotype</th><th>Strand</th><th>Location</th></tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -14,7 +16,7 @@
 			<td>{{ gene.description }}</td>
 			<td>{{ gene.get_biotype_display() }}</td>
 			<td>{{ gene.strand }}</td>
-			<td>{{ gene.start }}-{{ gene.end }}</td>
+			<td>Chr{{ gene.chromosome.id }}: {{ gene.start }}-{{ gene.end }}</td>
 		</tr>
 	</tbody>
 </table>
@@ -30,7 +32,27 @@
 			<td><a href="http://www.ensembl.org/Macaca_mulatta/Transcript/Summary?t={{ transcript.ensembl }}" target="_blank">{{ transcript.ensembl }} <i class="external alternate icon"></i></a></td>
 			<td><a href="http://www.ensembl.org/Macaca_mulatta/Transcript/ProteinSummary?t={{ transcript.ensembl }}" target="_blank">{{ transcript.protein }} <i class="external alternate icon"></i></a></td>
 			<td>{{ transcript.strand }}</td>
-			<td>{{ transcript.start }}-{{ transcript.end }}</td>
+			<td>Chr{{ transcript.gene.chromosome.id }}: {{ transcript.start }}-{{ transcript.end }}</td>
+		</tr>
+		{% else %}
+		<tr><td colspan="4">N/A</td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<h3 class="ui header">Human Orthology</h3>
+<table class="ui table">
+	<thead>
+		<tr><th>Ensembl ID</th><th>HGNC ID</th><th>Symbol</th><th>Name</th><th>Support</th></tr>
+	</thead>
+	<tbody>
+		{% for orthology in orthologys %}
+		<tr>
+			<td><a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ orthology.human_ensembl }}" target="_blank">{{ orthology.human_ensembl }} <i class="external alternate icon"></i></a></td>
+			<td><a href="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id={{ orthology.human_hgnc }}" target="_blank">{{ orthology.human_hgnc }} <i class="external alternate icon"></i></a></td>
+			<td>{{ orthology.human_symbol }}</td>
+			<td>{{ orthology.human_name }}</td>
+			<td>{{ orthology.support|replace(',', ', ') }}</td>
 		</tr>
 		{% else %}
 		<tr><td colspan="4">N/A</td></tr>
@@ -135,4 +157,40 @@
 	</table>
 </div>
 </div>
+
+<h3 class="ui header">SNPs in CDS Region</h3>
+<table class="ui compact table amazing">
+	<thead>
+		<tr><th>SNP ID</th><th>Individual</th><th>Species</th><th>Group</th><th>Mutation</th><th>Genotype</th></tr>
+	</thead>
+	<tbody>
+		{% for snp in snps %}
+		<tr>
+			<td><a href="{{ url('snpid', kwargs={'indiv': '%03d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
+			<td>{{ snp.individual.code }}</td>
+			<td>{{ snp.individual.species.common }}</td>
+			<td>{{ snp.individual.species.group.name }}</td>
+			<td>
+				{% for m in snp.snp.mutation_set.all() %}
+				{% if loop.index == 1 %}
+				{{ m.get_synonymous_display() }}
+				{% else %}
+				/ {{ m.get_synonymous_display() }}
+				{% endif %}
+				{% endfor %}
+			</td>
+			<td>
+				{% if snp.genotype == 1 %}
+				<span class="genotype homo">homozygote</span>
+				{% else %}
+				<span class="genotype hetero">heterozygote</span>
+				{% endif %}
+			</td>
+		</tr>
+		{% else %}
+		<tr><td colspan="5" class="center aligned">N/A</td></tr>
+		{% endfor %}
+	</tbody>
+</table>
 {% endblock %}
+</script>

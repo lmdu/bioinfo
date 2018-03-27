@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+// active data table
+ $(".ui.table.amazing").DataTable();
+
+
 //$('select.dropdown').dropdown();
 $('.ui.dropdown').dropdown();
 //$('.ui.checkbox').checkbox();

@@ -306,18 +306,38 @@ def download(request):
 def gene(request, gid):
 	gene = Gene.objects.get(ensembl=gid)
 	transcripts = gene.transcript_set.all()
+	orthologys = gene.orthology_set.all()
 	gos = gene.funcannot_set.filter(function__source=1)
 	keggs = gene.funcannot_set.filter(function__source=2)
 	ips = gene.funcannot_set.filter(function__source=3)
 	pfams = gene.funcannot_set.filter(function__source=4)
 
+	annots = Gannot.objects.filter(gene=gene.id, feature=1)
+	snps = []
+	for annot in annots:
+		for i in range(1, 21):
+			try:
+				snp = Variant.get_sharding_model(i, annot.snp.chromosome.id).objects.get(snp__id=annot.snp.id)
+			except ObjectDoesNotExist:
+				pass
+			else:
+				snps.append(snp)
+
 	return render(request, 'macaca/gene.html', {
 		'gene': gene,
 		'transcripts': transcripts,
+		'orthologys': orthologys,
 		'gos': gos,
 		'keggs': keggs,
 		'ips': ips,
 		'pfams': pfams,
+		'snps': snps,
+	})
+
+def drugs(request):
+	drugs = Drug.objects.all()
+	return render(request, 'macaca/drug.html', {
+		'drugs': drugs,
 	})
 
 	

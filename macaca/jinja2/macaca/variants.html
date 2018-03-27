@@ -88,7 +88,7 @@
 			<td>{{snp.snp.chromosome.name}}: {{snp.snp.position}}</td>
 			<td>
 				{% for gene in snp.snp.gannot_set.all() %}
-				{{ gene.gene.ensembl }}: {{ gene.get_feature_display() }}<br>
+				<a href="{{ url('gene', kwargs={'gid': gene.gene.ensembl}) }}">{{ gene.gene.ensembl }}</a>: {{ gene.get_feature_display() }}<br>
 				{% else %}
 				Intergenic
 				{%endfor%}

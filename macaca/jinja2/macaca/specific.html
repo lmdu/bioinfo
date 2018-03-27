@@ -9,6 +9,10 @@
 <input type="hidden" id="group" name="group" value="{{ paras.group }}">
 <input type="hidden" id="species" name="species" value="{{ paras.species }}">
 <div class="ui brown segment">
+	<h4 class="ui header">
+		<i class="filter icon"></i>
+		<div class="content">Filter Specific SNPs Using Feature Selection</div>
+	</h4>
 	<div class="ui chromosome circular labels">
 		<span>Chromosome</span>
 		{% for c in range(1,21) %}

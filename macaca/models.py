@@ -86,12 +86,13 @@ class Gene(models.Model):
 		(7, 'snoRNA')
 	)
 	ensembl = models.CharField(max_length=18, db_index=True, help_text="Ensembl gene id")
-	name = models.CharField(max_length=20, help_text="Gene name")
+	name = models.CharField(max_length=20, help_text="Gene symbol")
 	description = models.CharField(max_length=200, help_text="Gene description")
 	biotype = models.IntegerField(choices=CODING_TYPES, help_text="Gene coding types")
 	start = models.IntegerField(help_text="Gene start position")
 	end = models.IntegerField(help_text="Gene end position")
 	strand = models.CharField(max_length=1, help_text="Gene strand")
+	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 
 class Transcript(models.Model):
 	ensembl = models.CharField(max_length=18, help_text="Transcript ensembl id")
@@ -210,7 +211,6 @@ class Orthology(models.Model):
 	human_hgnc = models.CharField(max_length=10, help_text="human gene hgnc id")
 	human_name = models.CharField(max_length=200, help_text="human gene name")
 	human_symbol = models.CharField(max_length=20, help_text="human gene symbol")
-	swissport = models.CharField(max_length=10, help_text="Swissport gene id")
 	support = models.CharField(max_length=255, help_text="orthology support database")
 	gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
 
@@ -225,8 +225,8 @@ class Drug(models.Model):
 	drug_type = models.IntegerField(choices=DRUG_TYPES, help_text="drugbank drug type")
 	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 
-class Disease(models.Model):
-	omim_id = models.IntegerField(help_text="omim id")
-	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
+#class Disease(models.Model):
+#	omim_id = models.IntegerField(help_text="omim id")
+#	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 
 	

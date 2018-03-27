@@ -18,4 +18,5 @@ urlpatterns = [
 	path('gene/<gid>', views.gene, name='gene'),
 	path('pileup/<int:sid>', views.pileup, name='pileup'),
 	path('statistics/', views.statistics, name='statistics'),
+	path('drugs/', views.drugs, name='drugs'),
 ]
