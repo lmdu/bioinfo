@@ -1,6 +1,4 @@
-from django.db import models
-
-# Create your models here.
+from django.apps import apps
 from django.db import models
 
 # Create your models here.
@@ -46,16 +44,19 @@ class Snp(models.Model):
 class Variant(models.Model):
 	@classmethod
 	def get_sharding_model(cls, individual, chrom):
-		class Meta:
-			db_table = 'variant_{0}_{1}'.format(individual, chrom)
-			ordering = ['id']
+		try:
+			return apps.get_registered_model('macaca', 'Variant_{}_{}'.format(individual, chrom))
+		except LookupError:
+			class Meta:
+				db_table = 'variant_{0}_{1}'.format(individual, chrom)
+				ordering = ['id']
 
-		attrs = {
-			'__module__': cls.__module__,
-			'Meta': Meta,
-		}
+			attrs = {
+				'__module__': cls.__module__,
+				'Meta': Meta,
+			}
 
-		return type(str('Variant_{0}_{1}'.format(individual, chrom)), (cls,), attrs)
+			return type(str('Variant_{0}_{1}'.format(individual, chrom)), (cls,), attrs)
 
 	GENOTYPES = (
 		(1, 'Homozygote'),

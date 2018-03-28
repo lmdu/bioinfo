@@ -132,7 +132,6 @@ def search(request):
 	elif q.startswith('ENSMMUG'):
 		return redirect('gene', q)
 
-	
 
 def specific(request):
 	groups = Group.objects.all()
@@ -149,12 +148,12 @@ def specific(request):
 
 	if paras['group'] >= 0:
 		if paras['group'] == 0:
-			snps = GroupSpecific.objects.all()
+			snps = GroupSpecific.objects.filter(chromosome=paras['chromosome'])
 		else:
 			snps = GroupSpecific.objects.filter(group=paras['group'], chromosome=paras['chromosome'])
 	elif paras['species'] >= 0:
 		if paras['species'] == 0:
-			snps = SpeciesSpecific.objects.all()
+			snps = SpeciesSpecific.objects.filter(chromosome=paras['chromosome'])
 		else:
 			snps = SpeciesSpecific.objects.filter(species=paras['species'], chromosome=paras['chromosome'])
 
@@ -311,7 +310,25 @@ def gene(request, gid):
 	keggs = gene.funcannot_set.filter(function__source=2)
 	ips = gene.funcannot_set.filter(function__source=3)
 	pfams = gene.funcannot_set.filter(function__source=4)
+	
+	return render(request, 'macaca/gene.html', {
+		'gene': gene,
+		'transcripts': transcripts,
+		'orthologys': orthologys,
+		'gos': gos,
+		'keggs': keggs,
+		'ips': ips,
+		'pfams': pfams,
+	})
 
+def drugs(request):
+	drugs = Drug.objects.all()
+	return render(request, 'macaca/drug.html', {
+		'drugs': drugs,
+	})
+
+def snpcds(request, gid):
+	gene = Gene.objects.get(ensembl=gid)
 	annots = Gannot.objects.filter(gene=gene.id, feature=1)
 	snps = []
 	for annot in annots:
@@ -322,25 +339,10 @@ def gene(request, gid):
 				pass
 			else:
 				snps.append(snp)
-
-	return render(request, 'macaca/gene.html', {
-		'gene': gene,
-		'transcripts': transcripts,
-		'orthologys': orthologys,
-		'gos': gos,
-		'keggs': keggs,
-		'ips': ips,
-		'pfams': pfams,
+	return render(request, 'macaca/snpcds.html', {
 		'snps': snps,
+		'gid': gid,
 	})
-
-def drugs(request):
-	drugs = Drug.objects.all()
-	return render(request, 'macaca/drug.html', {
-		'drugs': drugs,
-	})
-
-	
 
 def pileup(request, sid):
 	snp = Snp.objects.get(id=sid)

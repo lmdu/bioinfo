@@ -1,0 +1,39 @@
+{% set urlname="snpcds" %}
+{% extends "macaca/base.html" %}
+
+{% block main %}
+<h3 class="ui header">SNPs in {{ gid }}  Gene CDS Region</h3>
+<table class="ui compact table amazing">
+	<thead>
+		<tr><th>SNP ID</th><th>Individual</th><th>Species</th><th>Group</th><th>Mutation</th><th>Genotype</th></tr>
+	</thead>
+	<tbody>
+		{% for snp in snps %}
+		<tr>
+			<td><a href="{{ url('snpid', kwargs={'indiv': '%03d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
+			<td>{{ snp.individual.code }}</td>
+			<td>{{ snp.individual.species.common }}</td>
+			<td>{{ snp.individual.species.group.name }}</td>
+			<td>
+				{% for m in snp.snp.mutation_set.all() %}
+				{% if loop.index == 1 %}
+				{{ m.get_synonymous_display() }}
+				{% else %}
+				/ {{ m.get_synonymous_display() }}
+				{% endif %}
+				{% endfor %}
+			</td>
+			<td>
+				{% if snp.genotype == 1 %}
+				<span class="genotype homo">homozygote</span>
+				{% else %}
+				<span class="genotype hetero">heterozygote</span>
+				{% endif %}
+			</td>
+		</tr>
+		{% else %}
+		<tr><td colspan="5" class="center aligned">N/A</td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

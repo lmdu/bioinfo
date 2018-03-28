@@ -8,6 +8,7 @@ urlpatterns = [
 	path('species/<int:sid>', views.species, name='species'),
 	path('group/<int:gid>', views.group, name='group'),
 	path('variants/', views.variants, name='variants'),
+	path('variants/<gid>', views.snpcds, name='snpcds'),
 	path('specific/', views.specific, name='specific'),
 	path('snp/<int:sid>/', views.snp, name='snp'),
 	re_path(r'^snp/MACSNP(?P<indiv>[0-9]{3})(?P<sid>[0-9]{9})/$', views.snpid, name='snpid'),
