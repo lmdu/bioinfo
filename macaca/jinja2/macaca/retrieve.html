@@ -29,7 +29,7 @@
 	<div class="field">
 		<label>
 			<div class="ui radio checkbox">
-				<input value="individual" type="radio" name="category">
+				<input value="individual" type="radio" name="category" checked="checked">
 				<label>Individual</label>
 			</div>
 		</label>
@@ -99,9 +99,23 @@
 </div>
 
 <div class="ui dividing header">Associated Gene</div>
-<div class="field">
-	<label>Ensembl Gene ID</label>
-	<input type="text" name="gene">
+<div class="four fields">
+	<div class="field">
+		<label>Macaque Ensembl Gene ID</label>
+		<input type="text" name="gene">
+	</div>
+	<div class="field">
+		<label>Human Orthology Ensembl Gene ID</label>
+		<input type="text" name="ortholgoy">
+	</div>
+	<div class="field">
+		<label>Drugbank Drug ID</label>
+		<input type="text" name="drug">
+	</div>
+	<div class="field">
+		<label>Phenotype OMIM</label>
+		<input type="number" name="omim">
+	</div>
 </div>
 
 <div class="fields">

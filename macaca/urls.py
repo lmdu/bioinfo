@@ -20,4 +20,7 @@ urlpatterns = [
 	path('pileup/<int:sid>', views.pileup, name='pileup'),
 	path('statistics/', views.statistics, name='statistics'),
 	path('drugs/', views.drugs, name='drugs'),
+	path('drugs/<did>', views.drug, name='drug'),
+	path('diseases/', views.diseases, name='diseases'),
+	path('diseases/<did>', views.disease, name='disease'),
 ]

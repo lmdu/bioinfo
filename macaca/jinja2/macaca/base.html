@@ -26,8 +26,8 @@
         <div class="ui dropdown item">
           Genes<i class="dropdown icon"></i>
           <div class="menu">
-            <a href="" class="item">Disease Gene</a>
-            <a href="{{ url('drugs') }}" class="item">Drug target Gene</a>
+            <a href="{{ url('diseases') }}" class="item">Disease Associated Gene</a>
+            <a href="{{ url('drugs') }}" class="item">Drug Target Gene</a>
           </div>
         </div>
         <a class="item {% if urlname=='statistics' %} active {% endif %}" href="{{ url('statistics') }}" title="Statistical table">Statistics</a>

@@ -1,0 +1,37 @@
+{% set urlname="disease" %}
+{% extends "macaca/base.html" %}
+
+{% block main %}
+<h3 class="ui header">Disease information</h3>
+<table class="ui table">
+	<thead>
+		<tr><th>OMIM</th><th>Title</th><th>Symbol</th></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="https://omim.org/entry/{{ diseases[0].pomim }}" target="_blank">{{ diseases[0].pomim }} <i class="external alternate icon"></a></td>
+			<td>{{ diseases[0].phenotype }}</td>
+			<td>{{ diseases[0].symbol }}</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3 class="ui header">Drug associated genes</h3>
+<table class="ui table">
+	<thead>
+		<tr><th>Ensembl ID</th><th>Symbol</th><th>Name</th><th>Human Orthology</th><th>OMIM ID</th><th>SNPs in CDS</th></tr>
+	</thead>
+	<tbody>
+		{% for disease in diseases %}
+		<tr>
+			<td><a href="{{ url('gene', kwargs={'gid':disease.orthology.gene.ensembl}) }}">{{ disease.orthology.gene.ensembl }}</a></td>
+			<td>{{ disease.orthology.gene.name }}</td>
+			<td>{{ disease.orthology.gene.description }}</td>
+			<td><a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ disease.orthology.human_ensembl }}" target="_blank">{{ disease.orthology.human_ensembl }}</a></td>
+			<td><a href="https://omim.org/entry/{{ disease.gomim }}" target="_blank">{{ disease.gomim }}</a></td>
+			<td><a href="{{ url('snpcds', kwargs={'gid':disease.orthology.gene.ensembl}) }}" class="ui mini basic orange button">View</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

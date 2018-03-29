@@ -119,7 +119,11 @@ class Gannot(models.Model):
 
 	class Meta:
 		ordering = ['id']
-		index_together = ['feature', 'snp']
+		index_together = [
+			['feature', 'snp'],
+			['feature', 'gene'],
+			['feature', 'gene', 'snp'],
+		]
 
 class Tannot(models.Model):
 	'''Transcript annotation'''
@@ -159,7 +163,7 @@ class Function(models.Model):
 		(3, 'Pfam'),
 		(4, 'InterPro')
 	)
-	source = models.IntegerField(choices=FUNC_TYPES, help_text="The function source database name")
+	source = models.IntegerField(choices=FUNC_TYPES, db_index=True, help_text="The function source database name")
 	accession = models.CharField(max_length=15, help_text="Functional database accession id")
 	description = models.CharField(max_length=200, help_text="Function description")
 	supplement = models.CharField(max_length=80, help_text="Other information")
@@ -200,20 +204,26 @@ class SpeciesSpecific(models.Model):
 		]
 
 class Statistics(models.Model):
-	feature = models.IntegerField()
-	genotype = models.IntegerField()
-	mutation = models.IntegerField()
+	feature = models.IntegerField(db_index=True)
+	genotype = models.IntegerField(db_index=True)
+	mutation = models.IntegerField(db_index=True)
 	counts = models.IntegerField()
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
 
+	class Meta:
+		index_together = ['feature', 'genotype', 'mutation']
+
 class Orthology(models.Model):
-	human_ensembl = models.CharField(max_length=18, help_text="human ensembl gene id")
+	human_ensembl = models.CharField(max_length=18, db_index=True, help_text="human ensembl gene id")
 	human_hgnc = models.CharField(max_length=10, help_text="human gene hgnc id")
 	human_name = models.CharField(max_length=200, help_text="human gene name")
 	human_symbol = models.CharField(max_length=20, help_text="human gene symbol")
 	support = models.CharField(max_length=255, help_text="orthology support database")
 	gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
+
+	class Meta:
+		index_together = ['human_ensembl', 'gene']
 
 class Drug(models.Model):
 	DRUG_TYPES = (
@@ -221,13 +231,21 @@ class Drug(models.Model):
 		(2, 'small molecule')
 	)
 	partner = models.CharField(max_length=10, help_text="drugbank target gene id")
-	drug_id = models.CharField(max_length=7, help_text="drugbank durg id")
+	drug_id = models.CharField(max_length=7, db_index=True, help_text="drugbank durg id")
 	drug_name = models.CharField(max_length=255, help_text="drugbank drug name")
 	drug_type = models.IntegerField(choices=DRUG_TYPES, help_text="drugbank drug type")
 	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 
-#class Disease(models.Model):
-#	omim_id = models.IntegerField(help_text="omim id")
-#	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
+	class Meta:
+		index_together = ['drug_id', 'orthology']
 
+class Disease(models.Model):
+	gomim = models.IntegerField(help_text="Gene omim id")
+	pomim = models.IntegerField(db_index=True, help_text="disease omim id")
+	phenotype = models.CharField(max_length=255, help_text="disease phenotype description")
+	symbol = models.CharField(max_length=20, help_text="disease phenotype symbol")
+	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 	
+	class Meta:
+		index_together = ['pomim', 'orthology']
+

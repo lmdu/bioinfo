@@ -1,0 +1,22 @@
+{% set urlname="drugs" %}
+{% extends "macaca/base.html" %}
+
+{% block main %}
+<h2 class="ui header">Disease Associated Genes</h2>
+<table class="ui table amazing">
+	<thead>
+		<tr><th>Ensembl ID</th><th>Symbol</th><th>Name</th><th>Human Orthology</th><th>Phenotype OMIM</th></tr>
+	</thead>
+	<tbody>
+		{% for disease in diseases %}
+		<tr>
+			<td><a href="{{ url('gene', kwargs={'gid':disease.orthology.gene.ensembl}) }}">{{ disease.orthology.gene.ensembl }}</a></td>
+			<td>{{ disease.orthology.gene.name }}</td>
+			<td>{{ disease.orthology.gene.description }}</td>
+			<td><a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ disease.orthology.human_ensembl }}" target="_blank">{{ disease.orthology.human_ensembl }}</a></td>
+			<td><a href="{{ url('disease', kwargs={'did': disease.pomim}) }}">{{ disease.pomim }}</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

@@ -118,20 +118,26 @@ def snpid(request, indiv, sid):
 
 def search(request):
 	q = request.GET.get('q')
-	if q.startswith(('MACSNP', 'ENSMMUG')) and len(q) != 18:
-		raise Http404("%s is not right SNP ID" % q)
-
-	if q.startswith(('MACSNPG', 'MACSNPS')):
+	q = q.strip()
+	
+	if q.startswith(('MACSNPG', 'MACSNPS')) and len(q) == 18:
 		cat, cid, sid = q[6], q[7:9], q[9:]
 		return redirect('snpspec', cat, cid, sid)
 
-	elif q.startswith('MACSNP'):
+	elif q.startswith('MACSNP') and len(q) == 18:
 		indiv, sid= q[6:9], q[9:]
 		return redirect('snpid', indiv, sid)
 
-	elif q.startswith('ENSMMUG'):
+	elif q.startswith('ENSMMUG') and len(q) == 18:
 		return redirect('gene', q)
 
+	elif q.startswith('DB') and len(q) == 7:
+		return redirect('drug', q)
+
+	elif q.isdigit() and len(q) == 10:
+		return redirect('disease', q)
+	else:
+		raise Http404('{} dose not exists in database'.format(q))
 
 def specific(request):
 	groups = Group.objects.all()
@@ -224,7 +230,10 @@ def retrieve(request):
 		feature = int(request.GET.get('feature')),
 		genotype = int(request.GET.get('genotype')),
 		mutation = int(request.GET.get('mutation')),
-		gene = request.GET.get('gene')
+		gene = request.GET.get('gene'),
+		ortholgoy = request.GET.get('ortholgoy'),
+		drug = request.GET.get('drug'),
+		omim = request.GET.get('omim', 0),
 	)
 
 	paras['start'] = int(paras['start']) if paras['start'] else 0
@@ -251,6 +260,15 @@ def retrieve(request):
 
 	if paras['gene']:
 		snps = snps.filter(snp__gannot__gene__ensembl=paras['gene'])
+
+	if paras['ortholgoy']:
+		snps = snps.filter(snp__gannot__gene__orthology__human_ensembl=paras['ortholgoy'])
+
+	if paras['drug']:
+		snps = snps.filter(snp__gannot__gene__orthology__drug__drug_id=paras['drug'])
+
+	if paras['omim']:
+		snps = snps.filter(snp__gannot__gene__orthology__disease__pomim=paras['omim'])
 
 	paginator = Paginator(snps, paras['records'])
 	try:
@@ -323,13 +341,39 @@ def gene(request, gid):
 
 def drugs(request):
 	drugs = Drug.objects.all()
+	return render(request, 'macaca/drugs.html', {
+		'drugs': drugs,
+	})
+
+def drug(request, did):
+	try:
+		drugs = Drug.objects.filter(drug_id=did)
+	except ObjectDoesNotExist:
+		raise Http404('No genes associated with drug {}'.format(did))
+
 	return render(request, 'macaca/drug.html', {
 		'drugs': drugs,
 	})
 
+def diseases(request):
+	diseases = Disease.objects.all()
+	return render(request, 'macaca/diseases.html',{
+		'diseases': diseases,
+	})
+
+def disease(request, did):
+	did = int(did)
+	try:
+		diseases = Disease.objects.filter(pomim=did)
+	except ObjectDoesNotExist:
+		raise Http404('No genes associated with disease {}'.format(did))
+
+	return render(request, 'macaca/disease.html', {
+		'diseases': diseases,
+	})	
+
 def snpcds(request, gid):
-	gene = Gene.objects.get(ensembl=gid)
-	annots = Gannot.objects.filter(gene=gene.id, feature=1)
+	annots = Gannot.objects.filter(feature=1, gene__ensembl=gid)
 	snps = []
 	for annot in annots:
 		for i in range(1, 21):
