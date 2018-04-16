@@ -72,6 +72,51 @@ def variants(request):
 		'paras': paras
 	})
 
+def nrsnps(request):
+	chromos = Chromosome.objects.all()[:20]
+	species = Individual.objects.all()
+
+	paras = dict(
+		page = int(request.GET.get('page', 1)),
+		records = int(request.GET.get('records', 10)),
+		chromosome = int(request.GET.get('chr', 1)),
+		feature = int(request.GET.get('feature', 0)),
+		mutation = int(request.GET.get('mutation', 0))
+	)
+
+	snps = Snp.objects.all()
+
+	if paras['chromosome']:
+		snps = snps.filter(chromosome=paras['chromosome'])
+
+	if paras['mutation']:
+		snps = snps.filter(mutation__synonymous=paras['mutation'])
+
+	if paras['feature']:
+		snps = snps.filter(gannot__feature=paras['feature'])
+
+	paginator = Paginator(snps, paras['records'])
+
+	try:
+		snps = paginator.page(paras['page'])
+	except PageNotAnInteger:
+		snps = paginator.page(1)
+	except EmptyPage:
+		snps = paginator.page(paginator.num_pages)
+
+	genotypes = {}
+	for snp in snps:
+		vs = Variant.get_sharding_model(0, 0).objects.filter(snp__id=snp.id)
+		for v in vs:
+			genotypes[(snp.id, v.individual.id)] = v.genotype
+
+	return render(request, 'macaca/nrsnps.html', {
+		'snps': snps,
+		'species': species,
+		'genotypes': genotypes,
+		'paras': paras
+	})
+
 #Get snp by variant id
 def snp(request, sid):
 	one = Variant.objects.get(id=sid)
