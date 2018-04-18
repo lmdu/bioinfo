@@ -368,7 +368,7 @@ with open(snp_file) as fh:
 
 			for feat in set(locations):
 				gannot_count += 1
-				gannot_out.write("%s\t%s\t%s\t%s\t%s\n" % (gannot_count, gene_pos, feat_types[feat], cols[0], gene_mapping[r.geneid]))
+				gannot_out.write("%s\t%s\t%s\t%s\t%s\n" % (gannot_count, gene_pos, feat_types[feat], gene_mapping[r.geneid], cols[0]))
 
 			for muta in set(mutations):
 				mutation_count += 1

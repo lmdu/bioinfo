@@ -26,7 +26,7 @@ def species(request, sid):
 
 
 def group(request, gid):
-	one = Group.objects.get(id=gid)
+	one = Groups.objects.get(id=gid)
 	return render(request, 'macaca/group.html', {
 		'group': one,
 	})
@@ -45,7 +45,10 @@ def variants(request):
 		mutation = int(request.GET.get('mutation', 0))
 	)
 
-	snps = Variant.get_sharding_model(paras['sample'],paras['chromosome']).objects.all()
+	snps = Variant.get_sharding_model(paras['chromosome']).objects.all()
+
+	if paras['sample']:
+		snps = snps.filter(individual=paras['sample'])
 
 	if paras['mutation']:
 		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
@@ -84,10 +87,8 @@ def nrsnps(request):
 		mutation = int(request.GET.get('mutation', 0))
 	)
 
+	Snp._meta.db_table = 'snp%s' % paras['chromosome']
 	snps = Snp.objects.all()
-
-	if paras['chromosome']:
-		snps = snps.filter(chromosome=paras['chromosome'])
 
 	if paras['mutation']:
 		snps = snps.filter(mutation__synonymous=paras['mutation'])
@@ -105,10 +106,14 @@ def nrsnps(request):
 		snps = paginator.page(paginator.num_pages)
 
 	genotypes = {}
-	for snp in snps:
-		vs = Variant.get_sharding_model(0, 0).objects.filter(snp__id=snp.id)
-		for v in vs:
-			genotypes[(snp.id, v.individual.id)] = v.genotype
+	snp_ids = [snp.id for snp in snps]
+	vs = Variant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
+	ns = Nonvariant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
+	for v in vs:
+		genotypes[(v.snp.id, v.individual.id)] = v.genotype
+
+	for n in ns:
+		genotypes[(n.snp.id, n.individual.id)] = 3
 
 	return render(request, 'macaca/nrsnps.html', {
 		'snps': snps,
@@ -136,22 +141,24 @@ def snpid(request, indiv, sid):
 	sid = int(sid)
 	try:
 		snp = Snp.objects.get(id=sid)
-		one = Variant.get_sharding_model(indiv, snp.chromosome.id).objects.get(snp__id=sid)
+		one = Variants.get_sharding_model(snp.chromosome.id).objects.get(individual__id=indiv,snp__id=sid)
 	except ObjectDoesNotExist:
 		raise Http404('MACSNP%03d%09d does not exists in this database' % (indiv, sid))
 	genes = one.snp.gannot_set.all()
 	transcripts = one.snp.tannot_set.all()
-	others = []
-	for i in range(1, 21):
-		if i == indiv:
-			continue
+	others = Variants.get_sharding_model(snp.chromosome.id).objects.filter(snp__id=sid).exclude(individual__id=indiv)
+
+	#others = []
+	#for i in range(1, 21):
+	#	if i == indiv:
+	#		continue
 		
-		try:
-			other = Variant.get_sharding_model(i, snp.chromosome.id).objects.get(snp__id=sid)
-		except ObjectDoesNotExist:
-			pass
-		else:
-			others.append(other)
+	#	try:
+	#		other = Variant.get_sharding_model(i, snp.chromosome.id).objects.get(snp__id=sid)
+	#	except ObjectDoesNotExist:
+	#		pass
+	#	else:
+	#		others.append(other)
 
 	return render(request, 'macaca/snp.html', {
 		'snp': one,
@@ -185,7 +192,7 @@ def search(request):
 		raise Http404('{} dose not exists in database'.format(q))
 
 def specific(request):
-	groups = Group.objects.all()
+	groups = Groups.objects.all()
 	species = Species.objects.all()
 	paras = dict(
 		page = int(request.GET.get('page', 1)),
@@ -234,7 +241,7 @@ def snpspec(request, cat, cid, sid):
 	cid = int(cid)
 	sid = int(sid)
 	if cat == 'G':
-		category = Group.objects.get(id=cid)
+		category = Groups.objects.get(id=cid)
 	else:
 		category = Species.objects.get(id=cid)
 	snp = Snp.objects.get(id=sid)
@@ -251,7 +258,7 @@ def snpspec(request, cat, cid, sid):
 def retrieve(request):
 	if not request.GET:
 		individuals = Individual.objects.all()
-		groups = Group.objects.all()
+		groups = Groups.objects.all()
 		species = Species.objects.all()
 		return render(request, 'macaca/retrieve.html', {
 			'individuals': individuals,

@@ -72,11 +72,11 @@ for snp_file in snp_files:
 					continue
 				elif t == '0/0':
 					non_id += 1
-					non_out.write("%s\t%s\t%s\n" % (non_id, samples[codes[idx]][0], snp_id))
+					non_out.write("%s\t%s\t%s\t%s\n" % (non_id, chrom, samples[codes[idx]][0], snp_id))
 					continue
 
 				var_id += 1
-				var_out.write("%s\t%s\t%s\t%s\n" % (var_id, genotypes[t], samples[codes[idx]][0], snp_id))
+				var_out.write("%s\t%s\t%s\t%s\t%s\n" % (var_id, genotypes[t], chrom, samples[codes[idx]][0], snp_id))
 
 			#check specific snp
 			if '.' in types or '0/1' in types:
@@ -99,7 +99,7 @@ for snp_file in snp_files:
 					if sum(gmat[g]) > 0:
 						if all(gmat[g]):
 							gsp_id += 1
-							gsp_out.write("%s\t%s\t%s\n" % (gsp_id, snp_id, g))
+							gsp_out.write("%s\t%s\t%s\t%s\n" % (gsp_id, chrom, g, snp_id))
 						break
 
 			#process species specific snps
@@ -110,7 +110,7 @@ for snp_file in snp_files:
 					if sum(smat[s]) > 0:
 						if all(smat[s]):
 							ssp_id += 1
-							ssp_out.write("%s\t%s\t%s\n" % (ssp_id, snp_id, s))
+							ssp_out.write("%s\t%s\t%s\t%s\n" % (ssp_id, chrom, snp_id, s))
 						break
 
 	print(snp_file)
