@@ -52,10 +52,38 @@ class Snp(models.Model):
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 
 	class Meta:
-		abstract = False
 		db_table = 'snp'
 		ordering = ['id']
 		index_together = ['position', 'chromosome']
+
+class Snps(models.Model):
+	@classmethod
+	def get_sharding_model(cls, chrom):
+		try:
+			return apps.get_registered_model('macaca', 'Snp{}'.format(chrom))
+		except LookupError:
+			class Meta:
+				db_table = 'snp{}'.format(chrom)
+				ordering = ['id']
+
+			attrs = {
+				'__module__': cls.__module__,
+				'Meta': Meta,
+			}
+
+			return type(str('Snp{}'.format(chrom)), (cls,), attrs)
+	
+	snp = models.OneToOneField(Snp, on_delete=models.CASCADE)
+	position = models.IntegerField(db_index=True, help_text="Position in chromosome sequence")
+	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
+
+	class Meta:
+		abstract = True
+		ordering = ['id']
+		index_together = [
+			['position', 'chromosome'],
+			['snp', 'chromosome'],
+		]
 
 class Variant(models.Model):
 	@classmethod

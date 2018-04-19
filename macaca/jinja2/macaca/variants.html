@@ -19,6 +19,7 @@
 	</div>
 	<div class="ui individual circular labels">
 		<span>Individual</span>
+		<a class="ui label {% if paras.sample==0 %} orange {% endif %}" data-num="0">All</a>
 		{% for s in species %}
 		<a class="ui label {% if paras.sample==s.id %} orange {% endif %}" data-num="{{s.id}}">{{s.code}}</a>
 		{% endfor %}
@@ -75,6 +76,7 @@
 		<tr>
 			<th>SNP ID</th>
 			<th>Position</th>
+			<th>Inidvidual</th>
 			<th>Gene: Location</th>
 			<th>Reference</th>
 			<th>Alteration</th>
@@ -86,6 +88,7 @@
 		<tr>
 			<td><a href="{{ url('snpid', kwargs={'indiv': '%03d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
 			<td>{{snp.snp.chromosome.name}}: {{snp.snp.position}}</td>
+			<td>{{ snp.individual.code }}</td>
 			<td>
 				{% for gene in snp.snp.gannot_set.all() %}
 				<a href="{{ url('gene', kwargs={'gid': gene.gene.ensembl}) }}">{{ gene.gene.ensembl }}</a>: {{ gene.get_feature_display() }}<br>
@@ -97,9 +100,11 @@
 			<td><span class="{{snp.snp.alteration}}">{{snp.snp.alteration}}</span></td>
 			<td>
 				{% if snp.genotype == 1 %}
-				<span class="genotype homo">homozygote</span>
+				<!--<span class="genotype homo">homozygote</span>-->
+				<div class="ui mini circular red label">homozygote</div>
 				{% else %}
-				<span class="genotype hetero">heterozygote</span>
+				<!--<span class="genotype hetero"></span>-->
+				<div class="ui mini circular blue label">heterozygote</div>
 				{% endif %}
 			</td>
 		</tr>

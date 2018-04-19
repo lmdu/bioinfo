@@ -10,19 +10,24 @@
 .ui.result span{
 	margin-left: 20px;
 }
-
-.genotype{
-	padding: 1px 10px;
+.genotype-circos{
 	display: inline-block;
-	border-radius: 15px;
-	color: #fff;
+	border-radius: 50%;
+	margin: 0 8px; 
+	width: 14px; 
+	height:14px;
+	background:#e0e1e1;
 }
-.genotype.hetero{
-	background: linear-gradient(to right, #f2711c 0%, #f2711c 50%, #a5673f 50%, #a5673f 100%);
+.genotype-circos.red{
+	background:#db2828;
 }
-.genotype.homo{
-	background: #a5673f;
+.genotype-circos.blue{
+	background:#2185d0;
 }
+.genotype-circos.green{
+	background:#B2DBBF;
+}
+
 
 /*base color*/
 .A, .T, .C, .G, .N{

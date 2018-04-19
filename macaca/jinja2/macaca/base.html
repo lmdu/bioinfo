@@ -24,10 +24,10 @@
           Browse<i class="dropdown icon"></i>
           <div class="menu">
             <a class="item" href="{{ url('variants') }}">Individual SNPs</a>
+            <a class="item" href="{{ url('specific') }}">Specific SNPs</a>
             <a class="item" href="{{ url('nrsnps') }}">Non-redundant SNPs</a>
           </div>
         </div>
-        <a class="item {% if urlname=='specific' %} active {% endif %}" href="{{ url('specific') }}" title="Group or Species Specific SNPs">Specific</a>
         <div class="ui dropdown item">
           Genes<i class="dropdown icon"></i>
           <div class="menu">

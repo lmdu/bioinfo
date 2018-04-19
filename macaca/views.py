@@ -39,7 +39,7 @@ def variants(request):
 		page = int(request.GET.get('page', 1)),
 		records = int(request.GET.get('records', 10)),
 		chromosome = int(request.GET.get('chr', 1)),
-		sample = int(request.GET.get('sample', 1)),
+		sample = int(request.GET.get('sample', 0)),
 		feature = int(request.GET.get('feature', 0)),
 		genotype = int(request.GET.get('genotype', 0)),
 		mutation = int(request.GET.get('mutation', 0))
@@ -87,14 +87,13 @@ def nrsnps(request):
 		mutation = int(request.GET.get('mutation', 0))
 	)
 
-	Snp._meta.db_table = 'snp%s' % paras['chromosome']
-	snps = Snp.objects.all()
+	snps = Snps.get_sharding_model(paras['chromosome']).objects.all()
 
 	if paras['mutation']:
-		snps = snps.filter(mutation__synonymous=paras['mutation'])
+		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
 
 	if paras['feature']:
-		snps = snps.filter(gannot__feature=paras['feature'])
+		snps = snps.filter(snp__gannot__feature=paras['feature'])
 
 	paginator = Paginator(snps, paras['records'])
 
@@ -106,7 +105,7 @@ def nrsnps(request):
 		snps = paginator.page(paginator.num_pages)
 
 	genotypes = {}
-	snp_ids = [snp.id for snp in snps]
+	snp_ids = [snp.snp.id for snp in snps]
 	vs = Variant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
 	ns = Nonvariant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
 	for v in vs:
@@ -141,30 +140,27 @@ def snpid(request, indiv, sid):
 	sid = int(sid)
 	try:
 		snp = Snp.objects.get(id=sid)
-		one = Variants.get_sharding_model(snp.chromosome.id).objects.get(individual__id=indiv,snp__id=sid)
+		one = Variant.get_sharding_model(snp.chromosome.id).objects.get(individual__id=indiv,snp__id=sid)
 	except ObjectDoesNotExist:
 		raise Http404('MACSNP%03d%09d does not exists in this database' % (indiv, sid))
 	genes = one.snp.gannot_set.all()
 	transcripts = one.snp.tannot_set.all()
-	others = Variants.get_sharding_model(snp.chromosome.id).objects.filter(snp__id=sid).exclude(individual__id=indiv)
+	vs = Variant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid).exclude(individual__id=indiv)
+	ns = Nonvariant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+	genotypes = {}
+	for v in vs:
+		genotypes[v.individual.id] = v.genotype
+	for n in ns:
+		genotypes[n.individual.id] = 3
 
-	#others = []
-	#for i in range(1, 21):
-	#	if i == indiv:
-	#		continue
-		
-	#	try:
-	#		other = Variant.get_sharding_model(i, snp.chromosome.id).objects.get(snp__id=sid)
-	#	except ObjectDoesNotExist:
-	#		pass
-	#	else:
-	#		others.append(other)
+	samples = Individual.objects.exclude(pk=indiv)
 
 	return render(request, 'macaca/snp.html', {
 		'snp': one,
 		'genes': genes,
 		'transcripts': transcripts,
-		'others': others,
+		'genotypes': genotypes,
+		'samples': samples,
 	})
 
 
