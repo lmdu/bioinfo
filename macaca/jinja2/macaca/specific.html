@@ -74,15 +74,16 @@
 <table class="ui brown celled table">
 	<thead>
 		<tr>
-			<th>SNP ID</th>
+			<th>Specific SNP ID</th>
 			<th>Position</th>
+			<th>Reference</th>
+			<th>Alteration</th>
+			<th>Gene: Location</th>
 			{% if paras.group>=0 %}
 			<th>Group-specific</th>
 			{% else %}
 			<th>Species-specific</th>
 			{% endif %}
-			<th>Reference</th>
-			<th>Alteration</th>
 			<th>Genotype</th>
 		</tr>
 	</thead>
@@ -91,31 +92,38 @@
 		<tr>
 			<td>
 				{% if paras.group>=0 %}
-				<a href="{{ url('snpspec', kwargs={'cat':'G','cid':'%02d'|format(snp.group.id), 'sid':'%09d'|format(snp.snp.id)}) }}">
+				<a href="{{ url('ssnp', kwargs={'cat':'G','cid':'%02d'|format(snp.group.id), 'sid':'%09d'|format(snp.snp.id)}) }}">
 					MACSNPG{{ "%02d%09d"|format(snp.group.id, snp.snp.id) }}
 				</a>
 				{% else %}
-				<a href="{{ url('snpspec', kwargs={'cat':'S','cid':'%02d'|format(snp.species.id), 'sid':'%09d'|format(snp.snp.id)}) }}">
+				<a href="{{ url('ssnp', kwargs={'cat':'S','cid':'%02d'|format(snp.species.id), 'sid':'%09d'|format(snp.snp.id)}) }}">
 					MACSNPS{{ "%02d%09d"|format(snp.species.id, snp.snp.id) }}
 				</a>
 				{% endif %}
 			</td>
 			<td>{{ snp.snp.chromosome.name }}:{{snp.snp.position}}</td>
+			<td><span class="{{snp.snp.reference}}">{{snp.snp.reference}}</span></td>
+			<td><span class="{{snp.snp.alteration}}">{{snp.snp.alteration}}</span></td>
+			<td>
+				{% for gene in snp.snp.gannot_set.all() %}
+				<a href="{{ url('gene', kwargs={'gid': gene.gene.ensembl}) }}">{{ gene.gene.ensembl }}</a>: {{ gene.get_feature_display() }}<br>
+				{% else %}
+				Intergenic
+				{%endfor%}
+			</td>
 			{% if paras.group>=0 %}
 			<td>{{ snp.group.name }}</td>
 			{% else %}
 			<td><i>{{ snp.species.common }}</i></td>
 			{% endif %}
-			<td><span class="{{snp.snp.reference}}">{{snp.snp.reference}}</span></td>
-			<td><span class="{{snp.snp.alteration}}">{{snp.snp.alteration}}</span></td>
 			<td><div class="ui mini circular red label">homozygote</div></td>
 		</tr>
 		{% else %}
-		<tr><td colspan="6" class="center aligned">No Results Found</td></tr>
+		<tr><td colspan="7" class="center aligned">No Results Found</td></tr>
 		{% endfor %}
 	</tbody>
 	<tfoot>
-		<tr><th colspan="6">
+		<tr><th colspan="7">
 		<div class="ui pager right floated pagination menu">
 			{% if snps.has_previous() %}
 			<a class="icon item" data-num="{{ snps.previous_page_number() }}">

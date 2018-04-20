@@ -10,7 +10,7 @@
 	<tbody>
 		{% for snp in snps %}
 		<tr>
-			<td><a href="{{ url('snpid', kwargs={'indiv': '%03d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
+			<td><a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNPI{{"%02d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
 			<td>{{ snp.individual.code }}</td>
 			<td>{{ snp.individual.species.common }}</td>
 			<td>{{ snp.individual.species.group.name }}</td>

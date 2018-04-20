@@ -6,6 +6,7 @@
 	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/semantic-ui/2.3.1/semantic.min.js"></script>
   <script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.bootcss.com/datatables/1.10.16/js/dataTables.semanticui.min.js"></script>
 	<link href="https://cdn.bootcss.com/semantic-ui/2.3.1/semantic.min.css" rel="stylesheet">
   <link href="https://cdn.bootcss.com/datatables/1.10.16/css/dataTables.semanticui.min.css" rel="stylesheet">
 	<script src="{{ static('macaca/action.js') }}"></script>
@@ -23,7 +24,7 @@
         <div class="ui dropdown item">
           Browse<i class="dropdown icon"></i>
           <div class="menu">
-            <a class="item" href="{{ url('variants') }}">Individual SNPs</a>
+            <a class="item" href="{{ url('isnps') }}">Individual SNPs</a>
             <a class="item" href="{{ url('specific') }}">Specific SNPs</a>
             <a class="item" href="{{ url('nrsnps') }}">Non-redundant SNPs</a>
           </div>

@@ -11,16 +11,18 @@ non_file = os.path.join(data_dir, 'non_variant.table')
 
 print('split snp table')
 outs = [None]
+nums = [None]
 for i in range(1,21):
 	op = open("%s.%s" % (snp_file, i), 'w')
 	outs.append(op)
+	nums.append(0)
 
 with open(snp_file) as fh:
 	for line in fh:
 		cols = line.strip().split()
 		idx = int(cols[-1])
-
-		outs[idx].write(line)
+		nums[idx] += 1
+		outs[idx].write("%s\t%s\t%s\t%s\n" % (nums[idx], cols[0], cols[1], cols[-1]))
 
 for op in outs[1:]:
 	op.close()

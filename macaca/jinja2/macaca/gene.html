@@ -3,7 +3,7 @@
 
 {% block main %}
 
-<h2 class="ui brown header">{{ gene.ensembl }} <a class="ui yellow right floated button" href="{{ url('snpcds', kwargs={'gid':gene.ensembl}) }}">View SNPs in CDS</a></h2>
+<h2 class="ui brown header">{{ gene.ensembl }} <a class="ui yellow right floated button" href="{{ url('csnps', kwargs={'gid':gene.ensembl}) }}">View SNPs in CDS</a></h2>
 <h3 class="ui header">Gene Information</h3>
 <table class="ui table">
 	<thead>

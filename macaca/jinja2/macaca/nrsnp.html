@@ -1,43 +1,20 @@
 {% extends "macaca/base.html" %}
 {% block main %}
 <h2 class="ui brown header">
-	MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}
+	MACSNPC{{"%02d%09d"|format(snp.chromosome.pk,snp.id)}}
 </h2>
-
-<h3 class="ui header">Individual Information</h3>
-<table class="ui table">
-	<thead>
-		<tr><th>Individual</th><th>Species</th><th>Common name</th><th>Group</th><th>Location</th></tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>{{ snp.individual.code }}</td>
-			<td><i>{{ snp.individual.species.scientific }}</i></td>
-			<td>{{ snp.individual.species.common }}</td>
-			<td>{{ snp.individual.species.group.name }}</td>
-			<td>{{ snp.individual.location }}</td>
-		</tr>
-	</tbody>
-</table>
 
 <h3 class="ui header">Variant Allele information</h3>
 <table class="ui table">
 	<thead>
-		<tr><th>Chromosome</th><th>Position</th><th>Reference</th><th>Alteration</th><th>Genotype</th></tr>
+		<tr><th>Chromosome</th><th>Position</th><th>Reference</th><th>Alteration</th></tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>{{ snp.snp.chromosome.name }}</td>
-			<td>{{ snp.snp.position }}</td>
-			<td><span class="{{ snp.snp.reference }}">{{ snp.snp.reference }}</span></td>
-			<td><span class="{{ snp.snp.alteration }}">{{ snp.snp.alteration }}</span></td>
-			<td>
-				{% if snp.genotype == 1 %}
-				<div class="ui mini circular red label">homozygote</div>
-				{% else %}
-				<div class="ui mini circular blue label">heterozygote</div>
-				{% endif %}
-			</td>
+			<td>{{ snp.chromosome.name }}</td>
+			<td>{{ snp.position }}</td>
+			<td><span class="{{ snp.reference }}">{{ snp.reference }}</span></td>
+			<td><span class="{{ snp.alteration }}">{{ snp.alteration }}</span></td>
 		</tr>
 	</tbody>
 </table>
@@ -47,7 +24,7 @@
 	<tr>
 		<td>5' Flanking Sequence</td>
 		<td>
-			{% for b in snp.snp.five %}
+			{% for b in snp.five %}
 			<span class="{{ b }}">{{ b }}</span>
 			{% endfor %}
 		</td>
@@ -55,7 +32,7 @@
 	<tr>
 		<td>3' Flanking Sequence</td>
 		<td>
-			{% for b in snp.snp.three %}
+			{% for b in snp.three %}
 			<span class="{{ b }}">{{ b }}</span>
 			{% endfor %}
 		</td>
@@ -113,23 +90,23 @@
 	</tbody>
 </table>
 
-<h3 class="ui header">SNPs of other individuals in this position</h3>
-<table class="ui celled definition table">
-	<tbody>
+<h3 class="ui header">Genotypes in individuals</h3>
+<table class="ui celled table">
+	<thead>
 		<tr>
-			<td>Individual</td>
 			{% for sample in samples %}
-			<td>{{ sample.code }}</td>
+			<th>{{ sample.code }}</th>
 			{% endfor %}
 		</tr>
+	</thead>
+	<tbody>
 		<tr>
-			<td>Genotype</td>
 			{% for s in samples %}
 			<td>
 			{% if genotypes[s.id] == 1 %}
-			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos red"></span></a>
+			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos red"></span></a>
 			{% elif genotypes[s.id] == 2 %}
-			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos blue"></span></a>
+			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos blue"></span></a>
 			{% elif genotypes[s.id] == 3 %}
 			<span class="genotype-circos green"></span>
 			{% else %}
@@ -141,7 +118,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<th colspan="20">
+			<th colspan="21">
 				<div class="ui right floated basic segment">
 					<span class="genotype-circos red"></span> Homozygote
 					<span class="genotype-circos blue"></span> Heterozygote

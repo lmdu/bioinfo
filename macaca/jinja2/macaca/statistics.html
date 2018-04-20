@@ -47,7 +47,7 @@
 		<tr>
 			<td>{{ rows[i][0] }}</td>
 			{% for j in range(1,21) %}
-			<td><a href="{{ url('variants') }}?chr={{ j }}&sample={{ i+1 }}&feature={{ paras.feature }}&genotype={{ paras.genotype }}&mutation={{ paras.mutation }}">{{ rows[i][j] }}</a></td>
+			<td><a href="{{ url('isnps') }}?chr={{ j }}&sample={{ i+1 }}&feature={{ paras.feature }}&genotype={{ paras.genotype }}&mutation={{ paras.mutation }}">{{ rows[i][j] }}</a></td>
 			{% endfor %}
 		</tr>
 		{% endfor %}
