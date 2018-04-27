@@ -113,6 +113,22 @@
 </div>
 <div class="ui info message">Note: genotype attribute cannot be applied to filter non-redundant SNPs</div>
 
+<div class="ui dividing header">Associated Gene</div>
+<div class="two fields">
+	<div class="field">
+		<label>Gene ID type</label>
+		<select name="idtype" class="ui selection dropdown">
+			<option value="ensembl">Macaque Ensembl Gene</option>
+			<option value="disease">OMIM pheotype accession number</option>
+			<option value="drug">Drug ID from Drugbank</option>
+		</select>
+	</div>
+	<div class="field">
+		<label>Gene ID</label>
+		<input type="text" name="gene">
+	</div>
+</div>
+
 <div class="fields">
 	<div class="field">
 		<button type="submit" class="ui brown button">Search and Download SNPs</button>
