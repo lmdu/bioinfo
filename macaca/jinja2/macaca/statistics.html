@@ -1,5 +1,14 @@
 {% set urlname="statistics" %}
 {% extends "macaca/base.html" %}
+
+{% block head %}
+<style type="text/css">
+.ui[class*="very compact"].table td {
+	padding: .4em .2em;
+}
+</style>
+{% endblock %}
+
 {% block main %}
 
 {% set features=["All", "CDS", "EXON", "3'UTR", "INTRON", "5'UTR"] %}

@@ -205,8 +205,8 @@ class Gannot(models.Model):
 class Tannot(models.Model):
 	'''Transcript annotation'''
 	MUTATION_TYPES = (
-		(1, 'Non-synonymous'),
-		(2, 'Synonymous'),
+		(1, 'Synonymous'),
+		(2, 'Non-synonymous'),
 	)
 	transcript_pos = models.IntegerField(help_text="Relative position in transcript")
 	ref_codon = models.CharField(max_length=3, help_text="SNP site reference codon")
@@ -225,8 +225,8 @@ class Tannot(models.Model):
 class Mutation(models.Model):
 	'''Synonymous or non-synonymous mutations'''
 	MUTATION_TYPES = (
-		(1, 'Non-synonymous'),
-		(2, 'Synonymous'),
+		(1, 'Synonymous'),
+		(2, 'Non-synonymous'),
 	)
 	synonymous = models.IntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)

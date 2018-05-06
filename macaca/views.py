@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
-
-# Create your views here.
-from django.http import HttpResponse, Http404
+from django.urls import reverse
+from django.http import HttpResponse, Http404, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db.models import Q
 from .models import *
 
 # Create your views here.
@@ -300,6 +300,8 @@ def retrieve(request):
 		genotype = int(request.GET.get('genotype')),
 		mutation = int(request.GET.get('mutation')),
 		samples = request.GET.getlist('samples'),
+		gene_type = request.GET.get('idtype'),
+		gene_id = request.GET.get('gene'),
 	)
 	
 	sample_ids = list(map(int, paras['samples']))
@@ -332,6 +334,15 @@ def retrieve(request):
 
 	if paras['mutation']:
 		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
+
+	if paras['gene_id']:
+		if paras['gene_type'] == 'ensembl':
+			snps = snps.filter(snp__gannot__gene__ensembl=paras['gene_id'])
+		elif paras['gene_type'] == 'drug':
+			snps = snps.filter(snp__gannot__gene__orthology__drug__drug_id=paras['gene_id'])
+		elif paras['gene_type'] == 'disease':
+			snps = snps.filter(snp__gannot__gene__orthology__disease__pomim=paras['gene_id'])
+
 
 	paginator = Paginator(snps, paras['records'])
 	try:
@@ -438,11 +449,60 @@ def gene(request, gid):
 		'pfams': pfams,
 	})
 
+@csrf_exempt
 def drugs(request):
-	drugs = Drug.objects.all()
-	return render(request, 'macaca/drugs.html', {
-		'drugs': drugs,
-	})
+	if request.method == 'GET':
+		return render(request, 'macaca/drugs.html')
+	
+	elif request.method == 'POST':
+		order = int(request.POST.get('order[0][column]'))
+		order_dir = request.POST.get('order[0][dir]')
+		search = request.POST.get('search[value]')
+		start = int(request.POST.get('start'))
+		length = int(request.POST.get('length'))
+		total_count = Drug.objects.count()
+		filter_count = total_count
+		
+		drugs = Drug.objects.all()
+		if search:
+			drugs = drugs.filter(
+				Q(orthology__gene__ensembl__contains=search)
+				| Q(orthology__gene__name__contains=search)
+				| Q(orthology__gene__description__contains=search)
+				| Q(drug_id__contains=search)
+			)
+			filter_count = drugs.count()
+
+		sign = '-' if order_dir == 'desc' else ''
+		if order == 0:
+			drugs = drugs.order_by('{}orthology__gene__ensembl'.format(sign))
+		elif order == 1:
+			drugs = drugs.order_by('{}orthology__gene__name'.format(sign))
+		elif order == 2:
+			drugs = drugs.order_by('{}orthology__gene__description'.format(sign))
+		elif order == 3:
+			drugs = drugs.order_by('{}drug_id'.format(sign))
+
+
+
+		drugs = drugs[start:start+length]
+
+		rows = []
+		for drug in drugs:
+			row = []
+			row.append('<a href="{}">{}</a>'.format(reverse('gene', kwargs={'gid':drug.orthology.gene.ensembl}), drug.orthology.gene.ensembl))
+			row.append(drug.orthology.gene.name)
+			row.append(drug.orthology.gene.description)
+			row.append('<a href="{}">{}</a>'.format(reverse('drug', kwargs={'did': drug.drug_id}), drug.drug_id))
+			row.append('<a class="ui orange basic label" href="{}">Browse</a>'.format(reverse('csnps', kwargs={'gid':drug.orthology.gene.ensembl})))
+			rows.append(row)
+
+		return JsonResponse({
+			'draw': request.POST.get('draw'),
+			'recordsTotal': total_count,
+			'recordsFiltered': filter_count,
+			'data': rows,
+		})
 
 def drug(request, did):
 	try:

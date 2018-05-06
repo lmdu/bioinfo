@@ -16,7 +16,7 @@
 	</tbody>
 </table>
 
-<h3 class="ui header">Drug associated genes</h3>
+<h3 class="ui header">Drug targeted genes</h3>
 <table class="ui table">
 	<thead>
 		<tr><th>Ensembl ID</th><th>Symbol</th><th>Name</th><th>Human Orthology</th><th>Drugbank ID</th><th>SNPs in CDS</th></tr>
@@ -29,7 +29,7 @@
 			<td>{{ drug.orthology.gene.description }}</td>
 			<td><a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ drug.orthology.human_ensembl }}" target="_blank">{{ drug.orthology.human_ensembl }}</a></td>
 			<td><a href="https://www.drugbank.ca/biodb/bio_entities/{{ drug.partner }}" target="_blank">{{ drug.partner }}</a></td>
-			<td><a href="{{ url('snpcds', kwargs={'gid':drug.orthology.gene.ensembl}) }}" class="ui mini basic orange button">View</a></td>
+			<td><a href="{{ url('csnps', kwargs={'gid':drug.orthology.gene.ensembl}) }}" class="ui basic orange button">Browse</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>

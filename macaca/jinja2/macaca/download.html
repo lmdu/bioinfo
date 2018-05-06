@@ -19,6 +19,8 @@
 	<input type="hidden" name="feature" value="{{ paras.feature }}">
 	<input type="hidden" name="genotype" value="{{ paras.genotype }}">
 	<input type="hidden" name="mutation" value="{{ paras.mutation }}">
+	<input type="hidden" name="idtype" value="{{ paras.gene_type }}">
+	<input type="hidden" name="gene" value="{{ paras.gene_id }}">
 	{% for s in paras.samples %}
 	<input type="hidden" name="samples" value="{{ s }}">
 	{% endfor %}
@@ -64,6 +66,17 @@
 			{% if paras.end %}
 			{{ paras.end }}
 			{% endif %}
+		</div>
+		<div class="item">
+			<strong>
+				{% if paras.gene_type == 'ensembl' %}
+				Ensembl gene ID
+				{% elif paras.gene_type == 'disease' %}
+				OMIM accession
+				{% elif paras.gene_type == 'drug' %}
+				Drugbank drug ID
+				{% endif %}
+			</strong>: {{ paras.gene_id }}
 		</div>
 		<div class="item">
 			<strong>Gene location</strong>: {{features[paras.feature]}}

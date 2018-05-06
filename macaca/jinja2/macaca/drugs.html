@@ -1,23 +1,34 @@
 {% set urlname="drugs" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+Drug target genes - MACSNPdb
+{% endblock %}
+
 {% block main %}
 <h2 class="ui header">Drug Target Genes</h2>
-<table class="ui table amazing">
+<table class="ui table">
 	<thead>
-		<tr><th>Ensembl ID</th><th>Symbol</th><th>Name</th><th>Drug ID</th><th>Drug Name</th><th>SNPs in CDS</th></tr>
-	</thead>
-	<tbody>
-		{% for drug in drugs %}
 		<tr>
-			<td><a href="{{ url('gene', kwargs={'gid':drug.orthology.gene.ensembl}) }}">{{ drug.orthology.gene.ensembl }}</a></td>
-			<td>{{ drug.orthology.gene.name }}</td>
-			<td>{{ drug.orthology.gene.description }}</td>
-			<td><a href="{{ url('drug', kwargs={'did': drug.drug_id}) }}" target="_blank">{{ drug.drug_id }}</a></td>
-			<td>{{ drug.drug_name }}</td>
-			<td><a href="{{ url('csnps', kwargs={'gid':drug.orthology.gene.ensembl}) }}" class="ui mini orange label">View</a></td>
+			<th class="single line">Ensembl ID</th>
+			<th class="single line">Symbol</th>
+			<th>Name</th>
+			<th class="single line">Drug ID</th>
+			<th class="single line">SNPs in CDS</th>
 		</tr>
-		{% endfor %}
-	</tbody>
+	</thead>
 </table>
+<script type="text/javascript">
+$('.ui.table').DataTable({
+	columnDefs: [
+		{ "orderable": false, "targets": -1}
+	],
+	processing: true,
+	serverSide: true,
+	ajax: {
+		url: '{{ url("drugs") }}',
+		type: 'POST'
+	}
+});
+</script>
 {% endblock %}

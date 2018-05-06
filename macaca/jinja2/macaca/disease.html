@@ -29,7 +29,7 @@
 			<td>{{ disease.orthology.gene.description }}</td>
 			<td><a href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?g={{ disease.orthology.human_ensembl }}" target="_blank">{{ disease.orthology.human_ensembl }}</a></td>
 			<td><a href="https://omim.org/entry/{{ disease.gomim }}" target="_blank">{{ disease.gomim }}</a></td>
-			<td><a href="{{ url('snpcds', kwargs={'gid':disease.orthology.gene.ensembl}) }}" class="ui mini basic orange button">View</a></td>
+			<td><a href="{{ url('csnps', kwargs={'gid':disease.orthology.gene.ensembl}) }}" class="ui basic orange button">Browse</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>

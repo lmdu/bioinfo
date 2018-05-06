@@ -5,7 +5,13 @@
 <h2 class="ui header">Disease Associated Genes</h2>
 <table class="ui table amazing">
 	<thead>
-		<tr><th>Ensembl ID</th><th>Symbol</th><th>Name</th><th>Phenotype OMIM</th><th>SNPs in CDS</th></tr>
+		<tr>
+			<th class="single line">Ensembl ID</th>
+			<th class="single line">Symbol</th>
+			<th>Name</th>
+			<th class="single line">Phenotype OMIM</th>
+			<th class="single line">SNPs in CDS</th>
+		</tr>
 	</thead>
 	<tbody>
 		{% for disease in diseases %}
@@ -14,7 +20,7 @@
 			<td>{{ disease.orthology.gene.name }}</td>
 			<td>{{ disease.orthology.gene.description }}</td>
 			<td><a href="{{ url('disease', kwargs={'did': disease.pomim}) }}">{{ disease.pomim }}</a></td>
-			<td><a href="{{ url('csnps', kwargs={'gid':drug.orthology.gene.ensembl}) }}" class="ui mini orange label">View</a></td>
+			<td><a href="{{ url('csnps', kwargs={'gid':disease.orthology.gene.ensembl}) }}" class="ui basic orange label">Browse</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>

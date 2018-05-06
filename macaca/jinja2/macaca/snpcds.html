@@ -3,31 +3,32 @@
 
 {% block main %}
 <h3 class="ui header">SNPs in {{ gid }}  Gene CDS Region</h3>
-<table class="ui compact table amazing">
+<table class="ui table amazing">
 	<thead>
-		<tr><th>SNP ID</th><th>Individual</th><th>Species</th><th>Group</th><th>Mutation</th><th>Genotype</th></tr>
+		<tr><th>SNP ID</th><th>Individual</th><th>Position</th><th>Reference</th><th>Alteration</th><th>Mutation</th><th>Genotype</th></tr>
 	</thead>
 	<tbody>
 		{% for snp in snps %}
 		<tr>
 			<td><a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNPI{{"%02d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
 			<td>{{ snp.individual.code }}</td>
-			<td>{{ snp.individual.species.common }}</td>
-			<td>{{ snp.individual.species.group.name }}</td>
+			<td>chr{{ snp.chromosome.pk }}: {{snp.snp.position}}</td>
+			<td><span class="{{ snp.snp.reference }}">{{ snp.snp.reference }}</span></td>
+			<td><span class="{{ snp.snp.alteration}}">{{ snp.snp.alteration}}</span></td>
 			<td>
 				{% for m in snp.snp.mutation_set.all() %}
-				{% if loop.index == 1 %}
-				{{ m.get_synonymous_display() }}
+				{% if m.synonymous == 1 %}
+				<div class="ui yellow label">{{ m.get_synonymous_display() }}</div>
 				{% else %}
-				/ {{ m.get_synonymous_display() }}
+				<div class="ui green label">{{ m.get_synonymous_display() }}</div>
 				{% endif %}
 				{% endfor %}
 			</td>
 			<td>
 				{% if snp.genotype == 1 %}
-				<span class="genotype homo">homozygote</span>
+				<div class="ui red label">homozygote</div>
 				{% else %}
-				<span class="genotype hetero">heterozygote</span>
+				<div class="ui blue label">heterozygote</div>
 				{% endif %}
 			</td>
 		</tr>
