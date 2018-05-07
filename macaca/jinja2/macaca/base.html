@@ -3,12 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>{% block title %}{% endblock %}</title>
-	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/semantic-ui/2.3.1/semantic.min.js"></script>
-  <script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.bootcss.com/datatables/1.10.16/js/dataTables.semanticui.min.js"></script>
-	<link href="https://cdn.bootcss.com/semantic-ui/2.3.1/semantic.min.css" rel="stylesheet">
-  <link href="https://cdn.bootcss.com/datatables/1.10.16/css/dataTables.semanticui.min.css" rel="stylesheet">
+	<script src="{{ static('macaca/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ static('macaca/semantic/semantic.min.js') }}"></script>
+	<link href="{{ static('macaca/semantic/semantic.min.css') }}" rel="stylesheet">
 	<script src="{{ static('macaca/action.js') }}"></script>
   <link rel="stylesheet" href="{{ static('macaca/style.css') }}">
   {% block head %}{% endblock %}
@@ -42,8 +39,8 @@
           Help<i class="dropdown icon"></i>
           <div class="menu">
             <a class="item" href="{{ url('organism') }}">Individual information</a>
-            <a class="item" href="/">User guide</a>
-            <a class="item" href="/">Process pipeline</a>
+            <a class="item" href="{{ url('help', kwargs={'page': 'document'}) }}">Documentation</a>
+            <a class="item" href="{{ url('help', kwargs={'page': 'pipeline'}) }}">Process pipeline</a>
           </div>
         </div>
       </div>
@@ -57,15 +54,15 @@
 </div>
 
 <div class="ui inverted brown vertical footer segment">
-	<div class="ui center aligned container">
-      <div class="ui stackable inverted divided grid">
+	<div class="ui left aligned container">
+      <div class="ui stackable inverted grid">
         <div class="three wide column">
-          <h4 class="ui inverted header">Group 1</h4>
+          <h4 class="ui inverted header">Browse</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Link One</a>
-            <a href="#" class="item">Link Two</a>
-            <a href="#" class="item">Link Three</a>
-            <a href="#" class="item">Link Four</a>
+            <a href="#" class="item">Individual SNPs</a>
+            <a href="#" class="item">Specific SNPs</a>
+            <a href="#" class="item">Non-redundant SNPs</a>
+            <a href="#" class="item">Gene-related SNPs</a>
           </div>
         </div>
         <div class="three wide column">
@@ -78,12 +75,12 @@
           </div>
         </div>
         <div class="three wide column">
-          <h4 class="ui inverted header">Group 3</h4>
+          <h4 class="ui inverted header">Resources</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Link One</a>
-            <a href="#" class="item">Link Two</a>
-            <a href="#" class="item">Link Three</a>
-            <a href="#" class="item">Link Four</a>
+            <a href="#" class="item">NCBI dbSNP</a>
+            <a href="#" class="item">Ensembl</a>
+            <a href="#" class="item">Drugbank</a>
+            <a href="#" class="item">OMIM</a>
           </div>
         </div>
         <div class="seven wide column">

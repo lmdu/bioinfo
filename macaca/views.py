@@ -483,8 +483,6 @@ def drugs(request):
 		elif order == 3:
 			drugs = drugs.order_by('{}drug_id'.format(sign))
 
-
-
 		drugs = drugs[start:start+length]
 
 		rows = []
@@ -514,11 +512,59 @@ def drug(request, did):
 		'drugs': drugs,
 	})
 
+@csrf_exempt
 def diseases(request):
-	diseases = Disease.objects.all()
-	return render(request, 'macaca/diseases.html',{
-		'diseases': diseases,
-	})
+	if request.method == 'GET':
+		return render(request, 'macaca/diseases.html')
+
+	elif request.method == 'POST':
+		order = int(request.POST.get('order[0][column]'))
+		order_dir = request.POST.get('order[0][dir]')
+		search = request.POST.get('search[value]')
+		start = int(request.POST.get('start'))
+		length = int(request.POST.get('length'))
+		total_count = Disease.objects.count()
+		filter_count = total_count
+		
+		diseases = Disease.objects.all()
+		if search:
+			diseases = diseases.filter(
+				Q(orthology__gene__ensembl__contains=search)
+				| Q(orthology__gene__name__contains=search)
+				| Q(orthology__gene__description__contains=search)
+				| Q(pomim__contains=search)
+			)
+			filter_count = diseases.count()
+
+		sign = '-' if order_dir == 'desc' else ''
+		if order == 0:
+			diseases = diseases.order_by('{}orthology__gene__ensembl'.format(sign))
+		elif order == 1:
+			diseases = diseases.order_by('{}orthology__gene__name'.format(sign))
+		elif order == 2:
+			diseases = diseases.order_by('{}orthology__gene__description'.format(sign))
+		elif order == 3:
+			diseases = diseases.order_by('{}pomim'.format(sign))
+
+		diseases = diseases[start:start+length]
+
+		rows = []
+		for disease in diseases:
+			row = []
+			row.append('<a href="{}">{}</a>'.format(reverse('gene', kwargs={'gid':disease.orthology.gene.ensembl}), disease.orthology.gene.ensembl))
+			row.append(disease.orthology.gene.name)
+			row.append(disease.orthology.gene.description)
+			row.append('<a href="{}">{}</a>'.format(reverse('disease', kwargs={'did': disease.pomim}), disease.pomim))
+			row.append('<a class="ui orange basic label" href="{}">Browse</a>'.format(reverse('csnps', kwargs={'gid':disease.orthology.gene.ensembl})))
+			rows.append(row)
+
+		return JsonResponse({
+			'draw': request.POST.get('draw'),
+			'recordsTotal': total_count,
+			'recordsFiltered': filter_count,
+			'data': rows,
+		})
+
 
 def disease(request, did):
 	did = int(did)
@@ -596,4 +642,6 @@ def statistics(request):
 		'rows': rows,
 	})
 
+def help(request, page):
+	return render(request, 'macaca/%s.html' % page)
 	

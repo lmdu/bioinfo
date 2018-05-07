@@ -5,22 +5,32 @@
 <div id="hero">
 	<div id="hero-top">
 		<h1>Macaque SNP Database</h1>
-		<h2>a data container for the variation information of dog/wolf genomes</h2>
+		<h2>a database for genetic divergence investigation among macaques</h2>
 	</div>
 	<div id="hero-center">
 		<form method="get" id="search" action="{{url('search')}}">
 			<div class="ui inverted fluid huge icon input">
-				<input type="text" id="search-input" name="q" placeholder="MACSNPI18000001060">
+				<input type="text" id="search-input" name="q" placeholder="MACSNP018000001060">
 				<i class="search link icon"></i>
 			</div>
-			<p>Your input can not be empty and the input must be one below:</p>
+			<p style="text-align: left;">Your input can not be empty and the input may be a SNP identifier, OMIM phenotype accession, Drug ID from Drugbank database or macaque Ensembl gene ID</p>
 		</form>
 	</div>
-	<div id="hero-bottom">Version 1.0 / Last updated: Jul 26, 2014</div>
+	<div id="hero-bottom">
+		<div class="ui horizontal list">
+			<div class="item">
+				<div class="ui green image label">Version <div class="detail">1.0</div></div>
+			</div>
+			<div class="item">
+				<div class="ui blue image label">Last updated <div class="detail">May 8, 2018</div></div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block main %}
+<div class="ui basic large segment">
 <div class="ui two column divided grid">
 	<div class="row">
 		<div class="twelve wide column">
@@ -30,12 +40,12 @@
 In the current version, DoGSD contains 19 millions non-redundant SNPs retrived from dbSNP (ver 139) and called from 77 individual smaples.</p>
 			
 			<h3 class="ui header">Features</h3>
-			<ul class="ui list">
-				<li>We provide a non-redundant dataset for all SNPs and individual list for each sample.</li>
-				<li>We provide two ways to view SNP, one is table-based format and the other is chromosome based GBrowse format.</li>
-				<li>We provide detailed information of each SNP, including original sample, sequencing platform, chromosome position, SNP annotation, 3/5 flank sequences, SNPs of same position but detected in other samples, allele frequencies of dog/wolf populations and Fst value between dog and wolf populations.</li>
-				<li>We provide the comparative analysis function to facilitate a quick comparison of SNPs in different samples.</li>
-				<li>We provide table-delimited SNP, bam/sra and fastq files of each individual in the download ftp. User can get all the data and do more deep analysis.</li>
+			<ul class="ui relaxed list">
+				<li class="item">We provide a non-redundant dataset for all SNPs and individual list for each sample.</li>
+				<li class="item">We provide two ways to view SNP, one is table-based format and the other is chromosome based GBrowse format.</li>
+				<li class="item">We provide detailed information of each SNP, including original sample, sequencing platform, chromosome position, SNP annotation, 3/5 flank sequences, SNPs of same position but detected in other samples, allele frequencies of dog/wolf populations and Fst value between dog and wolf populations.</li>
+				<li class="item">We provide the comparative analysis function to facilitate a quick comparison of SNPs in different samples.</li>
+				<li class="item">We provide table-delimited SNP, bam/sra and fastq files of each individual in the download ftp. User can get all the data and do more deep analysis.</li>
 			</ul>
 
 			<h3 class="ui header">Publications</h3>
@@ -56,5 +66,6 @@ In the current version, DoGSD contains 19 millions non-redundant SNPs retrived f
 			</ul>
 		</div>
 	</div>
+</div>
 </div>
 {% endblock %}

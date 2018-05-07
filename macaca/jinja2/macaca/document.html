@@ -1,0 +1,91 @@
+{% extends "macaca/base.html" %}
+
+{% block main %}
+<div class="ui basic large segment">
+<div class="ui two column grid">
+	<div class="four wide column" id="document">
+		<div class="ui sticky">
+			<div class="ui vertical large menu">
+				<div class="item">
+					<a href="#1" class="header">1 Homepage of MACSNPdb</a>
+				</div>
+				<div class="item">
+					<a href="#2" class="header">2 Browse SNPs</a>
+					<div class="menu">
+						<a href="#2.1" class="item">2.1 SNP unique identifiers</a>
+						<a href="#2.2" class="item">2.2 Individual SNPs</a>
+						<a href="#2.3" class="item">2.3 Specific SNPs</a>
+						<a href="#2.4" class="item">2.4 Non-redundant SNPs</a>
+					</div>
+				</div>
+				<div class="item">
+					<a href="#3" class="header">3 Search and downlaod SNPs</a>
+					<div class="menu">
+						<a href="#3.1" class="item">Search SNPs</a>
+						<a href="#3.2" class="item">Retrieve SNPs</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="twelve wide column">
+		<h3 id="1">1 Homepage of MACSNPdb</h3>
+		<p><img class="ui centered bordered image" src="{{ static('macaca/images/demo1.png') }}"></p>
+		<h5>(1) Navigation bar of MACSNPdb database</h5>
+		<ul class="ui list">
+			<li class="item"><b>Home</b>: Quick search; About MACSNPdb; Acknowledgements</li>
+			<li class="item"><b>Browse</b>: Individual SNPs, Specific SNPs; Non-redundant SNPs</li>
+			<li class="item"><b>Genes</b>: Disease-associated genes; Drug-targeted genes</li>
+			<li class="item"><b>Statistics</b>: Statistics of SNPs</li>
+			<li class="item"><b>Retrieve</b>: Search and download SNPs</li>
+			<li class="item"><b>Help</b>: Sample information; Documentation; Process pipeline</li>
+		</ul>
+		<h5>(2) Quick search</h5>
+		<p>Quick search function allows users to provide a SNP identifier (individual, group-specific, species-specific or non-redundant SNP), macaque Ensembl gene ID, OMIM phenotype accession number or drug ID from Drugbank database to query item.</p>
+
+		<h3 id="2">Browe SNPs</h3>
+		<h4>SNP unique identifier</h4>
+		<p>The database will automatically generate a unique identifier for individual, specific or non-redundant SNP. All the SNP identifier start with "MACSNP". The constitution of three identifers are shown in the following Figure.</p>
+		<p><img class="ui centered bordered image" src="{{ static('macaca/images/snpid.png') }}"></p>
+
+		<h4 id="2.1">Individual SNPs</h4>
+		<p><img class="ui centered bordered image" src="{{ static('macaca/images/demo2.png') }}"></p>
+		<p>The individual SNPs browse pape includs the filtration pane (1) with the SNP result table (2) located under it. Through filtration pane, users may filter snps in table by specify chrosome number, individual, gene feature (CDS, UTR or Intron etc.), genotype (homozygote or heterozygote) and mutation type (non-synonymous or synonymous). Click SNP ID hyperlink, users can obtain detailed information for SNP.</p>
+
+		<div class="two column row">
+			<div class="column">
+				<img class="ui bordered image" src="{{ static('macaca/images/demo3.png') }}">
+				<p>Fig.3 Individual SNP browse page</p>
+			</div>
+			<div class="column">
+				<img class="ui bordered image" src="{{ static('macaca/images/demo4.png') }}">
+				<p>Fig.4 Individual SNP browse page</p>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+		<h4 id="2.2">Specific SNPs</h4>
+
+
+		<h4 id="2.3">Non-redundant SNPs</h4>
+
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+$('.ui.sticky').sticky({
+	offset: 50,
+	bottomOffset: 50,
+	context: '#document'
+});
+</script>
+
+{% endblock %}

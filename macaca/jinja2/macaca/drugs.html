@@ -5,6 +5,12 @@
 Drug target genes - MACSNPdb
 {% endblock %}
 
+{% block head %}
+<script src="{{ static('macaca/datatable/jquery.dataTables.min.js') }}"></script>
+<script src="{{ static('macaca/datatable/dataTables.semanticui.min.js') }}"></script>
+<link href="{{ static('macaca/datatable/dataTables.semanticui.min.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
 <h2 class="ui header">Drug Target Genes</h2>
 <table class="ui table">

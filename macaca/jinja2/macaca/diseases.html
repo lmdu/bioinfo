@@ -1,9 +1,15 @@
 {% set urlname="drugs" %}
 {% extends "macaca/base.html" %}
 
+{% block head %}
+<script src="{{ static('macaca/datatable/jquery.dataTables.min.js') }}"></script>
+<script src="{{ static('macaca/datatable/dataTables.semanticui.min.js') }}"></script>
+<link href="{{ static('macaca/datatable/dataTables.semanticui.min.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block main %}
 <h2 class="ui header">Disease Associated Genes</h2>
-<table class="ui table amazing">
+<table class="ui table">
 	<thead>
 		<tr>
 			<th class="single line">Ensembl ID</th>
@@ -13,16 +19,18 @@
 			<th class="single line">SNPs in CDS</th>
 		</tr>
 	</thead>
-	<tbody>
-		{% for disease in diseases %}
-		<tr>
-			<td><a href="{{ url('gene', kwargs={'gid':disease.orthology.gene.ensembl}) }}">{{ disease.orthology.gene.ensembl }}</a></td>
-			<td>{{ disease.orthology.gene.name }}</td>
-			<td>{{ disease.orthology.gene.description }}</td>
-			<td><a href="{{ url('disease', kwargs={'did': disease.pomim}) }}">{{ disease.pomim }}</a></td>
-			<td><a href="{{ url('csnps', kwargs={'gid':disease.orthology.gene.ensembl}) }}" class="ui basic orange label">Browse</a></td>
-		</tr>
-		{% endfor %}
-	</tbody>
 </table>
+<script type="text/javascript">
+$('.ui.table').DataTable({
+	columnDefs: [
+		{ "orderable": false, "targets": -1}
+	],
+	processing: true,
+	serverSide: true,
+	ajax: {
+		url: '{{ url("diseases") }}',
+		type: 'POST'
+	}
+});
+</script>
 {% endblock %}

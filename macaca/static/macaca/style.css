@@ -101,3 +101,7 @@
 	text-align:right;
 	background:linear-gradient(to top,rgba(0,0,0,.5) 0,rgba(0,0,0,0) 100%);
 }
+
+.center-aligned{
+	text-align: center;
+}

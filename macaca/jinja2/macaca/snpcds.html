@@ -5,12 +5,20 @@
 <h3 class="ui header">SNPs in {{ gid }}  Gene CDS Region</h3>
 <table class="ui table amazing">
 	<thead>
-		<tr><th>SNP ID</th><th>Individual</th><th>Position</th><th>Reference</th><th>Alteration</th><th>Mutation</th><th>Genotype</th></tr>
+		<tr>
+			<th>SNP ID</th>
+			<th>Individual</th>
+			<th>Position</th>
+			<th>Reference</th>
+			<th>Alteration</th>
+			<th>Mutation</th>
+			<th>Genotype</th>
+		</tr>
 	</thead>
 	<tbody>
 		{% for snp in snps %}
 		<tr>
-			<td><a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNPI{{"%02d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
+			<td><a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(snp.individual.id), 'sid':'%09d'|format(snp.snp.id)}) }}">MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}</a></td>
 			<td>{{ snp.individual.code }}</td>
 			<td>chr{{ snp.chromosome.pk }}: {{snp.snp.position}}</td>
 			<td><span class="{{ snp.snp.reference }}">{{ snp.snp.reference }}</span></td>
