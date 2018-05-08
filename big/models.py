@@ -19,14 +19,15 @@ class Article(models.Model):
 	slug = models.SlugField()
 	layout = models.SmallIntegerField(choices=PAGE_TYPE, default=1)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
-	created = models.DateTimeField(auto_now=True)
-	updated = models.DateTimeField(null=True)
+	created = models.DateTimeField(auto_now_add=True)
+	updated = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
 		return self.title
 
 class Publication(models.Model):
 	title = models.CharField(max_length=255)
+	slug = models.SlugField()
 	abstract = models.TextField()
 	authors = models.CharField(max_length=255)
 	journal = models.CharField(max_length=100)
@@ -35,7 +36,7 @@ class Publication(models.Model):
 	pages = models.CharField(max_length=20)
 	doi = models.CharField(max_length=100)
 	factor = models.FloatField()
-	created = models.DateTimeField(auto_now=True)
+	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.title
@@ -54,6 +55,10 @@ class Member(models.Model):
 class Slideshow(models.Model):
 	title = models.CharField(max_length=255)
 	description = models.TextField()
-	image = models.ImageField(upload_to='uploads/')
-	created = models.DateTimeField(auto_now=True)
+	image = models.ImageField()
+	article = models.ForeignKey(Article, on_delete=models.CASCADE)
+	created = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return self.title
 

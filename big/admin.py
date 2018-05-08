@@ -25,4 +25,4 @@ class MemberAdmin(admin.ModelAdmin):
 
 @admin.register(Slideshow)
 class SlideAdmin(admin.ModelAdmin):
-	list_display = ('id', 'title', 'image', 'created')
+	list_display = ('id', 'title', 'image', 'article', 'created')
