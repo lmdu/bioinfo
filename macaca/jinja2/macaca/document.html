@@ -53,7 +53,7 @@
 			<li class="item"><b>Help</b>: Sample information; Documentation; Process pipeline</li>
 		</ul>
 		<h4>(2) Quick search</h4>
-		<p>Quick search function allows users to provide a SNP identifier (individual, group-specific, species-specific or non-redundant SNP), macaque Ensembl gene ID, OMIM phenotype accession number or drug ID from Drugbank database to query item.</p>
+		<p>Quick search function allows you to provide a SNP identifier (individual, group-specific, species-specific or non-redundant SNP), macaque Ensembl gene ID, OMIM phenotype accession number or drug ID from Drugbank database to query item.</p>
 
 		<h2 id="2">2 Browe SNPs</h2>
 		<h3 id="2.1">2.1 SNP unique identifier</h3>
@@ -62,22 +62,28 @@
 
 		<h3 id="2.2">2.2 Individual SNPs</h3>
 		<p><img class="ui centered bordered image" src="{{ static('macaca/images/demo2.png') }}"></p>
-		<p>The individual SNPs browse pape includs the filtration pane (1) with the SNP result table (2) located under it. Through filtration pane, users may filter snps in table by specifying chrosome number, individual, gene feature (CDS, UTR or Intron etc.), genotype (homozygote or heterozygote) and mutation type (non-synonymous or synonymous). The result table listed SNP information including ID, position in chromosome, reference, alteration, individual, gene location and genotype. By clicking the SNP ID hyperlink, users can obtain detailed information for SNP.</p>
+		<p>The individual SNPs browse page includs the filtration pane (1) with the SNP result table (2) located under it. Through filtration pane, you may filter snps in table by specifying chrosome number, individual, gene feature (CDS, UTR or Intron etc.), genotype (homozygote or heterozygote) and mutation type (non-synonymous or synonymous). The result table listed SNP information including ID, position in chromosome, reference, alteration, individual, gene location and genotype. By clicking the SNP ID hyperlink, you can obtain detailed information for SNP.</p>
 
 		<h3 id="2.3">2.3 Specific SNPs</h3>
 		<p><img class="ui bordered image" src="{{ static('macaca/images/demo3.png') }}"></p>
-		<p>The specific SNPs browse page has the same interface with individual SNPs browe page. The filtration pane allows users to select a species or group to get a list of corresponding specific SNPs. The detailed information for specific SNP can be obtained by clicking the specific SNP ID hyperlink.</p>
+		<p>The specific SNPs browse page has the same interface with individual SNPs browe page. The filtration pane allows you to select a species or group to get a list of corresponding specific SNPs. The detailed information for specific SNP can be obtained by clicking the specific SNP ID hyperlink.</p>
 
 		<h3 id="2.4">2.4 Non-redundant SNPs</h3>
 		<p><img class="ui bordered image" src="{{ static('macaca/images/demo4.png') }}"></p>
-		<p>In the non-redundant SNPs browse page, in addition to non-redundant SNP information, users also get a genotyping comparative map of individuals. The genotyes are indicated by colored circle dots (red: homozygote, blue: heterozygote, green: not variant for that individual, gray: no reads mapped to this position for that individual). Users can select several individuals in filtration pane to generate a genotyping comparative map. Users may click the non-redundant SNP ID hyperlink to obtain detail information or click the red or blue dot to view individual SNP.</p>
+		<p>In the non-redundant SNPs browse page, in addition to non-redundant SNP information, you also get a genotyping comparative map of individuals. The genotyes are indicated by colored circle dots (red: homozygote, blue: heterozygote, green: not variant for that individual, gray: no reads mapped to this position for that individual). Users can select several individuals in filtration pane to generate a genotyping comparative map. Users may click the non-redundant SNP ID hyperlink to obtain detail information or click the red or blue dot to view individual SNP.</p>
 
 		<h2 id="3">3 Statistics</h2>
+		<p><img class="ui bordered image" src="{{ static('macaca/images/demo5.png') }}"></p>
+		<p>MACSNPdb summarizes SNP number by chromosome for each individuals and generates a statistical table shown in above figure. Each column indicates the SNP number in a chromosome of each individuals and Each row indicates the SNP number of a individual in each chromosome. Click the number, you can view the SNPs in a given chromosome and individual. You can use filters in filtration pane to get SNP summary table in gene region. You can also restrict the genotype and mutation type.</p>
 
 		<h2 id="4">4 Search and download SNPs</h2>
 		<h3 id="4.1">4.1 Search SNPs</h3>
+		<p><img class="ui bordered image" src="{{ static('macaca/images/demo6.png') }}"></p>
+		<p>MACSNPdb provide a flexible search function for you to retrieve desired SNPs. The above figure shows the interface of search page. You can select to search individual, group-specific, species-specific or non-redundant SNPs. You can set chromosome number, start position and end position. You can also set location of SNPs in gene, genotype and mutation type to restrict search result. Centainly, you can specify gene id to get gene-associated SNPs. When you search non-redundant SNPs, you can select multiple individuals to genotype comparison among individuals.</p>
 
 		<h3 id="4.2">4.2 Download SNPs</h3>
+		<p><img class="ui bordered image" src="{{ static('macaca/images/demo7.png') }}"></p>
+		<p>The above figure shows the search result of individual SNPs. You can select SNPs that you are interested and then click download button to obtain detailed information of selected SNPs.</p>
 
 	</div>
 </div>
@@ -86,7 +92,6 @@
 <script type="text/javascript">
 $('.ui.sticky').sticky({
 	offset: 50,
-	bottomOffset: 50,
 	context: '#document'
 });
 </script>
