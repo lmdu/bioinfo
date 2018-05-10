@@ -330,10 +330,17 @@ class Drug(models.Model):
 		index_together = ['drug_id', 'orthology']
 
 class Disease(models.Model):
-	gomim = models.IntegerField(help_text="Gene omim id")
-	pomim = models.IntegerField(db_index=True, help_text="disease omim id")
+	MAPPING_KEYS = (
+		(1, "The disorder was positioned by mapping of the wildtype gene"),
+		(2, "The disease phenotype itself was mapped"),
+		(3, "The molecular basis of the disorder is known"),
+		(4, "The disorder is a chromosome deletion or duplication syndrome")
+	)
+	gomim = models.IntegerField(help_text="gene omim accession")
+	pomim = models.IntegerField(db_index=True, help_text="disease omim accession")
 	phenotype = models.CharField(max_length=255, help_text="disease phenotype description")
-	symbol = models.CharField(max_length=20, help_text="disease phenotype symbol")
+	mapkey = models.SmallIntegerField(choices=MAPPING_KEYS, help_text="Phenotype mapping key")
+	inheritance = models.CharField(max_length=50, help_text="Inheritance")
 	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 	
 	class Meta:

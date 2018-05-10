@@ -570,21 +570,37 @@ def disease(request, did):
 	did = int(did)
 	try:
 		diseases = Disease.objects.filter(pomim=did)
+		phenotype = "; ".join(set([d.phenotype for d in diseases]))
 	except ObjectDoesNotExist:
 		raise Http404('No genes associated with disease {}'.format(did))
 
 	return render(request, 'macaca/disease.html', {
 		'diseases': diseases,
+		'phenotype': phenotype,
 	})	
 
 def cds_snps(request, gid):
 	gene = Gene.objects.get(ensembl=gid)
 	annots = Gannot.objects.filter(feature=1, gene__ensembl=gid)
 	snp_ids = [annot.snp.id for annot in annots]
-	snps = Variant.get_sharding_model(gene.chromosome.pk).objects.filter(snp__pk__in=snp_ids)
+	snps = Snps.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+
+	genotypes = {}
+	vs = Variant.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+	ns = Nonvariant.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+	for v in vs:
+		genotypes[(v.snp.id, v.individual.id)] = v.genotype
+
+	for n in ns:
+		genotypes[(n.snp.id, n.individual.id)] = 3
+
+	species = Individual.objects.all()
+
 	return render(request, 'macaca/snpcds.html', {
 		'snps': snps,
 		'gid': gid,
+		'genotypes': genotypes,
+		'species': species,
 	})
 
 def pileup(request, sid):
