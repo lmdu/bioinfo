@@ -1,0 +1,21 @@
+{% extends "big/base.html" %}
+{% block main %}
+
+<div class="container">
+	<div class="row mt-5">
+		<div class="col-8">
+			<h4 class="mt-0">
+				<a href="{{ url('article', kwargs={'slug': post.slug}) }}">{{ post.title }}</a>
+			</h4>
+			<div class="mt-3 mb-3">
+				<a class="badge badge-success" href="{{ url('category', kwargs={'slug':post.category.slug}) }}">{{ post.category.name }}</a>
+				<span class="text-muted">{{ dj.date(post.created, 'Y-m-d H:i:s') }}</span>
+			</div>
+			{{ post.content|safe }}
+		</div>
+		<div class="col-4">
+			{% include "big/sidebar.html" %}
+		</div>
+	</div>
+</div>
+{% endblock %}

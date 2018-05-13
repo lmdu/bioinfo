@@ -1,0 +1,39 @@
+{% extends "big/base.html" %}
+
+{% block main %}
+<div class="container">
+	<div class="row mt-5">
+		<div class="col-8">
+			{% for research in researches %}
+			<div class="row mb-5">
+				<div class="col-2">
+					<img class="img-fluid" src="{{ MEDIA_URL }}/{{ research.thumbnail }}">
+				</div>
+				<div class="col-10">
+					<h5 class="mt-0">
+						Impact Factor: <div class="badge badge-danger">{{ research.factor }}</div>
+					</h5>
+					<div class="text-muted">
+						{{ dj.date(research.created, 'Y-m-d H:i:s') }}
+					</div>
+					<div class="mt-2">
+						{{ research.authors }}
+						({{ research.year }})
+						<a href="http://doi.org/{{ research.doi }}">{{ research.title }}</a>.
+						{{ research.journal }}.
+						{{ research.volume }}
+						{% if research.issue %}
+						({{ research.issue }})
+						{% endif %}
+						: {{ research.pages }}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="col-4">
+			{% include "big/sidebar.html" %}
+		</div>
+	</div>
+</div>
+{% endblock %}
