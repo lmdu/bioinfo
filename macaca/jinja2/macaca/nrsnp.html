@@ -78,7 +78,23 @@
 		<tr>
 			<td><a href="http://www.ensembl.org/Macaca_mulatta/Transcript/Summary?t={{ transcript.transcript.ensembl }}" target="_blank">{{ transcript.transcript.ensembl }} <i class="external alternate icon"></i></a></td>
 			<td>{{ transcript.transcript_pos }}</td>
-			<td>{{ transcript.ref_codon|format_codon(transcript.codon_pos)|safe }} -> {{ transcript.alt_codon|format_codon(transcript.codon_pos)|safe }}</td>
+			<td>
+				{% for b in transcript.ref_codon -%}
+				{% if loop.index == transcript.codon_pos -%}
+				<b style="color:red;">{{ b }}</b>
+				{%- else -%}
+				{{ b }}
+				{%- endif %}
+				{%- endfor %}
+				 -> 
+				{% for b in transcript.alt_codon -%}
+				{% if loop.index == transcript.codon_pos -%}
+				<b style="color:red;">{{ b }}</b>
+				{%- else -%}
+				{{ b }}
+				{%- endif %}
+				{%- endfor %}
+			</td>
 			<td><a href="http://www.ensembl.org/Macaca_mulatta/Transcript/ProteinSummary?t={{ transcript.transcript.ensembl }}" target="_blank">{{ transcript.transcript.protein }} <i class="external alternate icon"></i></a></td>
 			<td>{{ transcript.protein_pos }}</td>
 			<td>{{ transcript.ref_aa }} -> {{ transcript.alt_aa }}</td>

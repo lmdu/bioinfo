@@ -24,7 +24,8 @@
 		<span>Species</span>
 		<a class="ui species label {% if paras.species==0 %} orange {% endif %}" data-num="0">All</a>
 		{% for s in species %}
-		<a class="ui species label {% if paras.species==s.id %} orange {% endif %}" data-num="{{s.id}}">{{s.common|species_code }}</a>
+		{% set r = s.common.split() %}
+		<a class="ui species label {% if paras.species==s.id %} orange {% endif %}" data-num="{{s.id}}">{{ s.code }}</a>
 		{% endfor %}
 		
 		<span>Groups</span>

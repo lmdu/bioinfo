@@ -1,11 +1,10 @@
-import copy
 from django.apps import apps
 from django.db import models
 
 # Create your models here.
 class Chromosome(models.Model):
 	name = models.CharField(max_length=5, help_text="Chromosome name, chr1-chr20")
-	size = models.IntegerField(help_text = "Chromosome sequence length")
+	size = models.IntegerField(help_text="Chromosome sequence length")
 
 	class Meta:
 		db_table = 'chromosome'
@@ -20,16 +19,17 @@ class Species(models.Model):
 	taxonomy = models.IntegerField(help_text="NCBI taxonomy number")
 	scientific = models.CharField(max_length=50, help_text="Scientific name")
 	common = models.CharField(max_length=50, help_text="Common name")
+	code = models.CharField(max_length=5, help_text="New code")
 	group = models.ForeignKey(Groups, on_delete=models.CASCADE, help_text="Species group information")
 
 	class Meta:
 		db_table = 'species'
 
 class Individual(models.Model):
-	code = models.CharField(max_length=5,help_text="Custom code number for species")
+	code = models.CharField(max_length=5, help_text="Custom code number for species")
 	sample = models.CharField(max_length=20, help_text="sample seria number")
 	location = models.CharField(max_length=100, help_text="Where the sample collected")
-	non_variant = models.BigIntegerField(help_text = "The number of non-variant sites")
+	non_variant = models.BigIntegerField(help_text="The number of non-variant sites")
 	heterozygous = models.IntegerField(help_text="The number of heterozygous sites")
 	homozygous = models.IntegerField(help_text="The number of homozygous sites")
 	variants = models.IntegerField(help_text="The number of total variant sites")
@@ -106,7 +106,7 @@ class Variant(models.Model):
 		(1, 'Homozygote'),
 		(2, 'Heterozygote')
 	)
-	genotype = models.IntegerField(choices=GENOTYPES, db_index=True, help_text="Alteration genotype")
+	genotype = models.PositiveSmallIntegerField(choices=GENOTYPES, db_index=True, help_text="Alteration genotype")
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
@@ -159,7 +159,7 @@ class Gene(models.Model):
 	ensembl = models.CharField(max_length=18, db_index=True, help_text="Ensembl gene id")
 	name = models.CharField(max_length=20, help_text="Gene symbol")
 	description = models.CharField(max_length=200, help_text="Gene description")
-	biotype = models.IntegerField(choices=CODING_TYPES, help_text="Gene coding types")
+	biotype = models.PositiveSmallIntegerField(choices=CODING_TYPES, help_text="Gene coding types")
 	start = models.IntegerField(help_text="Gene start position")
 	end = models.IntegerField(help_text="Gene end position")
 	strand = models.CharField(max_length=1, help_text="Gene strand")
@@ -189,7 +189,7 @@ class Gannot(models.Model):
 		(5, "5'UTR")
 	)
 	gene_pos = models.IntegerField(help_text="Relative position in gene")
-	feature = models.IntegerField(choices=FEATURE_TYPES, db_index=True, help_text="Gene features")
+	feature = models.PositiveSmallIntegerField(choices=FEATURE_TYPES, db_index=True, help_text="Gene features")
 	gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
 
@@ -215,7 +215,7 @@ class Tannot(models.Model):
 	ref_aa = models.CharField(max_length=10, help_text="The reference amino acid for SNP codon")
 	alt_aa = models.CharField(max_length=10, help_text="The alteration amino acid for SNP codon")
 	protein_pos = models.IntegerField(help_text="Relative position of codon in protein")
-	synonymous = models.IntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
+	synonymous = models.PositiveSmallIntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
 	transcript = models.ForeignKey(Transcript, on_delete=models.CASCADE)
 
@@ -228,7 +228,7 @@ class Mutation(models.Model):
 		(1, 'Synonymous'),
 		(2, 'Non-synonymous'),
 	)
-	synonymous = models.IntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
+	synonymous = models.PositiveSmallIntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
 	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
 
 	class Meta:
@@ -244,7 +244,7 @@ class Function(models.Model):
 		(3, 'Pfam'),
 		(4, 'InterPro')
 	)
-	source = models.IntegerField(choices=FUNC_TYPES, db_index=True, help_text="The function source database name")
+	source = models.PositiveSmallIntegerField(choices=FUNC_TYPES, db_index=True, help_text="The function source database name")
 	accession = models.CharField(max_length=15, help_text="Functional database accession id")
 	description = models.CharField(max_length=200, help_text="Function description")
 	supplement = models.CharField(max_length=80, help_text="Other information")
@@ -322,7 +322,7 @@ class Drug(models.Model):
 	partner = models.CharField(max_length=10, help_text="drugbank target gene id")
 	drug_id = models.CharField(max_length=7, db_index=True, help_text="drugbank durg id")
 	drug_name = models.CharField(max_length=255, help_text="drugbank drug name")
-	drug_type = models.IntegerField(choices=DRUG_TYPES, help_text="drugbank drug type")
+	drug_type = models.PositiveSmallIntegerField(choices=DRUG_TYPES, help_text="drugbank drug type")
 	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 
 	class Meta:
@@ -339,7 +339,7 @@ class Disease(models.Model):
 	gomim = models.IntegerField(help_text="gene omim accession")
 	pomim = models.IntegerField(db_index=True, help_text="disease omim accession")
 	phenotype = models.CharField(max_length=255, help_text="disease phenotype description")
-	mapkey = models.SmallIntegerField(choices=MAPPING_KEYS, help_text="Phenotype mapping key")
+	mapkey = models.PositiveSmallIntegerField(choices=MAPPING_KEYS, help_text="Phenotype mapping key")
 	inheritance = models.CharField(max_length=50, help_text="Inheritance")
 	orthology = models.ForeignKey(Orthology, on_delete=models.CASCADE)
 	

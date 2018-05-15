@@ -43,7 +43,6 @@
 			{% for b in snp.three %}
 			<span class="{{ b }}">{{ b }}</span>
 			{% endfor %}
-
 		</td>
 	</tr>
 </table>
@@ -56,7 +55,7 @@
 	<tbody>
 		{% for gene in genes %}
 		<tr>
-			<td><a class="ui item" href="">{{ gene.gene.ensembl }}</a></td>
+			<td><a class="ui item" href="{{ url('gene', kwargs={'gid': gene.gene.ensembl}) }}">{{ gene.gene.ensembl }}</a></td>
 			<td><a data-tooltip="{{ gene.gene.description }}">{{ gene.gene.name }}</a></td>
 			<td>{{ gene.gene.get_biotype_display() }}</td>
 			<td>{{ gene.gene_pos }}</td>
@@ -85,10 +84,26 @@
 	<tbody>
 		{% for transcript in transcripts %}
 		<tr>
-			<td><a href="http://www.ensembl.org/Macaca_mulatta/geneview?gene={{ transcript.transcript.ensembl }}">{{ transcript.transcript.ensembl }}</a></td>
+			<td><a href="http://www.ensembl.org/Macaca_mulatta/geneview?gene={{ transcript.transcript.ensembl }}">{{ transcript.transcript.ensembl }} <i class="external alternate icon"></i></a></td>
 			<td>{{ transcript.transcript_pos }}</td>
-			<td>{{ transcript.ref_codon|format_codon(transcript.codon_pos)|safe }} -> {{ transcript.alt_codon|format_codon(transcript.codon_pos)|safe }}</td>
-			<td><a href="http://www.ensembl.org/Macaca_mulatta/geneview?gene={{ transcript.transcript.protein }}">{{ transcript.transcript.protein }}</a></td>
+			<td>
+				{% for b in transcript.ref_codon -%}
+				{% if loop.index == transcript.codon_pos -%}
+				<b style="color:red;">{{ b }}</b>
+				{%- else -%}
+				{{ b }}
+				{%- endif %}
+				{%- endfor %}
+				 -> 
+				{% for b in transcript.alt_codon -%}
+				{% if loop.index == transcript.codon_pos -%}
+				<b style="color:red;">{{ b }}</b>
+				{%- else -%}
+				{{ b }}
+				{%- endif %}
+				{%- endfor %}
+			</td>
+			<td><a href="http://www.ensembl.org/Macaca_mulatta/geneview?gene={{ transcript.transcript.protein }}">{{ transcript.transcript.protein }} <i class="external alternate icon"></i></a></td>
 			<td>{{ transcript.protein_pos }}</td>
 			<td>{{ transcript.ref_aa }} -> {{ transcript.alt_aa }}</td>
 			<td>{{ transcript.get_synonymous_display() }}</td>
@@ -99,96 +114,42 @@
 	</tbody>
 </table>
 
-
-{% for gene in genes %}
-{% if gene.feature == 1 %}
-<h3 class="ui header">Functional Annotation for Gene <span style="color:#A52A2A;">{{ gene.gene.ensembl }}</span></h3>
-<h4 class="ui header">Gene Ontology (GO) Annotation</h4>
-<table class="ui compact table">
+<h3 class="ui header">Genotypes of individuals in this position</h3>
+<table class="ui celled table">
 	<thead>
-		<tr><th>GO Term</th><th>Description</th><th>Ontology</th></tr>
-	</thead>
-	<tbody>
-		{% for go in gene.gene.funcannot_set.filter(function__source=1) %}
 		<tr>
-			<td><a href="http://amigo.geneontology.org/amigo/term/{{ go.function.accession }}">{{ go.function.accession }}</a></td>
-			<td>{{ go.function.description }}</td>
-			<td>{{ go.function.supplement }}</td>
+			{% for sample in samples %}
+			<th>{{ sample.code }}</th>
+			{% endfor %}
 		</tr>
-		{% else %}
-		<tr><td colspan="3" class="center aligned">N/A</td></tr>
-		{% endfor %}
-	</tbody>
-</table>
-
-<h4 class="ui header">KEGG Pathway Annotation</h4>
-<table class="ui compact table">
-	<thead>
-		<tr><th>Pathway ID</th><th>Description</th><th>Category</th></tr>
 	</thead>
 	<tbody>
-		{% for kegg in gene.gene.funcannot_set.filter(function__source=2) %}
 		<tr>
-			<td><a href="http://www.kegg.jp/dbget-bin/www_bget?{{ kegg.function.accession }}">{{ kegg.function.accession }}</a></td>
-			<td>{{ kegg.function.description }}</td>
-			<td>{{ kegg.function.supplement }}</td>
-		</tr>
-		{% else %}
-		<tr><td colspan="3" class="center aligned">N/A</td></tr>
-		{% endfor %}
-	</tbody>
-</table>
-
-<h4 class="ui header">Pfam Protein Family</h4>
-<table class="ui compact table">
-	<thead>
-		<tr><th>Pfam ID</th><th>Description</th><th>Clan</th></tr>
-	</thead>
-	<tbody>
-		{% for pfam in gene.gene.funcannot_set.filter(function__source=4) %}
-		<tr>
-			<td><a href="http://pfam.xfam.org/family/{{ pfam.function.accession }}">{{ pfam.function.accession }}</a></td>
-			<td>{{ pfam.function.description }}</td>
+			{% for s in samples %}
 			<td>
-				{% if pfam.function.supplement %}
-				<a href="{{ pfam.function.supplement }}">{{ pfam.function.supplement }}</a>
-				{% else %}
-				N/A
-				{% endif %}
+			{% if genotypes[s.id] == 1 %}
+			<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos red"></span></a>
+			{% elif genotypes[s.id] == 2 %}
+			<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos blue"></span></a>
+			{% elif genotypes[s.id] == 3 %}
+			<span class="genotype-circos green"></span>
+			{% else %}
+			<span class="genotype-circos"></span>
+			{% endif %}
 			</td>
+			{% endfor %}
 		</tr>
-		{% else %}
-		<tr><td colspan="3">N/A</td></tr>
-		{% endfor %}
 	</tbody>
-</table>
-
-<h4 class="ui header">InterPro Domains</h4>
-<table class="ui compact table">
-	<thead>
-		<tr><th>InterPro ID</th><th>Description</th><th>Type</th></tr>
-	</thead>
-	<tbody>
-		{% for interpro in gene.gene.funcannot_set.filter(function__source=3) %}
+	<tfoot>
 		<tr>
-			<td><a href="http://www.ebi.ac.uk/interpro/entry/{{ interpro.function.accession }}">{{ interpro.function.accession }}</a></td>
-			<td>{{ interpro.function.description }}</td>
-			<td>
-				{% if interpro.function.supplement %}
-				{{ interpro.function.supplement }}
-				{% else %}
-				N/A
-				{% endif %}
-			</td>
+			<th colspan="21">
+				<div class="ui right floated basic segment">
+					<span class="genotype-circos red"></span> Homozygote
+					<span class="genotype-circos green"></span> Not variant
+				</div>
+			</th>
 		</tr>
-		{% else %}
-		<tr><td colspan="2">N/A</td></tr>
-		{% endfor %}
-	</tbody>
+	</tfoot>
 </table>
-
-{% endif %}
-{% endfor %}
-
 
 {% endblock %}

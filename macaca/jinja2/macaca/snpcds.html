@@ -21,7 +21,7 @@
 			<th>Mutation</th>
 			<th>
 				{% for s in species %}
-				<span style="display: inline-block; transform: rotate(-90deg); width: 30px; height: 22px;">
+				<span style="display: inline-block; transform: rotate(-90deg); width: 28px; height: 18px;">
 					{{ s.code }}
 				</span>
 				{% endfor %}
@@ -50,14 +50,14 @@
 
 				{% if k in genotypes %}
 				{% if genotypes[k] == 1 %}
-				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos red"></span></a>
+				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos small red"></span></a>
 				{% elif genotypes[k] == 2 %}
-				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos blue"></span></a>
+				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos small blue"></span></a>
 				{% elif genotypes[k] == 3 %}
-				<span class="genotype-circos green"></span>
+				<span class="genotype-circos small green"></span>
 				{% endif %}
 				{% else %}
-				<span class="genotype-circos"></span>
+				<span class="genotype-circos small"></span>
 				{% endif %}
 				{% endfor %}
 			</td>

@@ -264,12 +264,26 @@ def specific_snp(request, cat, cid, sid):
 	snp = Snp.objects.get(id=sid)
 	genes = snp.gannot_set.all()
 	transcripts = snp.tannot_set.all()
+
+	vs = Variant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+	ns = Nonvariant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+
+	genotypes = {}
+	for v in vs:
+		genotypes[v.individual.id] = v.genotype
+	for n in ns:
+		genotypes[n.individual.id] = 3
+
+	samples = Individual.objects.all()
+
 	return render(request, 'macaca/snpspec.html', {
 		'cat': cat,
 		'snp': snp,
 		'category': category,
 		'genes': genes,
-		'transcripts': transcripts
+		'transcripts': transcripts,
+		'genotypes': genotypes,
+		'samples': samples,
 	})
 
 def retrieve(request):
@@ -488,11 +502,12 @@ def drugs(request):
 		rows = []
 		for drug in drugs:
 			row = []
+			snp_count = Gannot.objects.filter(feature=1, gene__ensembl=drug.orthology.gene.ensembl).count()
 			row.append('<a href="{}">{}</a>'.format(reverse('gene', kwargs={'gid':drug.orthology.gene.ensembl}), drug.orthology.gene.ensembl))
 			row.append(drug.orthology.gene.name)
 			row.append(drug.orthology.gene.description)
 			row.append('<a href="{}">{}</a>'.format(reverse('drug', kwargs={'did': drug.drug_id}), drug.drug_id))
-			row.append('<a class="ui orange basic label" href="{}">Browse</a>'.format(reverse('csnps', kwargs={'gid':drug.orthology.gene.ensembl})))
+			row.append('<a href="{}">{}</a>'.format(reverse('csnps', kwargs={'gid':drug.orthology.gene.ensembl}), snp_count))
 			rows.append(row)
 
 		return JsonResponse({
@@ -551,11 +566,12 @@ def diseases(request):
 		rows = []
 		for disease in diseases:
 			row = []
+			snp_count = Gannot.objects.filter(feature=1, gene__ensembl=disease.orthology.gene.ensembl).count()
 			row.append('<a href="{}">{}</a>'.format(reverse('gene', kwargs={'gid':disease.orthology.gene.ensembl}), disease.orthology.gene.ensembl))
 			row.append(disease.orthology.gene.name)
 			row.append(disease.orthology.gene.description)
 			row.append('<a href="{}">{}</a>'.format(reverse('disease', kwargs={'did': disease.pomim}), disease.pomim))
-			row.append('<a class="ui orange basic label" href="{}">Browse</a>'.format(reverse('csnps', kwargs={'gid':disease.orthology.gene.ensembl})))
+			row.append('<a href="{}">{}</a>'.format(reverse('csnps', kwargs={'gid':disease.orthology.gene.ensembl}), snp_count))
 			rows.append(row)
 
 		return JsonResponse({

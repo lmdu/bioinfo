@@ -13,10 +13,14 @@
 .genotype-circos{
 	display: inline-block;
 	border-radius: 50%;
-	margin: 0 8px; 
+	margin: 0 8px;
 	width: 14px; 
 	height:14px;
 	background:#e0e1e1;
+}
+.genotype-circos.small{
+	width: 12px;
+	height: 12px;
 }
 .genotype-circos.red{
 	background:#db2828;
