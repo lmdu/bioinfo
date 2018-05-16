@@ -1,6 +1,10 @@
 {% set urlname="retrieve" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+Search and download SNPs - MACSNPdb
+{% endblock %}
+
 {% block main %}
 <form method="get" action="{{ url('retrieve') }}" class="ui form">
 

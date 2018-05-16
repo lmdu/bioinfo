@@ -1,6 +1,8 @@
 {% set urlname="disease" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}OMIM{{ diseases[0].pomim }}  - MACSNPdb{% endblock %}
+
 {% block main %}
 <h3 class="ui header">Disease information</h3>
 

@@ -1,6 +1,10 @@
 {% set urlname="drugs" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+{{drugs[0].drug_id}} - MACSNPdb
+{% endblock %}
+
 {% block main %}
 <h3 class="ui header">Drug information</h3>
 <table class="ui table">

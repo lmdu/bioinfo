@@ -1,4 +1,9 @@
 {% extends "macaca/base.html" %}
+
+{% block title %}
+MACSNPR{{"%02d%09d"|format(snp.chromosome.pk,snp.id)}} - MACSNPdb
+{% endblock %}
+
 {% block main %}
 <h2 class="ui brown header">
 	MACSNPR{{"%02d%09d"|format(snp.chromosome.pk,snp.id)}}

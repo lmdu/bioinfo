@@ -1,4 +1,9 @@
 {% extends "macaca/base.html" %}
+
+{% block title %}
+MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}} - MACSNPdb
+{% endblock %}
+
 {% block main %}
 <h2 class="ui brown header">
 	MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}}

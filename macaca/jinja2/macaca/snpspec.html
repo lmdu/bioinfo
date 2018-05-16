@@ -1,7 +1,11 @@
 {% set urlname="specific" %}
 {% extends "macaca/base.html" %}
-{% block main %}
 
+{% block title %}
+MACSNP{{"%s%02d%08d"|format(cat, category.id, snp.id)}} - MACSNPdb
+{% endblock %}
+
+{% block main %}
 <h2 class="ui brown header">
 	MACSNP{{"%s%02d%08d"|format(cat, category.id, snp.id)}}
 	<div class="ui orange large label">

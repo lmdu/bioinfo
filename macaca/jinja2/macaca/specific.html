@@ -1,5 +1,8 @@
 {% set urlname="specific" %}
 {% extends "macaca/base.html" %}
+
+{% block title %}Group and Species specific SNPs - MACSNPdb{% endblock %}
+
 {% block main %}
 <form action="{{ url('specific') }}" method="get" id="snps-filter">
 <input type="hidden" id="page" name="page" value="{{ paras.page }}">

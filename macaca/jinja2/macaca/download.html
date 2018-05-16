@@ -1,6 +1,20 @@
 {% set urlname="retrieve" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+Search results for
+{% if paras.category == 'individual' %}
+individual
+{% elif paras.category == 'group' %}
+group-specific
+{% elif paras.category == 'species' %}
+species-specific
+{% elif paras.category == 'nrsnps' %}
+Non-redundant
+{% endif %}
+SNPs
+{% endblock %}
+
 {% set features=["All", "CDS", "EXON", "3'UTR", "INTRON", "5'UTR"] %}
 {% set genotypes = ["All", "homozygote", "	heterozygote"] %}
 {% set mutations = ["All", "non-synonymous", "synonymous"] %}

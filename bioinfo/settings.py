@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!&v6a3+r!!ffa!dyjlq1!sx&%6e+rt4ey4v_4&@p#*ibj^v1p%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['big.cdu.edu.cn','202.115.80.205', 'localhost']
+ALLOWED_HOSTS = ['big.cdu.edu.cn', 'localhost']
 
 
 # Application definition

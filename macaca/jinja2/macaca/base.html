@@ -59,43 +59,58 @@
         <div class="three wide column">
           <h4 class="ui inverted header">Browse</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Individual SNPs</a>
-            <a href="#" class="item">Specific SNPs</a>
-            <a href="#" class="item">Non-redundant SNPs</a>
-            <a href="#" class="item">Gene-related SNPs</a>
+            <a href="{{ url('isnps') }}" class="item">Individual SNPs</a>
+            <a href="{{ url('specific') }}" class="item">Specific SNPs</a>
+            <a href="{{ url('nrsnps') }}" class="item">Non-redundant SNPs</a>
+            <a href="{{ url('statistics') }}" class="item">SNPs statistics</a>
           </div>
         </div>
         <div class="three wide column">
-          <h4 class="ui inverted header">Group 2</h4>
+          <h4 class="ui inverted header">&nbsp;</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Link One</a>
-            <a href="#" class="item">Link Two</a>
-            <a href="#" class="item">Link Three</a>
-            <a href="#" class="item">Link Four</a>
+            <a href="{{ url('diseases') }}" class="item">Disease-associated genes</a>
+            <a href="{{ url('drugs') }}" class="item">Drug-targted genes</a>
+            <a href="{{ url('retrieve') }}" class="item">Search and download SNPs</a>
           </div>
         </div>
         <div class="three wide column">
           <h4 class="ui inverted header">Resources</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">NCBI dbSNP</a>
-            <a href="#" class="item">Ensembl</a>
-            <a href="#" class="item">Drugbank</a>
-            <a href="#" class="item">OMIM</a>
+            <a href="https://www.ncbi.nlm.nih.gov/snp/" target="_blank" class="item">NCBI dbSNP</a>
+            <a href="http://www.ensembl.org/index.html" class="item">Ensembl</a>
+            <a href="https://www.drugbank.ca/" target="_blank" class="item">Drugbank</a>
+            <a href="https://omim.org/" target="_blank" class="item">OMIM</a>
           </div>
         </div>
         <div class="seven wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+          <p style="color: rgba(255,255,255,.5);">MACSNPdb database is hosted and maintained by the Bioinformatics and Integrative Genomics Research Group (BIG) at the Chengdu University, Chengdu, China.</p>
+          <p style="color: rgba(255,255,255,.5);">Copyright &copy; 2018 Chengdu University and Sichuan University. All Rights Reserved.</p>
         </div>
       </div>
       <div class="ui inverted section divider"></div>
-      <!--<img src="assets/images/logo.png" class="ui centered mini image">-->
-      <div class="ui horizontal inverted small divided link list">
-        <a class="item" href="#">Site Map</a>
-        <a class="item" href="#">Contact Us</a>
-        <a class="item" href="#">Terms and Conditions</a>
-        <a class="item" href="#">Privacy Policy</a>
+      <div class="ui two column grid">
+        <div class="column">
+          <div class="ui tiny images" style="opacity: .7;">
+            <img class="ui image" src="{{ static('macaca/images/cdu.logo.png') }}">
+            <img class="ui image" src="{{ static('macaca/images/scu.logo.png') }}">
+          </div>
+        </div>
+        <div class="right aligned column">
+           <div class="ui horizontal inverted small link list">
+            <a class="item" href="http://big.cdu.edu.cn">About Us</a>
+            <a class="item" href="http://big.cdu.edu.cn">Contact Us</a>
+            <a class="item" href="https://www.cdu.edu.cn/" target="_blank">Chengdu University</a>
+            <a class="item" href="http://www.scu.edu.cn/" target="_blank">Sichuan University</a>
+            <span class="item">
+              <script type="text/javascript" src="//ra.revolvermaps.com/0/0/3.js?i=0daz1ftdraj&amp;b=0&amp;s=32&amp;m=2&amp;cl=ffffff&amp;co=010020&amp;cd=aa0000&amp;v0=60&amp;v1=60&amp;r=1" async="async"></script>
+            </span>
+          </div>
+          <div style="color: rgba(255,255,255,.5);">
+            Powered by <a style="color: rgba(255,255,255,.5);" href="https://www.djangoproject.com/" target="_blank">Django</a> and rendered by <a style="color: rgba(255,255,255,.5);" href="http://jinja.pocoo.org/" target="_blank">Jinja2</a>, designed with <a style="color: rgba(255,255,255,.5);" href="https://semantic-ui.com/" target="_blank">Semantic UI</a>.
+          </div>
+        </div>
       </div>
+      
     </div>
 </div>
 

@@ -1,6 +1,10 @@
 {% set urlname="snpcds" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+SNPs in CDS of {{ gid }}
+{% endblock %}
+
 {% block head %}
 <script src="{{ static('macaca/datatable/jquery.dataTables.min.js') }}"></script>
 <script src="{{ static('macaca/datatable/dataTables.semanticui.min.js') }}"></script>

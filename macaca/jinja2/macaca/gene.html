@@ -1,6 +1,10 @@
 {% set urlname="gene" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}
+{{ gene.ensembl }} - MACSNPdb
+{% endblock %}
+
 {% block main %}
 
 <h2 class="ui brown header">{{ gene.ensembl }} <a class="ui yellow right floated button" href="{{ url('csnps', kwargs={'gid':gene.ensembl}) }}">View SNPs in CDS</a></h2>

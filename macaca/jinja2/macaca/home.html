@@ -1,6 +1,8 @@
 {% set urlname="home" %}
 {% extends "macaca/base.html" %}
 
+{% block title %}MACSNPdb - macaque SNP database {% endblock %}
+
 {% block headbar %}
 <div id="hero">
 	<div id="hero-top">
@@ -34,49 +36,49 @@
 	<div class="twelve wide column">
 		<div class="ui large basic segment">
 			<h3 class="ui header">Macaca SNP Database</h3>
-			<p>MACSNPdb is an open-access SNP database comprising ~80.88 million high-quality non-redundant SNPs called from 20 macaques that may assist researchers to investigate interspecies genetic divergence between macaques. MACSNPdb allows users to browse and retrieve individual, sepcific and non-redundant SNPs. In particular, users can retrieve non-synonymous SNPs that may have deleterious effects on protein structure or function within macaque orthologs of human disease and drug-target genes. MACSNPdb also integrates gene functional annotation information including GO term, KEGG pathway, Pfam and InterPro domains.
+			<p><span class="ui large red label">MACSNPdb</span> is an open-access SNP database comprising ~80.88 million high-quality non-redundant SNPs called from 20 macaques that may assist researchers to investigate interspecies genetic divergence between macaques. MACSNPdb allows users to browse and retrieve individual, sepcific and non-redundant SNPs. In particular, users can retrieve non-synonymous SNPs that may have deleterious effects on protein structure or function within macaque orthologs of human disease and drug-target genes. MACSNPdb also integrates gene functional annotation information including GO term, KEGG pathway, Pfam and InterPro domains.
 			</p>
+
+			<embed src="{{ static('macaca/images/macsnpdb.svg') }}" width="100%"></embed>
+
 			<h3 class="ui header">Highlights</h3>
 			<ul class="ui relaxed list">
-				<li class="item">We provide a non-redundant dataset for all SNPs and individual list for each sample.</li>
-				<li class="item">We provide two ways to view SNP, one is table-based format and the other is chromosome based GBrowse format.</li>
-				<li class="item">We provide detailed information of each SNP, including original sample, sequencing platform, chromosome position, SNP annotation, 3/5 flank sequences, SNPs of same position but detected in other samples, allele frequencies of dog/wolf populations and Fst value between dog and wolf populations.</li>
-				<li class="item">We provide the comparative analysis function to facilitate a quick comparison of SNPs in different samples.</li>
-				<li class="item">We provide table-delimited SNP, bam/sra and fastq files of each individual in the download ftp. User can get all the data and do more deep analysis.</li>
+				<li class="item">MACSNPdb allows you to browse macaque individual SNPs, specific SNPs and non-redundant SNPs.</li>
+				<li class="item">MACSNPdb also allows you to browse disease-associated and drug-targeted genes related SNPs, particularly non-synonymous SNPs which may have deleterious effects on protein structure or function.</li>
+				<li class="item">The data collected from 20 macaques covered all the four species groups within genus Macaca, and thus, it can facilitate you to conduct genotyping comparative analysis between different macaques.</li>
+				<li class="item">MACSNPdb not only provides detailed information for SNPs but also provides gene functional information.</li>
+				<li class="item">MACSNPdb provides a flexible download function to assit you to search and retrieve desired SNPs</li>
 			</ul>
+
 			<h3 class="ui header">Acknowledgements</h3>
-			<p>Bai B, Zhao WM, Tang BX, et al.(2015)."DoGSD: the dog and wolf genome SNP database." Nucleic Acids Res 43:777-783.PMID:25404132</p>
+			<p>This work was supported by the Start-up Fund of Chengdu University [2081916062]</p>
 
 			<h3 class="ui header">Contact</h3>
-			<p>This work contributed by Beijing Institute of Genomics (BIG) and Kunming Institute of Zoology (KIZ). BIG develops the database architecture and maintains the service, KIZ provides the data.</p>
+			<p>Database developer Lianming Du (dulianming@cdu.edu.cn) and Zhenxin Fan (zxfan@cdu.edu.cn)</p>
 		</div>
 	</div>
 	<div class="four wide column">
 		<h3 class="ui top attached header">Latest News</h3>
 		<div class="ui attached segment">
-			<ul class="ui list">
-				<li class="item">Version 2.0 is on line now which uses Canfam3.0 as the reference genome.</li>
-				<li class="item">A total of 77 individual dog smaples are included.</li>
-				<li class="item">Fst data for all the samples can be shown in Browser.</li>
-				<li class="item">Google Map is integrated to show geographic locations of each individual sample.</li>
-				<li class="item">updated Jul 26, 2014</li>
+			<ul class="ui large list">
+				<li class="item">Version 1.0 is on line now.</li>
 			</ul>
 		</div>
 
 		<h3 class="ui top attached header">Statistics</h3>
-			<table class="ui compact attached table">
-				<tbody>
-					<tr><td>Individuals</td><td class="right aligned"><span class="ui grey circular label">20</span></td></tr>
-					<tr><td>Groups</td><td class="right aligned"><span class="ui grey circular label">5</span></td></tr>
-					<tr><td>Species</td><td class="right aligned"><span class="ui grey circular label">10</span></td></tr>
-					<tr><td>Individual SNPs</td><td class="right aligned"><span class="ui grey circular label">215 932 420</span></td></tr>
-					<tr><td>Non-redundant SNPs</td><td class="right aligned"><span class="ui grey circular label">80 879 499</span></td></tr>
-					<tr><td>Group-specific SNPs</td><td class="right aligned"><span class="ui grey circular label">5 079 706</span></td></tr>
-					<tr><td>Species-specific SNPs</td><td class="right aligned"><span class="ui grey circular label">7 252 490</span></td></tr>
-					<tr><td>SNPs in CDS</td><td class="right aligned"><span class="ui grey circular label">522 465</span></td></tr>
-					<tr><td>Nonsynonymous SNPs</td><td class="right aligned"><span class="ui grey circular label">220 098</span></td></tr>
-				</tbody>
-			</table>
+		<table class="ui compact attached table">
+			<tbody>
+				<tr><td>Individuals</td><td class="right aligned"><span class="ui grey circular label">20</span></td></tr>
+				<tr><td>Groups</td><td class="right aligned"><span class="ui grey circular label">5</span></td></tr>
+				<tr><td>Species</td><td class="right aligned"><span class="ui grey circular label">10</span></td></tr>
+				<tr><td>Individual SNPs</td><td class="right aligned"><span class="ui grey circular label">215 932 420</span></td></tr>
+				<tr><td>Non-redundant SNPs</td><td class="right aligned"><span class="ui grey circular label">80 879 499</span></td></tr>
+				<tr><td>Group-specific SNPs</td><td class="right aligned"><span class="ui grey circular label">5 079 706</span></td></tr>
+				<tr><td>Species-specific SNPs</td><td class="right aligned"><span class="ui grey circular label">7 252 490</span></td></tr>
+				<tr><td>SNPs in CDS</td><td class="right aligned"><span class="ui grey circular label">522 465</span></td></tr>
+				<tr><td>Nonsynonymous SNPs</td><td class="right aligned"><span class="ui grey circular label">220 098</span></td></tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}
