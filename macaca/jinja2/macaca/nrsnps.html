@@ -21,11 +21,11 @@ Non-redundant SNPs - MACSNPdb
 		<a class="ui label {% if paras.chromosome==c %} orange {% endif %}" data-num="{{c}}">chr{{c}}</a>
 		{% endfor %}
 	</div>
-	<div class="ui individual circular labels">
+	<div class="ui samples circular labels">
 		<span>Individual</span>
-		<a class="ui label" href="">All</a>
+		<a class="ui label {% if not paras.samples %} orange {% endif %}" data-num="0">All</a>
 		{% for s in species %}
-		<a class="ui label {% if paras.sample==s.id %} orange {% endif %}" data-num="{{s.id}}">{{s.code}}</a>
+		<a class="ui label {% if s.id in paras.samples %} orange {% endif %}" data-num="{{s.id}}">{{s.code}}</a>
 		{% endfor %}
 	</div>
 	<div class="ui filters circular labels">
@@ -48,6 +48,10 @@ Non-redundant SNPs - MACSNPdb
 			<input type="hidden" id="chromosome" name="chr" value="{{ paras.chromosome }}">
 			<input type="hidden" id="feature" name="feature" value="{{ paras.feature }}">
 			<input type="hidden" id="mutation" name="mutation" value="{{ paras.mutation }}">
+
+			{% for s in paras.samples %}
+			<input type="hidden" id="samples" name="samples" value="{{ s }}">
+			{% endfor %}
 		
 			Show
 			<select name="records" class="ui numperpage compact selection dropdown">
@@ -77,7 +81,9 @@ Non-redundant SNPs - MACSNPdb
 			<th>Alt</th>
 			<th>
 				{% for s in species %}
+				{% if not paras.samples or s.id in paras.samples %}
 				<span style="display: inline-block; transform: rotate(-90deg); width: 30px; height: 22px;">{{ s.code }}</span>
+				{% endif %}
 				{% endfor %}
 			</th>
 		</tr>
@@ -85,24 +91,27 @@ Non-redundant SNPs - MACSNPdb
 	<tbody>
 		{% for snp in snps %}
 		<tr>
-			<td><a href="{{ url('nrsnp', kwargs={'chrom': '%02d'|format(snp.chromosome.pk), 'sid':'%09d'|format(snp.snp.pk) }) }}">MACSNPR{{ "%02d%09d"|format(snp.chromosome.pk, snp.snp.pk) }}</a></td>
+			<td><a href="{{ url('nrsnp', kwargs={'chrom': '%02d'|format(snp.chromosome.pk), 'sid':'%09d'|format(snp.pk) }) }}">MACSNPR{{ "%02d%09d"|format(snp.chromosome.pk, snp.pk) }}</a></td>
 			<td>{{snp.chromosome.name}}: {{snp.position}}</td>
-			<td><span class="{{snp.snp.reference}}">{{snp.snp.reference}}</span></td>
-			<td><span class="{{snp.snp.alteration}}">{{snp.snp.alteration}}</span></td>
+			<td><span class="{{snp.reference}}">{{snp.reference}}</span></td>
+			<td><span class="{{snp.alteration}}">{{snp.alteration}}</span></td>
 			<td>
 				{% for s in species %}
-				{% set k = (snp.snp.pk, s.id) %}
+				{% if not paras.samples or s.id in paras.samples %}
+
+				{% set k = (snp.pk, s.id) %}
 
 				{% if k in genotypes %}
 				{% if genotypes[k] == 1 %}
-				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos red"></span></a>
+				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos red"></span></a>
 				{% elif genotypes[k] == 2 %}
-				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos blue"></span></a>
+				<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.pk)}}"><span class="genotype-circos blue"></span></a>
 				{% elif genotypes[k] == 3 %}
 				<span class="genotype-circos green"></span>
 				{% endif %}
 				{% else %}
 				<span class="genotype-circos"></span>
+				{% endif %}
 				{% endif %}
 				{% endfor %}
 			</td>

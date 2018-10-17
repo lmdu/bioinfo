@@ -50,6 +50,7 @@
 
 .ui.chromosome span,
 .ui.individual span,
+.ui.samples span,
 .ui.filters span{
 	display: inline-block;
 	font-weight: bold;
@@ -108,4 +109,8 @@
 
 .center-aligned{
 	text-align: center;
+}
+
+.right-aligned{
+	text-align: right;
 }

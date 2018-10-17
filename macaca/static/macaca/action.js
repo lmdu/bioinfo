@@ -21,6 +21,38 @@ $('.ui.individual a').click(function(e){
 	$('#snps-filter').submit();
 });
 
+//set samples link
+$('.ui.samples a').click(function(e){
+	e.preventDefault();
+
+	var sid = $(this).data('num').toString();
+	var ids = $("#snps-filter input[name='samples']").map(function(){
+		return $(this).val();
+	}).get();
+
+	if(sid==='0'){
+		$("#snps-filter input[name='samples']").remove();
+	} else {
+		if($.inArray(sid, ids) != -1){
+			$("#snps-filter input[name='samples']").each(function(){
+				if($(this).val() === sid){
+					$(this).remove();
+				}
+			});
+		} else {
+			var input = document.createElement('input');
+			input.type = 'hidden';
+			input.id = 'samples';
+			input.name = 'samples';
+			input.value = sid;
+			$("#snps-filter").append(input);
+		}
+	}
+	$('#page').val('1');
+	$('#snps-filter').submit();
+
+});
+
 //set feature link
 $('.ui.features').click(function(e){
 	e.preventDefault();

@@ -19,7 +19,7 @@ class Species(models.Model):
 	taxonomy = models.IntegerField(help_text="NCBI taxonomy number")
 	scientific = models.CharField(max_length=50, help_text="Scientific name")
 	common = models.CharField(max_length=50, help_text="Common name")
-	code = models.CharField(max_length=5, help_text="New code")
+	code = models.CharField(max_length=10, help_text="species code")
 	group = models.ForeignKey(Groups, on_delete=models.CASCADE, help_text="Species group information")
 
 	class Meta:
@@ -56,52 +56,16 @@ class Snp(models.Model):
 		ordering = ['id']
 		index_together = ['position', 'chromosome']
 
-class Snps(models.Model):
+class Snps(Snp):
 	@classmethod
-	def get_sharding_model(cls, chrom):
-		try:
-			return apps.get_registered_model('macaca', 'Snp{}'.format(chrom))
-		except LookupError:
-			class Meta:
-				db_table = 'snp{}'.format(chrom)
-				ordering = ['id']
-
-			attrs = {
-				'__module__': cls.__module__,
-				'Meta': Meta,
-			}
-
-			return type(str('Snp{}'.format(chrom)), (cls,), attrs)
-	
-	snp = models.OneToOneField(Snp, on_delete=models.CASCADE)
-	position = models.IntegerField(db_index=True, help_text="Position in chromosome sequence")
-	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
+	def shard(cls, chrom):
+		cls._meta.db_table = 'snp{}'.format(chrom)
+		return cls
 
 	class Meta:
-		abstract = True
-		ordering = ['id']
-		index_together = [
-			['position', 'chromosome'],
-			['snp', 'chromosome'],
-		]
+		proxy = True
 
 class Variant(models.Model):
-	@classmethod
-	def get_sharding_model(cls, chrom):
-		try:
-			return apps.get_registered_model('macaca', 'Variant{}'.format(chrom))
-		except LookupError:
-			class Meta:
-				db_table = 'variant{}'.format(chrom)
-				ordering = ['id']
-
-			attrs = {
-				'__module__': cls.__module__,
-				'Meta': Meta,
-			}
-
-			return type(str('Variant{}'.format(chrom)), (cls,), attrs)
-
 	GENOTYPES = (
 		(1, 'Homozygote'),
 		(2, 'Heterozygote')
@@ -109,10 +73,10 @@ class Variant(models.Model):
 	genotype = models.PositiveSmallIntegerField(choices=GENOTYPES, db_index=True, help_text="Alteration genotype")
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 
 	class Meta:
-		abstract = True
+		db_table = 'variant'
 		ordering = ['id']
 		index_together = [
 			['genotype', 'snp'],
@@ -121,30 +85,32 @@ class Variant(models.Model):
 			['genotype', 'individual', 'snp']
 		]
 
-class Nonvariant(models.Model):
+class Variants(Variant):
 	@classmethod
-	def get_sharding_model(cls, chrom):
-		try:
-			return apps.get_registered_model('macaca', 'Nonvariant{}'.format(chrom))
-		except LookupError:
-			class Meta:
-				db_table = 'nonvariant{}'.format(chrom)
-				ordering = ['id']
-
-			attrs = {
-				'__module__': cls.__module__,
-				'Meta': Meta,
-			}
-
-			return type(str('Nonvariant{}'.format(chrom)), (cls,), attrs)
-	#chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
-	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	def shard(cls, chrom):
+		cls._meta.db_table = 'variant{}'.format(chrom)
+		return cls
 
 	class Meta:
-		abstract = True
+		proxy = True
+
+class Nonvariant(models.Model):
+	individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
+
+	class Meta:
+		db_table = 'nonvariant'
 		ordering = ['id']
 		index_together = ['individual', 'snp']
+
+class Nonvariants(Nonvariant):
+	@classmethod
+	def shard(cls, chrom):
+		cls._meta.db_table = 'nonvariant{}'.format(chrom)
+		return cls
+
+	class Meta:
+		proxy = True
 
 class Gene(models.Model):
 	CODING_TYPES = (
@@ -191,7 +157,7 @@ class Gannot(models.Model):
 	gene_pos = models.IntegerField(help_text="Relative position in gene")
 	feature = models.PositiveSmallIntegerField(choices=FEATURE_TYPES, db_index=True, help_text="Gene features")
 	gene = models.ForeignKey(Gene, on_delete=models.CASCADE)
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 
 	class Meta:
 		db_table = 'gannot'
@@ -216,7 +182,7 @@ class Tannot(models.Model):
 	alt_aa = models.CharField(max_length=10, help_text="The alteration amino acid for SNP codon")
 	protein_pos = models.IntegerField(help_text="Relative position of codon in protein")
 	synonymous = models.PositiveSmallIntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 	transcript = models.ForeignKey(Transcript, on_delete=models.CASCADE)
 
 	class Meta:
@@ -229,7 +195,7 @@ class Mutation(models.Model):
 		(2, 'Non-synonymous'),
 	)
 	synonymous = models.PositiveSmallIntegerField(choices=MUTATION_TYPES, db_index=True, help_text="Mutation type")
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 
 	class Meta:
 		db_table = 'mutation'
@@ -265,7 +231,7 @@ class GroupSpecific(models.Model):
 	#the order of foreinkey field is sorted by alphabet
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
 	group = models.ForeignKey(Groups, on_delete=models.CASCADE)
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 
 	class Meta:
 		db_table = 'group_specific'
@@ -278,7 +244,7 @@ class GroupSpecific(models.Model):
 
 class SpeciesSpecific(models.Model):
 	chromosome = models.ForeignKey(Chromosome, on_delete=models.CASCADE)
-	snp = models.ForeignKey(Snp, on_delete=models.CASCADE)
+	snp = models.ForeignKey(Snps, on_delete=models.CASCADE)
 	species = models.ForeignKey(Species, on_delete=models.CASCADE)
 	
 	class Meta:

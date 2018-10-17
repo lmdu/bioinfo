@@ -149,9 +149,9 @@ MACSNP{{"%03d%09d"|format(snp.individual.id,snp.snp.id)}} - MACSNPdb
 			{% for s in samples %}
 			<td>
 			{% if genotypes[s.id] == 1 %}
-			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos red"></span></a>
+			<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos red"></span></a>
 			{% elif genotypes[s.id] == 2 %}
-			<a href="{{ url('isnp', kwargs={'indiv': '%02d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNPI{{"%02d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos blue"></span></a>
+			<a href="{{ url('isnp', kwargs={'indiv': '%03d'|format(s.id), 'sid':'%09d'|format(snp.snp.pk)}) }}" title="MACSNP{{"%03d%09d"|format(s.id,snp.snp.pk)}}"><span class="genotype-circos blue"></span></a>
 			{% elif genotypes[s.id] == 3 %}
 			<span class="genotype-circos green"></span>
 			{% else %}

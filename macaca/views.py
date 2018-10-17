@@ -42,10 +42,12 @@ def individual_snps(request):
 		sample = int(request.GET.get('sample', 0)),
 		feature = int(request.GET.get('feature', 0)),
 		genotype = int(request.GET.get('genotype', 0)),
-		mutation = int(request.GET.get('mutation', 0))
+		mutation = int(request.GET.get('mutation', 0)),
 	)
 
-	snps = Variant.get_sharding_model(paras['chromosome']).objects.all()
+	Snps.shard(paras['chromosome'])
+	
+	snps = Variants.shard(paras['chromosome']).objects.all()
 
 	if paras['sample']:
 		snps = snps.filter(individual=paras['sample'])
@@ -84,16 +86,19 @@ def nrsnps(request):
 		records = int(request.GET.get('records', 10)),
 		chromosome = int(request.GET.get('chr', 1)),
 		feature = int(request.GET.get('feature', 0)),
-		mutation = int(request.GET.get('mutation', 0))
+		mutation = int(request.GET.get('mutation', 0)),
+		samples = request.GET.getlist('samples'),
 	)
 
-	snps = Snps.get_sharding_model(paras['chromosome']).objects.all()
+	paras['samples'] = list(map(int, paras['samples']))
+
+	snps = Snps.shard(paras['chromosome']).objects.all()
 
 	if paras['mutation']:
-		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
+		snps = snps.filter(mutation__synonymous=paras['mutation'])
 
 	if paras['feature']:
-		snps = snps.filter(snp__gannot__feature=paras['feature'])
+		snps = snps.filter(gannot__feature=paras['feature'])
 
 	paginator = Paginator(snps, paras['records'])
 
@@ -105,9 +110,9 @@ def nrsnps(request):
 		snps = paginator.page(paginator.num_pages)
 
 	genotypes = {}
-	snp_ids = [snp.snp.id for snp in snps]
-	vs = Variant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
-	ns = Nonvariant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids)
+	snp_ids = [snp.id for snp in snps]
+	vs = Variants.shard(paras['chromosome']).objects.filter(snp__in=snp_ids)
+	ns = Nonvariants.shard(paras['chromosome']).objects.filter(snp__in=snp_ids)
 	for v in vs:
 		genotypes[(v.snp.id, v.individual.id)] = v.genotype
 
@@ -125,14 +130,14 @@ def nonredundant_snp(request, chrom, sid):
 	chrom = int(chrom)
 	sid = int(sid)
 	try:
-		snp = Snp.objects.get(id=sid)
+		snp = Snps.shard(chrom).objects.get(id=sid)
 	except ObjectDoesNotExist:
 		raise Http404('MACSNPC%02d%09d does not exists in this database' % (chrom, sid))
 
 	genes = snp.gannot_set.all()
 	transcripts = snp.tannot_set.all()
-	vs = Variant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
-	ns = Nonvariant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+	vs = Variants.shard(snp.chromosome.id).objects.filter(snp__pk=sid)
+	ns = Nonvariants.shard(snp.chromosome.id).objects.filter(snp__pk=sid)
 
 	genotypes = {}
 	for v in vs:
@@ -157,13 +162,14 @@ def individual_snp(request, indiv, sid):
 	sid = int(sid)
 	try:
 		snp = Snp.objects.get(id=sid)
-		one = Variant.get_sharding_model(snp.chromosome.id).objects.get(individual__id=indiv,snp__id=sid)
+		Snps.shard(snp.chromosome.id)
+		one = Variants.shard(snp.chromosome.id).objects.get(individual__id=indiv,snp__id=sid)
 	except ObjectDoesNotExist:
 		raise Http404('MACSNP%03d%09d does not exists in this database' % (indiv, sid))
 	genes = one.snp.gannot_set.all()
 	transcripts = one.snp.tannot_set.all()
-	vs = Variant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid).exclude(individual__id=indiv)
-	ns = Nonvariant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+	vs = Variants.shard(snp.chromosome.id).objects.filter(snp__pk=sid).exclude(individual__id=indiv)
+	ns = Nonvariants.shard(snp.chromosome.id).objects.filter(snp__pk=sid)
 	genotypes = {}
 	for v in vs:
 		genotypes[v.individual.id] = v.genotype
@@ -189,11 +195,11 @@ def search(request):
 		cat, cid, sid = q[6], q[7:9], q[9:]
 		return redirect('ssnp', cat, cid, sid)
 
-	elif q.startswith('MACSNPI') and len(q) == 18:
-		indiv, sid= q[7:9], q[9:]
+	elif q.startswith('MACSNP') and len(q) == 18:
+		indiv, sid= q[6:9], q[9:]
 		return redirect('isnp', indiv, sid)
 
-	elif q.startswith('MACSNPC') and len(q) == 18:
+	elif q.startswith('MACSNPR') and len(q) == 18:
 		chrom, sid = q[7:9], q[9:]
 		return redirect('nrsnp', chrom, sid)
 
@@ -220,6 +226,8 @@ def specific_snps(request):
 		group = int(request.GET.get('group', -1)),
 		species = int(request.GET.get('species', 0)),
 	)
+
+	Snps.shard(paras['chromosome'])
 
 	if paras['group'] >= 0:
 		if paras['group'] == 0:
@@ -261,12 +269,15 @@ def specific_snp(request, cat, cid, sid):
 		category = Groups.objects.get(id=cid)
 	else:
 		category = Species.objects.get(id=cid)
+	
 	snp = Snp.objects.get(id=sid)
+	snp = Snps.shard(snp.chromosome.id).objects.get(id=sid)
+
 	genes = snp.gannot_set.all()
 	transcripts = snp.tannot_set.all()
 
-	vs = Variant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
-	ns = Nonvariant.get_sharding_model(snp.chromosome.id).objects.filter(snp__pk=sid)
+	vs = Variants.shard(snp.chromosome.id).objects.filter(snp__pk=sid)
+	ns = Nonvariants.shard(snp.chromosome.id).objects.filter(snp__pk=sid)
 
 	genotypes = {}
 	for v in vs:
@@ -323,6 +334,8 @@ def retrieve(request):
 	paras['start'] = int(paras['start']) if paras['start'] else 0
 	paras['end'] = int(paras['end']) if paras['end'] else 0
 
+	Snps.shard(paras['chromosome'])
+
 	if paras['category'] == 'group':
 		snps = GroupSpecific.objects.filter(group=paras['group'], chromosome=paras['chromosome'])
 		organism = Groups.objects.get(pk=paras['group'])
@@ -330,32 +343,50 @@ def retrieve(request):
 		snps = SpeciesSpecific.objects.filter(species=paras['species'], chromosome=paras['chromosome'])
 		organism = Species.objects.get(pk=paras['species'])
 	elif paras['category'] == 'individual':
-		snps = Variant.get_sharding_model(paras['chromosome']).objects.filter(individual=paras['individual'])
+		snps = Variants.shard(paras['chromosome']).objects.filter(individual=paras['individual'])
 		organism = Individual.objects.get(pk=paras['individual'])
 
 		if paras['genotype']:
 			snps = snps.filter(genotype=paras['genotype'])
 	
 	elif paras['category'] == 'nrsnps':
-		snps = Snps.get_sharding_model(paras['chromosome']).objects.all()
+		snps = Snps.shard(paras['chromosome']).objects.all()
 		organism = Individual.objects.filter(pk__in=sample_ids)
 
 	if paras['start'] and paras['end']:
-		snps = snps.filter(snp__position__range=(paras['start'], paras['end']))
+		if paras['category'] == 'nrsnps':
+			snps = snps.filter(position__range=(paras['start'], paras['end']))
+		else:
+			snps = snps.filter(snp__position__range=(paras['start'], paras['end']))
 
 	if paras['feature']:
-		snps = snps.filter(snp__gannot__feature=paras['feature'])
+		if paras['category'] == 'nrsnps':
+			snps = snps.filter(gannot__feature=paras['feature'])
+		else:
+			snps = snps.filter(snp__gannot__feature=paras['feature'])
 
 	if paras['mutation']:
-		snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
+		if paras['category'] == 'nrsnps':
+			snps = snps.filter(mutation__synonymous=paras['mutation'])
+		else:
+			snps = snps.filter(snp__mutation__synonymous=paras['mutation'])
 
 	if paras['gene_id']:
-		if paras['gene_type'] == 'ensembl':
-			snps = snps.filter(snp__gannot__gene__ensembl=paras['gene_id'])
-		elif paras['gene_type'] == 'drug':
-			snps = snps.filter(snp__gannot__gene__orthology__drug__drug_id=paras['gene_id'])
-		elif paras['gene_type'] == 'disease':
-			snps = snps.filter(snp__gannot__gene__orthology__disease__pomim=paras['gene_id'])
+		if paras['category'] == 'nrsnps':
+			if paras['gene_type'] == 'ensembl':
+				snps = snps.filter(gannot__gene__ensembl=paras['gene_id'])
+			elif paras['gene_type'] == 'drug':
+				snps = snps.filter(gannot__gene__orthology__drug__drug_id=paras['gene_id'])
+			elif paras['gene_type'] == 'disease':
+				snps = snps.filter(gannot__gene__orthology__disease__pomim=paras['gene_id'])
+		else:
+
+			if paras['gene_type'] == 'ensembl':
+				snps = snps.filter(snp__gannot__gene__ensembl=paras['gene_id'])
+			elif paras['gene_type'] == 'drug':
+				snps = snps.filter(snp__gannot__gene__orthology__drug__drug_id=paras['gene_id'])
+			elif paras['gene_type'] == 'disease':
+				snps = snps.filter(snp__gannot__gene__orthology__disease__pomim=paras['gene_id'])
 
 
 	paginator = Paginator(snps, paras['records'])
@@ -369,14 +400,19 @@ def retrieve(request):
 	variants = {}
 	if paras['category'] == 'nrsnps':
 		snp_ids = [snp.id for snp in snps]
-		vs = Variant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
-		ns = Nonvariant.get_sharding_model(paras['chromosome']).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
+		vs = Variants.shard(paras['chromosome']).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
+		ns = Nonvariants.shard(paras['chromosome']).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
 		for v in vs:
 			variants[(v.snp.id, v.individual.id)] = v.genotype
 		for n in ns:
 			variants[(n.snp.id, n.individual.id)] = 3
 
-	return render(request, 'macaca/download.html', {
+	if paras['category'] == 'nrsnps':
+		tpl = 'macaca/download_nrsnps.html'
+	else:
+		tpl = 'macaca/download.html'
+
+	return render(request, tpl, {
 		'snps': snps,
 		'organism': organism,
 		'paras': paras,
@@ -397,12 +433,12 @@ def download(request):
 	elif category == 'species':
 		snps = SpeciesSpecific.objects.filter(snp__in=snp_ids)
 	elif category == 'individual':
-		snps = Variant.get_sharding_model(chromosome).objects.filter(snp__in=snp_ids, individual=individual)
+		snps = Variants.shard(chromosome).objects.filter(snp__in=snp_ids, individual=individual)
 	elif category == 'nrsnps':
 		variants = {}
-		snps = Snps.get_sharding_model(chromosome).objects.filter(snp__in=snp_ids)
-		vs = Variant.get_sharding_model(chromosome).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
-		ns = Nonvariant.get_sharding_model(chromosome).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
+		snps = Snps.shard(chromosome).objects.filter(pk__in=snp_ids)
+		vs = Variants.shard(chromosome).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
+		ns = Nonvariants.shard(chromosome).objects.filter(snp__in=snp_ids, individual__in=sample_ids)
 		for v in vs:
 			variants[(v.snp.id, v.individual.id)] = v.genotype
 		for n in ns:
@@ -417,11 +453,11 @@ def download(request):
 	for snp in snps:
 		if category == 'group':
 			sid = "MACSNPG%02d%09d" % (snp.group.id, snp.snp.id)
-			genotype = 'homozygote'
+			genotype = '1/1'
 		
 		elif category == 'species':
 			sid = "MACSNPS%02d%09d" % (snp.species.id, snp.snp.id)
-			genotype = 'homozygote'
+			genotype = '1/1'
 		
 		elif category == 'individual':
 			sid = "MACSNPI%02d%09d" % (snp.individual.id, snp.snp.id)
@@ -429,18 +465,29 @@ def download(request):
 		
 		elif category == 'nrsnps':
 			types = {1: '1/1', 2: '0/1', 3: '0/0', 4: '.'}
-			sid = "MACSNPC%02d%09d" % (snp.chromosome.pk, snp.snp.id)
-			genotype = " ".join([types.get(variants.get((snp.snp.pk, s.id), 4)) for s in samples])
+			sid = "MACSNPC%02d%09d" % (snp.chromosome.pk, snp.id)
+			genotype = " ".join([types.get(variants.get((snp.pk, s.id), 4)) for s in samples])
 
-		genes = "|".join(["%s:%s" % (gene.gene.ensembl, gene.get_feature_display()) for gene in snp.snp.gannot_set.all()])
+		if category == 'nrsnps':
+			genes = "|".join(["%s:%s" % (gene.gene.ensembl, gene.get_feature_display()) for gene in snp.gannot_set.all()])
+		else:
+			genes = "|".join(["%s:%s" % (gene.gene.ensembl, gene.get_feature_display()) for gene in snp.snp.gannot_set.all()])
+		
 		if not genes:
 			genes = 'Intergenic'
-		
-		contents.append(out_formats % (
-			sid, snp.snp.chromosome.name, snp.snp.position,
-			snp.snp.reference, snp.snp.alteration,
-			snp.snp.five, snp.snp.three, genes, genotype
-		))
+
+		if category == 'nrsnps':
+			contents.append(out_formats % (
+				sid, snp.chromosome.name, snp.position, snp.reference,
+				snp.alteration, snp.five, snp.three, genes, genotype
+			))
+
+		else:
+			contents.append(out_formats % (
+				sid, snp.snp.chromosome.name, snp.snp.position,
+				snp.snp.reference, snp.snp.alteration,
+				snp.snp.five, snp.snp.three, genes, genotype
+			))
 
 	return HttpResponse('<pre>'+''.join(contents)+'</pre>')
 
@@ -599,11 +646,11 @@ def cds_snps(request, gid):
 	gene = Gene.objects.get(ensembl=gid)
 	annots = Gannot.objects.filter(feature=1, gene__ensembl=gid)
 	snp_ids = [annot.snp.id for annot in annots]
-	snps = Snps.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+	snps = Snps.shard(gene.chromosome.pk).objects.filter(pk__in=snp_ids)
 
 	genotypes = {}
-	vs = Variant.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
-	ns = Nonvariant.get_sharding_model(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+	vs = Variants.shard(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
+	ns = Nonvariants.shard(gene.chromosome.pk).objects.filter(snp__in=snp_ids)
 	for v in vs:
 		genotypes[(v.snp.id, v.individual.id)] = v.genotype
 
