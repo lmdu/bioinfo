@@ -1,0 +1,78 @@
+{% set page_name = "big:member" %}
+{% extends "big/base.html" %}
+{% block title %}{{ member.name }} - {% endblock %}
+{% block main %}
+<div class="container">
+	<div class="row align-items-center mt-5">
+		<div class="col-md-6">
+			<div class="text-center text-md-end me-md-5">
+				<div class="rounded-circle border border-5 d-inline-block animate-hover">
+					{% if member.avatar %}
+					<img src="{{ member.avatar.url }}" alt="avatar" class="rounded-circle img-fluid" style="max-width: 300px;">
+					{% else %}
+					<img src="{{ static('big/image/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid" style="max-width: 300px;">
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="text-center text-md-start ms-md-5">
+				<p class="fs-4">{{ member.name }}</p>
+				<!--<p>{{ member.email }}</p>-->
+				{% if member.position == 4 %}
+				<p>{{ member.title }}</p>
+				{% elif member.position in [3, 5] %}
+				<p>{{ member.get_position_display() }}</p>
+				{% else %}
+				<p>
+					{% if lang %}
+					{{ member.grade }}级 {{ member.get_degree_display() }}{{ member.get_position_display() }}
+					{% else %}
+					{{ member.get_degree_display() }} student
+					{% endif %}
+				</p>
+				{% endif %}
+				<p>{{ _("专业") }}: {{ member.major }}</p>
+				<p>{{ _("研究兴趣") }}: {{ member.direct}}</p>
+				<p>
+					{% if member.email %}
+					<a href="#" data-bs-toggle="tooltip" title="{{ member.email.replace('@', ' at ') }}" data-bs-placement="bottom">
+						<img src="{{ static('big/image/email.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
+					</a>
+					{% endif %}
+					{% if member.github %}
+					<a href="{{ member.github }}" data-bs-toggle="tooltip" title="Github" data-bs-placement="bottom">
+						<img src="{{ static('big/image/github.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
+					</a>
+					{% endif %}
+					{% if member.researchgate %}
+					<a href="{{ member.researchgate }}" data-bs-toggle="tooltip" title="Researchgate" data-bs-placement="bottom">
+						<img src="{{ static('big/image/researchgate.svg') }}" class="border border-2 rounded-circle p-1 me-2"  width="36">
+					</a>
+					{% endif %}
+					{% if member.google %}
+					<a href="{{ member.google }}" data-bs-toggle="tooltip" title="Google scholar" data-bs-placement="bottom">
+						<img src="{{ static('big/image/scholar.svg') }}" class="border border-2 rounded-circle p-1" width="36">
+					</a>
+					{% endif %}
+				</p>
+			</div>
+		</div>
+	</div>
+	<hr class="border-bottom border-2 my-5">
+	<div class="row">
+		<div class="col lh-lg">
+			{{ member.bio | safe }}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+</script>
+{% endblock %}
