@@ -24,7 +24,6 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 	pass
 
-
 @admin.register(Slideshow)
 class SlideAdmin(ModelAdmin):
 	list_display = ('id', 'title_zh', 'slide', 'link', 'created')
@@ -67,7 +66,7 @@ class MediaAdmin(ModelAdmin):
 
 @admin.register(Option)
 class OptionAdmin(ModelAdmin):
-	list_display = ('id', 'name', 'title_zh', 'content_zh', 'created')
+	list_display = ('id', 'slug', 'title_zh', 'content_zh', 'created')
 
 @admin.register(Fund)
 class FundAdmin(ModelAdmin):

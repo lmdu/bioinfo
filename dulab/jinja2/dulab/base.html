@@ -20,7 +20,7 @@
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		{% set menus = (('dulab:index', _("首页")), ('dulab:news', _("最新动态")), ('dulab:member', _("团队成员")), ('dulab:research', _("研究方向")), ('dulab:publication', _("研究成果")), ('dulab:softwares', _("软件资源"))) %}
+		{% set menus = (('dulab:index', _("首页")), ('dulab:news', _("最新动态")), ('dulab:members', _("团队成员")), ('dulab:research', _("研究方向")), ('dulab:publication', _("研究成果")), ('dulab:softwares', _("软件资源"))) %}
 		<div class="collapse navbar-collapse" id="menu">
 			<ul class="navbar-nav flex-row flex-wrap pt-2 py-md-0 ms-md-auto">
 				{% for menu in menus %}
@@ -83,7 +83,7 @@
 				<div class="mb-3 footer-links">
 					<a href="{{ url('dulab:about') }}">{{ _("关于我们") }}</a>
 					<a href="{{ url('dulab:contact') }}">{{ _("联系我们") }}</a>
-					<a href="{{ url('dulab:join') }}">{{ _("加入我们") }}</a>
+					<a href="{{ url('dulab:joinus') }}">{{ _("加入我们") }}</a>
 					<a href="#" data-lang="zh-hans" class="change-lang-btn">{{ _("中文") }}</a>
 					<a href="#" data-lang="en-us" class="change-lang-btn">{{ _("英文") }}</a>
 					<form action="{{ url('set_language') }}" method="POST" id="change-lang">

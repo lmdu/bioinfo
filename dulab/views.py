@@ -28,9 +28,9 @@ class IndexView(TemplateView):
 		context['sliden'] = slides.count()
 		context['papers'] = Publication.objects.all()[0:5]
 		context['posts'] = Post.objects.filter(approve=1)[0:8]
-		context['introduce'] = Option.objects.filter(name='introduce').first()
-		context['interest'] = Option.objects.filter(name='interest').first()
-		context['supports'] = Option.objects.filter(name='supports')
+		context['introduce'] = Option.objects.filter(slug='introduce').first()
+		context['interest'] = Option.objects.filter(slug='interest').first()
+		context['supports'] = Option.objects.filter(slug='supports')
 
 		return context
 
