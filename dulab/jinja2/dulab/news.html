@@ -1,0 +1,118 @@
+{% set page_name = "dulab:news" %}
+{% extends "dulab/base.html" %}
+{% block title %}{{ _("最新动态") }} - {% endblock %}
+{% block main %}
+<div class="container mt-5">
+	{% for post in posts %}
+	<div class="row">
+		<div class="col-md-4">
+			{% if post.banner %}
+			<div class="animate-hover text-center">
+				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}">
+					<img class="mb-3 img-fluid" src="{{ post.banner.url }}">
+				</a>
+			</div>
+			{% elif post.thumbnail %}
+			<div class="animate-hover text-center">
+				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}">
+					<img class="mb-3 img-fluid" src="{{ post.thumbnail.url }}" >
+				</a>
+			</div>
+			{% endif %}
+		</div>
+		<div class="col-md-8 ps-md-5">
+			<h3 class="post-title">
+				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="link-success text-decoration-none">
+					{{ post.title }}
+				</a>
+			</h3>
+			<div class="my-4 lh-lg post-content">
+				{{ post.content | striptags | truncate(400) }}
+			</div>
+			<div class="post-meta">
+				<span class="text-muted">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="display: inline-block;vertical-align: -.125em;" viewBox="0 0 16 16">
+					  <path d="M5.5 10.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
+					  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+					  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+					</svg>
+					{% if lang %}
+					{{ time_format(post.created, 'Y-m-d') }}
+					{% else %}
+					{{ time_format(post.created, 'M j, Y') }}
+					{% endif %}
+				</span>
+				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="btn btn-sm btn-outline-success float-end">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+					  <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+					</svg>
+					{{ _("阅读更多") }}
+				</a>
+			</div>
+		</div>
+	</div>
+
+	{% if not loop.last %}
+	<hr class="boder-top my-5">
+	{% endif %}
+	{% endfor %}
+
+	<div class="row">
+		<div class="col">
+			<ul class="pagination mx-auto">
+				<li class="page-item {% if not page_obj.has_previous() %} disabled {% endif %}">
+		            <a class="page-link" href="?page={% if page_obj.has_previous() %}{{ page_obj.previous_page_number() }}{% endif %}">
+		              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+		                <path d="M15 6l-6 6l6 6"></path>
+		              </svg>
+		              上一页
+		            </a>
+		        </li>
+
+		        <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
+		        	<a href="?page=1" class="page-link">1</a>
+		        </li>
+
+		        {% if page_obj.number - 3 > 2 %}
+		        <li class="page-item">...</li>
+		        {% endif %}
+
+		        {% for i in range(page_obj.number-3, page_obj.number) %}
+		        {% if i >= 2 %}
+		        <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+		        	<a href="?page={{ i }}" class="page-link">{{ i }}</a>
+		        </li>
+		        {% endif %}
+		        {% endfor %}
+
+		        {% for j in range(page_obj.number, page_obj.number + 4) %}
+		        {% if 1 < j < page_obj.paginator.num_pages %}
+		        <li class="page-item {% if page_obj.number == j %}active{% endif %}">
+		        	<a href="?page={{ j }}" class="page-link">{{ j }}</a>
+		        </li>
+		        {% endif %}
+		        {% endfor %}
+
+		        {% if page_obj.number + 4 < page_obj.paginator.num_pages %}
+		        <li class="page-item">...</li>
+		        {% endif %}
+
+		        {% if page_obj.paginator.num_pages > 1 %}
+		        <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}active{% endif %}">
+		        	<a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">{{ page_obj.paginator.num_pages }}</a>
+		        </li>
+		        {% endif %}
+
+				<li class="page-item {% if not page_obj.has_next() %} disabled {% endif %}">
+		            <a class="page-link" href="?page={% if page_obj.has_next() %}{{ page_obj.next_page_number() }}{% endif %}">
+		              下一页
+		              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+		                <path d="M9 6l6 6l-6 6"></path>
+		              </svg>
+		            </a>
+		        </li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}
