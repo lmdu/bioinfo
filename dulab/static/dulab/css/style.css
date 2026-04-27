@@ -1,3 +1,7 @@
+html {
+	margin-left: 0 !important;
+}
+
 body{
 	/*background-color: #f8f8f8;*/
 }
@@ -14,6 +18,11 @@ a{
 /* header */
 .menubar{
 	background-color: rgba(0, 0, 0, .85);
+	box-shadow: none !important;
+}
+.menubar .nav-link:hover,
+.menubar .nav-link:focus {
+	color: white !important;
 }
 
 /* slideshow */
@@ -34,6 +43,24 @@ a{
 	background-color: rgba(0, 0, 0, .3);
     color: white;
     text-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+}
+
+#slideshow video {
+	max-width: 100%;
+	object-fit: cover;
+	object-position: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: -1;
+}
+
+#slideshow .carousel-control-prev-icon,
+#slideshow .carousel-control-next-icon {
+	width: 3rem !important;
+	height: 3rem !important;
 }
 
 /* footer */

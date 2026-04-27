@@ -1,5 +1,5 @@
-{% set page_name = "big:member" %}
-{% extends "big/base.html" %}
+{% set page_name = "dulab:member" %}
+{% extends "dulab/base.html" %}
 {% block title %}{{ member.name }} - {% endblock %}
 {% block main %}
 <div class="container">
@@ -10,7 +10,7 @@
 					{% if member.avatar %}
 					<img src="{{ member.avatar.url }}" alt="avatar" class="rounded-circle img-fluid" style="max-width: 300px;">
 					{% else %}
-					<img src="{{ static('big/image/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid" style="max-width: 300px;">
+					<img src="{{ static('dulab/img/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid" style="max-width: 300px;">
 					{% endif %}
 				</div>
 			</div>
@@ -37,22 +37,22 @@
 				<p>
 					{% if member.email %}
 					<a href="#" data-bs-toggle="tooltip" title="{{ member.email.replace('@', ' at ') }}" data-bs-placement="bottom">
-						<img src="{{ static('big/image/email.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
+						<img src="{{ static('dulab/img/email.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
 					</a>
 					{% endif %}
 					{% if member.github %}
 					<a href="{{ member.github }}" data-bs-toggle="tooltip" title="Github" data-bs-placement="bottom">
-						<img src="{{ static('big/image/github.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
+						<img src="{{ static('dulab/img/github.svg') }}" class="border border-2 rounded-circle p-1 me-2" width="36">
 					</a>
 					{% endif %}
 					{% if member.researchgate %}
 					<a href="{{ member.researchgate }}" data-bs-toggle="tooltip" title="Researchgate" data-bs-placement="bottom">
-						<img src="{{ static('big/image/researchgate.svg') }}" class="border border-2 rounded-circle p-1 me-2"  width="36">
+						<img src="{{ static('dulab/img/researchgate.svg') }}" class="border border-2 rounded-circle p-1 me-2"  width="36">
 					</a>
 					{% endif %}
 					{% if member.google %}
 					<a href="{{ member.google }}" data-bs-toggle="tooltip" title="Google scholar" data-bs-placement="bottom">
-						<img src="{{ static('big/image/scholar.svg') }}" class="border border-2 rounded-circle p-1" width="36">
+						<img src="{{ static('dulab/img/scholar.svg') }}" class="border border-2 rounded-circle p-1" width="36">
 					</a>
 					{% endif %}
 				</p>

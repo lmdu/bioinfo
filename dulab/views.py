@@ -1,6 +1,6 @@
 import os
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.db.models import Sum
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -15,6 +15,7 @@ from django.views.generic import View, TemplateView, ListView, CreateView, Detai
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
+from .forms import *
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -118,47 +119,14 @@ def signin(request):
 			messages.add_message(request, messages.ERROR, _("用户名或密码错误, 忘记帐号密码请联系管理员"))
 			return redirect('big:signin')
 
-class SignoutView(LogoutView):
-	pass
+class SignupView(CreateView):
+	form_class = SignupForm
+	success_url = reverse_lazy('admin:login')
+	template_name = 'dulab/signup.html'
 
 def signout(request):
 	logout(request)
-	return redirect('big:index')
-
-def signup(request):
-	if request.method == 'GET':
-		return render(request, 'big/signup.html')
-
-	elif request.method == 'POST':
-		username = request.POST.get('username')
-		email = request.POST.get('email')
-		name = request.POST.get('name')
-		password = request.POST.get('password')
-
-		if len(username) < 4:
-			messages.add_message(request, messages.WARNING, _("用户名长度至少为4位字母"))
-
-		elif User.objects.filter(username=username).exists():
-			messages.add_message(request, messages.WARNING, _("你输入的用户名已被占用, 请重新输入用户名"))
-		
-		elif len(password) < 8:
-			messages.add_message(request, messages.WARNING, _("密码的长度至少为8位数字或字母"))
-		
-		else:
-			User.objects.create_user(
-				username = username,
-				password = password,
-				email = email,
-			)
-			Member.objects.create_user(
-				uname = username,
-				email = email,
-			)
-
-			messages.add_message(request, messages.SUCCESS,
-			 _('注册成功, 请 <a href="{}">登录</a> 系统, 修改个人资料'.format(reverse('big:signin'))))
-
-		return redirect('big:signup')
+	return redirect('dulab:index')
 
 @login_required(login_url='/signin')
 def profile(request):

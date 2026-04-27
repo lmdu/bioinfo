@@ -75,6 +75,7 @@ class Member(BaseModel):
 	YEARS = ((i, i) for i in range(2020, timezone.now().year+1))
 
 	profile = models.OneToOneField(User, on_delete=models.CASCADE)
+	email = models.EmailField(blank=True)
 	name_zh = models.CharField(max_length=30, blank=True)
 	name_en = models.CharField(max_length=30, blank=True)
 	title_zh = models.CharField(max_length=255, blank=True)
@@ -140,11 +141,11 @@ class Post(BaseModel):
 		ordering = ['-created']
 
 class Slideshow(BaseModel):
+	slide = models.FileField(upload_to='dulab/slides/')
 	title_zh = models.CharField(max_length=255, blank=True)
 	title_en = models.CharField(max_length=255, blank=True)
 	description_zh = models.TextField(blank=True)
 	description_en = models.TextField(blank=True)
-	slide = models.ImageField(upload_to='dulab/slides/')
 	link = models.CharField(max_length=255, blank=True)
 	extra_zh = models.TextField(blank=True)
 	extra_en = models.TextField(blank=True)
