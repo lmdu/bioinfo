@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'dulab',
 ]
 
@@ -141,3 +143,7 @@ STATIC_ROOT = Path(BASE_DIR) / 'static'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = Path(BASE_DIR) / 'media'
 
+
+# The other external settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

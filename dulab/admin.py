@@ -45,7 +45,7 @@ class ResearchAdmin(ModelAdmin):
 
 @admin.register(Member)
 class MemberAdmin(ModelAdmin):
-	list_display = ('id', 'major_zh', 'grade', 'degree', 'position', 'status')
+	list_display = ('id', 'user__username', 'user__email', 'name_zh', 'phone', 'qq', 'weixin', 'major_zh', 'grade', 'degree', 'position', 'status')
 	list_filter = ('degree',)
 
 @admin.register(Software)

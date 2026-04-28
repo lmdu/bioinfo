@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
 from django.http import HttpResponseNotFound, JsonResponse, FileResponse
 from django.views.generic import View, TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -119,51 +119,44 @@ def signin(request):
 			messages.add_message(request, messages.ERROR, _("用户名或密码错误, 忘记帐号密码请联系管理员"))
 			return redirect('big:signin')
 
+class SigninView(LoginView):
+	next_page = reverse_lazy('dulab:index')
+	template_name = 'dulab/signin.html'
+
 class SignupView(CreateView):
 	form_class = SignupForm
-	success_url = reverse_lazy('admin:login')
+	success_url = reverse_lazy('dulab:signin')
 	template_name = 'dulab/signup.html'
 
 def signout(request):
 	logout(request)
 	return redirect('dulab:index')
 
-@login_required(login_url='/signin')
-def profile(request):
-	if request.method == 'GET':
-		member = Member.objects.get(uname=request.user.username)
-		return render(request, 'big/profile.html', {'member': member})
+class ProfileView(LoginRequiredMixin, UpdateView):
+	model = Member
+	form_class = ProfileForm
+	template_name = 'dulab/profile.html'
 
-	elif request.method == 'POST':
-		data = request.POST
-		avatar = request.FILES.get('avatar', None)
-		member = Member.objects.get(uname=request.user.username)
-		
-		if avatar:
-			member.avatar = avatar
+	def get_object(self, queryset=None):
+		return Member.objects.get(user=self.request.user)
 
-		member.email = data['email']
-		member.name_zh = data['name_zh']
-		member.name_en = data['name_en']
-		member.title_zh = data['title_zh']
-		member.title_en = data['title_en']
-		member.phone = data['phone']
-		member.major_zh = data['major_zh']
-		member.major_en = data['major_en']
-		member.grade = int(data['grade'])
-		member.degree = int(data['degree'])
-		member.position = int(data['position'])
-		member.status = int(data['status'])
-		member.direct_zh = data['direct_zh']
-		member.direct_en = data['direct_en']
-		member.bio_zh = data['bio_zh']
-		member.bio_en = data['bio_en']
-		member.github = data['github']
-		member.researchgate = data['researchgate']
-		member.google = data['google']
-		member.save()
+class AvatarUploadView(LoginRequiredMixin, View):
+	def post(self, request):
+		profile = self.request.user.profile
+		profile.avatar.delete()
+		form = AvatarCropForm(request.POST, request.FILES, instance=profile)
 
-		return redirect('big:profile')
+		if form.is_valid():
+			form.save()
+			return JsonResponse({'path': profile.avatar.url})
+
+		return JsonResponse({'error': 'upload error'})
+
+class AvatarDeleteView(LoginRequiredMixin, View):
+	def post(self, request):
+		profile = self.request.user.profile
+		profile.avatar.delete()
+		return JsonResponse({'path': profile.avatar.url})
 
 @login_required(login_url='/signin')
 def resetpasswd(request):

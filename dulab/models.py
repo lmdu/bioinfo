@@ -74,8 +74,7 @@ class Member(BaseModel):
 
 	YEARS = ((i, i) for i in range(2020, timezone.now().year+1))
 
-	profile = models.OneToOneField(User, on_delete=models.CASCADE)
-	email = models.EmailField(blank=True)
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 	name_zh = models.CharField(max_length=30, blank=True)
 	name_en = models.CharField(max_length=30, blank=True)
 	title_zh = models.CharField(max_length=255, blank=True)
@@ -109,11 +108,11 @@ class Member(BaseModel):
 @receiver(post_save, sender=User)
 def create_member(sender, instance, created, **kwargs):
 	if created:
-		Member.objects.create(profile=instance)
+		Member.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_member(sender, instance, **kwargs):
-	instance.member.save()
+	instance.profile.save()
 
 class Post(BaseModel):
 	APPROVES = {

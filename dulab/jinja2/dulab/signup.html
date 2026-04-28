@@ -2,29 +2,14 @@
 {% block title %}{{ _("注册") }} - {% endblock %}
 {% block main %}
 <div class="container">
-	{% if messages %}
-	{% for message in messages %}
-	<div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-5" role="alert">
-		{{ message | safe }}
-		<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-	</div>
-	{% endfor %}
-	{% endif %}
 	<div class="row justify-content-center mt-5">
 		<div class="col-10 col-md-6 col-lg-4">
 			<h2 class="text-center mb-5">{{ _("注册") }}</h2>
 			<form method="POST" class="needs-validation" novalidate>
 				{{ csrf_input }}
-
-				{% for field in form %}
-				<div class="mb-3">
-					<label class="form-label">{{ field.label }}</label>
-					{{ field }}
-					<small class="form-hint">{{ field.help_text | safe }}</small>
-				</div>
-				{% endfor %}
+				{{ form | crispy }}
 				<div class="mt-5">
-					<button type="submit" class="btn btn-primary btn-3 w-100">提交</button>
+					<button type="submit" class="btn btn-primary btn-3 w-100">注册</button>
 				</div>
 			</form>
 		</div>

@@ -1,147 +1,166 @@
-{% set page_name = "big:profile" %}
-{% extends "big/base.html" %}
-{% block title %}{{ _("修改资料") }} - {% endblock %}
-{% block main %}
-<div class="container">
-	<div class="row mt-5">
-		<div class="col">
-			<form method="POST" enctype="multipart/form-data" class="row g-3">
-				{{ csrf_input }}
-				<div class="col-md-3">
-					<label for="username" class="form-label">{{ _("用户名") }}</label>
-					<input type="text" name="username" id="username" class="form-control" value="{{ member.uname }}" disabled readonly>
-				</div>
-				<div class="col-md-1 text-right">
-					{% if member.avatar %}
-					<img src="{{ member.avatar.url }}" alt="avatar" width="64" height="64">
-					{% else %}
-					<img src="{{ static('big/image/avatar.png') }}" alt="avatar" width="64" height="64">
-					{% endif %}
-				</div>
-				<div class="col-md-8">
-					<label for="avatar" class="form-label">{{ _("选择图片更换头像") }}</label>
-					<input type="file" name="avatar" id="avatar" class="form-control">
-				</div>
-				
-				<div class="col-md-3">
-					<label for="name_zh" class="form-label">{{ _("中文名") }}</label>
-					<input type="text" name="name_zh" id="name_zh" class="form-control" value="{{ member.name_zh }}">
-				</div>
-				<div class="col-md-3">
-					<label for="name_en" class="form-label">{{ _("英文名") }}</label>
-					<input type="text" name="name_en" id="name_en" class="form-control" value="{{ member.name_en }}">
-				</div>
-				<div class="col-md-3">
-					<label for="title_zh" class="form-label">{{ _("中文头衔") }}</label>
-					<input type="text" name="title_zh" id="title_zh" class="form-control" value="{{ member.title_zh }}">
-				</div>
-				<div class="col-md-3">
-					<label for="title_en" class="form-label">{{ _("英文头衔") }}</label>
-					<input type="text" name="title_en" id="title_en" class="form-control" value="{{ member.title_en }}">
-				</div>
-				
-				<div class="col-md-3">
-					<label for="email" class="form-label">{{ _("邮箱") }}</label>
-					<input type="text" name="email" id="email" class="form-control" value="{{ member.email }}">
-				</div>
-				<div class="col-md-3">
-					<label for="phone" class="form-label">{{ _("电话") }}</label>
-					<input type="text" name="phone" id="phone" class="form-control" value="{{ member.phone }}">
-				</div>
-				<div class="col-md-3">
-					<label for="major_zh" class="form-label">{{ _("专业") }}({{ _("中文") }})</label>
-					<input type="text" name="major_zh" id="major_zh" class="form-control" value="{{ member.major_zh }}">
-				</div>
-				<div class="col-md-3">
-					<label for="major_en" class="form-label">{{ _("专业") }}({{ _("英文") }})</label>
-					<input type="text" name="major_en" id="major_en" class="form-control" value="{{ member.major_en }}">
-				</div>
-				<div class="col-md-3">
-					<label for="grade" class="form-label">{{ _("年级") }}</label>
-					<select id="grade" name="grade" class="form-select">
-						<option value="0">{{ _("未选择") }}</option>
-						{% for y in range(2020, now.year+1) %}
-						<option value="{{ y }}" {% if y == member.grade %} selected {% endif %}>{{ y }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col-md-3">
-					<label for="degree" class="form-label">{{ _("学位") }}</label>
-					<select id="degree" name="degree" class="form-select">
-						<option value="0">{{ _("未选择") }}</option>
-						{% set degrees = ((1, _("博士")), (2, _("硕士")), (3, _("学士"))) %}
-						{% for d in degrees %}
-						<option value="{{ d[0] }}" {% if d[0] == member.degree %} selected {% endif %}>{{ d[1] }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col-md-3">
-					<label for="position" class="form-label">{{ _("职位") }}</label>
-					<select id="position" name="position" class="form-select">
-						<option value="0">{{ _("未选择") }}</option>
-						{% set positions = ((1, _("研究生")), (2, _("本科生")), (3, _("博士后")), (4, _("教职工"))) %}
-						{% for p in positions %}
-						<option value="{{ p[0] }}" {% if p[0] == member.position %} selected {% endif %}>{{ p[1] }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col-md-3">
-					<label for="status" class="form-label">{{ _("状态") }}</label>
-					<select id="status" name="status" class="form-select">
-						<option value="0">{{ _("未选择") }}</option>
-						{% set status = ((1, _("在读")), (2, _("毕业")), (3, _("退学"))) %}
-						{% for s in status %}
-						<option value="{{ s[0] }}" {% if s[0] == member.status %} selected {% endif %}>{{ s[1] }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="col-md-6">
-					<label for="direct_zh" class="form-label">{{ _("研究方向") }}({{ _("中文") }})</label>
-					<input type="text" name="direct_zh" id="direct_zh" class="form-control" value="{{ member.direct_zh }}">
-				</div>
-				<div class="col-md-6">
-					<label for="direct_en" class="form-label">{{ _("研究方向") }}({{ _("英文") }})</label>
-					<input type="text" name="direct_en" id="direct_en" class="form-control" value="{{ member.direct_en }}">
-				</div>
-				<div class="col-md-4">
-					<label for="github" class="form-label">Github</label>
-					<input type="text" name="github" id="github" class="form-control" value="{{ member.github }}">
-				</div>
-				<div class="col-md-4">
-					<label for="researchgate" class="form-label">Researchgate</label>
-					<input type="text" name="researchgate" id="researchgate" class="form-control" value="{{ member.researchgate }}">
-				</div>
-				<div class="col-md-4">
-					<label for="google" class="form-label">Google Scholar</label>
-					<input type="text" name="google" id="google" class="form-control" value="{{ member.google }}">
-				</div>
-				<div class="col-md-6">
-					<label for="bio_zh" class="form-label">{{ _("中文简历") }}</label>
-					<textarea name="bio_zh" id="bio_zh" class="form-control jodit-editor" rows="8">{{ member.bio_zh }}</textarea>
-				</div>
-				<div class="col-md-6">
-					<label for="bio_en" class="form-label">{{ _("英文简历") }}</label>
-					<textarea name="bio_en" id="bio_en" class="form-control jodit-editor" rows="8">{{ member.bio_en }}</textarea>
-				</div>
-				<div class="col-12">
-					<button type="submit" class="btn btn-success">{{ _("更新资料") }}</button>
-				</div>
-			</form>
-		</div>
-	</div>
+{% extends 'dulab/subase.html' %}
+{% set submenu = 'account' %}
+{% block pagetitle %}
+个人资料
+{% endblock %}
+
+{% block form %}
+<form method="post">
+    <div class="card-body">
+      <h2 class="mb-4">我的帐号</h2>
+      <h3 class="card-title"><strong>头像</strong></h3>
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <span id="avatar-show" class="avatar avatar-xl" style="background-image: url({% if object.avatar %}{{ object.avatar.url }}{% else %}{{ static('dulab/img/avatar.png') }}{% endif %})"></span>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#avatar-uploader-dialog">修改头像</button>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#avatar-delete-dialog">删除头像</button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        {{ form | crispy }}
+      </div>
+    </div>
+    <div class="card-footer bg-transparent mt-auto">
+      <div class="btn-list justify-content-end">
+        <button type="Submit" class="btn btn-primary">保存修改</button>
+      </div>
+    </div>
+    {{ csrf_input }}
+</form>
+
+<div class="modal modal-blur fade" id="avatar-uploader-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <form method="POST" class="modal-content" enctype="multipart/form-data" id="avatar-form">
+      <div class="modal-header">
+        <h5 class="modal-title">修改头像</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <button type="button" class="btn btn-primary" id="avatar-select">选择图片文件</button>
+          <input type="file" id="avatar-input" class="visually-hidden" name="avatar" accept="image/*">
+        </div>
+        <div class="avatar-preview">
+          <img id="avatar-img" src="" style="max-width: 100%;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn me-auto" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="avatar-send">确认</button>
+      </div>
+      {{ csrf_input }}
+    </form>
+  </div>
+</div>
+
+<div class="modal modal-blur fade" id="avatar-delete-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-status bg-danger"></div>
+      <div class="modal-body text-center py-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon mb-2 text-danger icon-lg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M12 9v2m0 4v.01" />
+          <path
+            d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
+          />
+        </svg>
+        <h3>你确定要删除头像吗?</h3>
+        <div class="text-secondary">
+          删除头像不可恢复, 请谨慎操作, 头像删除后将使用默认头像
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="w-100">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn w-100" data-bs-dismiss="modal">取消</a>
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" id="avatar-delete">确定</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{{ static('big/css/jodit.min.css') }}">
-{% endblock %}
-
 {% block script %}
-<script src="{{ static('big/js/jodit.min.js') }}"></script>
+<script src="{{ static('dulab/js/cropper.min.js') }}"></script>
+
 <script type="text/javascript">
-var editors = [].slice.call(document.querySelectorAll('.jodit-editor'));
-editors.forEach( e => {
-	var editor = new Jodit(e);
-});
+
+const cropper = new Cropper('#avatar-img');
+
+  $('#avatar-img').cropper({
+    aspectRatio: 1,
+    autoCropArea: 0.5,
+    minCropBoxWidth: 100,
+    minCropBoxHeight: 100,
+  });
+
+  $('#avatar-input').on('change', function(e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      $('#avatar-img')
+        .cropper('reset')
+        .cropper('replace', event.target.result, false);
+    }
+    reader.readAsDataURL(file);
+  });
+
+  $('#avatar-send').click(function(){
+    var crop_data = $('#avatar-img').cropper('getData');
+    var form_data = new FormData($('#avatar-form')[0]);
+    form_data.append('x', crop_data.x);
+    form_data.append('y', crop_data.y);
+    form_data.append('w', crop_data.width);
+    form_data.append('h', crop_data.height);
+
+    $.ajax({
+      url: "{{ url('dulab:avatar-upload') }}",
+      type: 'POST',
+      data: form_data,
+      async: false,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function(data) {
+        $('#avatar-show').css('background-image', "url("+data.path+")");
+      },
+      error: function(data) {
+        alert('upload error');
+      }
+    });
+  });
+
+  $('#avatar-delete').click(function() {
+    $.post("{{ url('dulab:avatar-delete') }}", {
+      csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+    }, function(data){
+      $('#avatar-show').css('background-image', "url("+data.path+")");
+    });
+  });
+
+
 </script>
 {% endblock %}
