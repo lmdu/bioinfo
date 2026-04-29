@@ -1,5 +1,5 @@
 {% extends 'dulab/subase.html' %}
-{% set submenu = 'postadd' %}
+{% set submenu = 'password' %}
 {% block pagetitle %}
 个人资料
 {% endblock %}
@@ -9,7 +9,7 @@
 {% block form %}
 <form method="post">
     <div class="card-body">
-      <h2 class="mb-4">添加文章</h2>
+      <h2 class="mb-4">修改密码</h2>
       {{ form | crispy }}
     </div>
     <div class="card-footer bg-transparent mt-auto">

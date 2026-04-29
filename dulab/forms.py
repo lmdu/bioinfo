@@ -34,6 +34,7 @@ class ProfileForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.helper = FormHelper(self)
+		self.helper.form_tag = False
 		self.helper.layout = Layout(
 			HTML('<h3 class="card-title mt-4"><strong>基本信息</strong></h3>'),
 			Row(
@@ -105,7 +106,15 @@ class AvatarCropForm(forms.ModelForm):
 		crop_img = image.crop((x, y, x+w, y+h))
 
 		if w > 200:
-			crop_img = crop_img.resize((200, 200), Image.ANTIALIAS)
+			crop_img = crop_img.resize((200, 200), Image.LANCZOS)
 
 		crop_img.save(profile.avatar.path)
 		return profile
+
+class PostForm(forms.ModelForm):
+	class Meta:
+		model = Post
+		exclude = ['approve', 'author', 'created', 'updated']
+		
+
+

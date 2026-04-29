@@ -121,13 +121,13 @@ class Post(BaseModel):
 		2: _("退回修改"),
 	}
 
-	slug = models.SlugField(unique=True)
-	title_zh = models.CharField(max_length=255)
-	title_en = models.CharField(max_length=255, blank=True)
-	content_zh = models.TextField(blank=True)
-	content_en = models.TextField(blank=True)
-	thumbnail = models.ImageField(upload_to='dulab/thumbnails/', blank=True)
-	banner = models.ImageField(upload_to='dulab/banners/', blank=True)
+	slug = models.SlugField(unique=True, verbose_name=_("文章缩写名"), help_text="文章英文缩写名")
+	title_zh = models.CharField(max_length=255, verbose_name=_("标题(中文)"))
+	title_en = models.CharField(max_length=255, blank=True, verbose_name=_("标题(英文)"))
+	content_zh = models.TextField(blank=True, verbose_name=_("内容(中文)"))
+	content_en = models.TextField(blank=True, verbose_name=_("内容(英文)"))
+	thumbnail = models.ImageField(upload_to='dulab/thumbnails/', blank=True, verbose_name=_("缩略图"))
+	banner = models.ImageField(upload_to='dulab/banners/', blank=True, verbose_name=_("Banner图"))
 	approve = models.SmallIntegerField(choices=APPROVES, default=0)
 	author = models.ForeignKey(Member, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)

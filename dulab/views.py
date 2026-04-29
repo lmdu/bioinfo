@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from django.http import HttpResponseNotFound, JsonResponse, FileResponse
 from django.views.generic import View, TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -95,30 +95,6 @@ class JoinusDetailView(PageDetailView):
 class ContactDetailView(PageDetailView):
 	page_name = 'contactus'
 
-def signin(request):
-	if request.method == 'GET':
-		return render(request, 'big/signin.html')
-
-	else:
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-
-		user = authenticate(request, username=username, password=password)
-
-		if user is not None:
-			login(request, user)
-			member = Member.objects.get(uname=username)
-			if member.avatar:
-				request.session['avatar'] = member.avatar.url
-			else:
-				request.session['avatar'] = None
-
-			return redirect('big:profile')
-
-		else:
-			messages.add_message(request, messages.ERROR, _("用户名或密码错误, 忘记帐号密码请联系管理员"))
-			return redirect('big:signin')
-
 class SigninView(LoginView):
 	next_page = reverse_lazy('dulab:index')
 	template_name = 'dulab/signin.html'
@@ -132,10 +108,15 @@ def signout(request):
 	logout(request)
 	return redirect('dulab:index')
 
+class PasswordSetView(LoginRequiredMixin, PasswordChangeView):
+	template_name = 'dulab/setpasswd.html'
+	success_url = reverse_lazy('dulab:setpasswd')
+
 class ProfileView(LoginRequiredMixin, UpdateView):
 	model = Member
 	form_class = ProfileForm
 	template_name = 'dulab/profile.html'
+	success_url = reverse_lazy('dulab:profile')
 
 	def get_object(self, queryset=None):
 		return Member.objects.get(user=self.request.user)
@@ -148,118 +129,33 @@ class AvatarUploadView(LoginRequiredMixin, View):
 
 		if form.is_valid():
 			form.save()
-			return JsonResponse({'path': profile.avatar.url})
+			return JsonResponse({'success': True, 'path': profile.avatar.url})
 
-		return JsonResponse({'error': 'upload error'})
+		return JsonResponse({'success': False})
 
 class AvatarDeleteView(LoginRequiredMixin, View):
 	def post(self, request):
 		profile = self.request.user.profile
 		profile.avatar.delete()
-		return JsonResponse({'path': profile.avatar.url})
+		return JsonResponse({'success': True})
 
-@login_required(login_url='/signin')
-def resetpasswd(request):
-	if request.method == 'GET':
-		return render(request, 'big/resetpasswd.html')
+class PostListView(LoginRequiredMixin, ListView):
+	model = Post
+	template_name = 'dulab/postlist.html'
 
-	elif request.method == 'POST':
-		oldpasswd = request.POST.get('oldpasswd')
-		newpasswd = request.POST.get('newpasswd')
-		okpasswd = request.POST.get('okpasswd')
+class PostAddView(LoginRequiredMixin, CreateView):
+	model = Post
+	form_class = PostForm
+	template_name = 'dulab/postadd.html'
 
-		if len(newpasswd) < 8:
-			messages.add_message(request, messages.WARNING, _("密码的长度至少为8位数字或字母"))
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		return super().form_valid(form)
 
-		elif newpasswd != okpasswd:
-			messages.add_message(request, messages.WARNING, _("两次输入的密码不一致"))
-
-		elif authenticate(username=request.user.username, password=oldpasswd) is None:
-			messages.add_message(request, messages.WARNING, _("旧密码不正确"))
-
-		else:
-			user = User.objects.get(pk=request.user.id)
-			user.set_password(newpasswd)
-			user.save()
-			return redirect('big:signin')
-
-		return redirect('big:resetpasswd')
-
-@login_required(login_url='/signin')
-def postadd(request):
-	if request.method == 'GET':
-		return render(request, 'big/postadd.html')
-
-	elif request.method == 'POST':
-		data = request.POST
-
-		if Post.objects.filter(slug=data['slug']).exists():
-			messages.add_message(request, messages.WARNING, _("别名已被占用, 请重新输入"))
-			return redirect('big:postadd')
-
-		author = Member.objects.get(uname=request.user.username)
-
-		post = Post.objects.create(
-			slug = data['slug'],
-			title_zh = data['title_zh'],
-			title_en = data['title_en'],
-			content_zh = data['content_zh'],
-			content_en = data['content_en'],
-			author = author,
-		)
-
-		img = request.FILES.get('thumbnail', None)
-		if img:
-			post.thumbnail = img
-			post.save()
-
-		return redirect('big:postlist')
-
-@login_required(login_url='/signin')
-def postlist(request):
-	if request.method == 'GET':
-		#member = Member.objects.get(uname=request.user.username)
-		post_list = Post.objects.filter(author__uname=request.user.username)
-		paginator = Paginator(post_list, 15)
-		page = request.GET.get('page')
-		posts = paginator.get_page(page)
-
-		return render(request, 'big/postlist.html', {'posts': posts})
-
-@login_required(login_url='/signin')
-def postedit(request, slug):
-	if request.method == 'GET':
-		post = Post.objects.get(slug=slug)
-		return render(request, 'big/postedit.html', {'post': post})
-
-	elif request.method == 'POST':
-		data = request.POST
-		post = Post.objects.get(slug=slug)
-		
-		if slug != data['slug']:
-			if Post.objects.filter(slug=data['slug']).exists():
-				messages.add_message(request, messages.WARNING, _("别名已被占用, 请重新输入"))
-				return redirect(reverse('big:postedit', kwargs={'slug':slug}))
-		
-		post.slug = data['slug']
-		post.title_zh = data['title_zh']
-		post.title_en = data['title_en']
-		post.content_zh = data['content_zh']
-		post.content_en = data['content_en']
-		post.approve = 0
-
-		img = request.FILES.get('thumbnail', None)
-		if img:
-			post.thumbnail = img
-		post.save()
-
-		return redirect('big:postlist')
-
-@login_required(login_url='/signin')
-def postdelete(request, slug):
-	if request.method == 'GET':
-		Post.objects.get(slug=slug).delete()
-		return redirect('big:postlist')
+class PostEditView(LoginRequiredMixin, UpdateView):
+	model = Post
+	form_class = PostForm
+	template_name = 'dulab/postadd.html'
 
 @login_required
 def upload(request):
