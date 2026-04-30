@@ -35,10 +35,9 @@ class IndexView(TemplateView):
 
 		return context
 
-class PostListView(ListView):
+class NewsListView(ListView):
 	model = Post
 	template_name = 'dulab/news.html'
-	context_object_name = 'posts'
 	paginate_by = 10
 
 class PostDetailView(DetailView):
@@ -141,12 +140,17 @@ class AvatarDeleteView(LoginRequiredMixin, View):
 
 class PostListView(LoginRequiredMixin, ListView):
 	model = Post
+	paginate_by = 15
 	template_name = 'dulab/postlist.html'
+
+	def get_queryset(self):
+		return Post.objects.filter(author=self.request.user)
 
 class PostAddView(LoginRequiredMixin, CreateView):
 	model = Post
 	form_class = PostForm
 	template_name = 'dulab/postadd.html'
+	success_url = reverse_lazy('dulab:postlist')
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user
@@ -156,6 +160,11 @@ class PostEditView(LoginRequiredMixin, UpdateView):
 	model = Post
 	form_class = PostForm
 	template_name = 'dulab/postadd.html'
+	success_url = reverse_lazy('dulab:postlist')
+
+	def form_valid(self, form):
+		form.instance.approve = 0
+		return super().form_valid(form)
 
 @login_required
 def upload(request):

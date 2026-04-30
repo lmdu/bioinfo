@@ -3,7 +3,7 @@
 {% block title %}{{ _("最新动态") }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
-	{% for post in posts %}
+	{% for post in object_list %}
 	<div class="row">
 		<div class="col-md-4">
 			{% if post.banner %}
@@ -21,12 +21,12 @@
 			{% endif %}
 		</div>
 		<div class="col-md-8 ps-md-5">
-			<h3 class="post-title">
-				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="link-success text-decoration-none">
+			<h2 class="post-title">
+				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="link-blue text-decoration-none">
 					{{ post.title }}
 				</a>
-			</h3>
-			<div class="my-4 lh-lg post-content">
+			</h2>
+			<div class="my-4 lh-lg post-content fs-3">
 				{{ post.content | striptags | truncate(400) }}
 			</div>
 			<div class="post-meta">
@@ -36,11 +36,8 @@
 					  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
 					  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
 					</svg>
-					{% if lang %}
-					{{ time_format(post.created, 'Y-m-d') }}
-					{% else %}
-					{{ time_format(post.created, 'M j, Y') }}
-					{% endif %}
+					{{ post.created | date('Y-m-d') }}
+					{{ post.created | time('H:i:s') }}
 				</span>
 				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="btn btn-sm btn-outline-success float-end">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
@@ -59,59 +56,9 @@
 
 	<div class="row">
 		<div class="col">
-			<ul class="pagination mx-auto">
-				<li class="page-item {% if not page_obj.has_previous() %} disabled {% endif %}">
-		            <a class="page-link" href="?page={% if page_obj.has_previous() %}{{ page_obj.previous_page_number() }}{% endif %}">
-		              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-		                <path d="M15 6l-6 6l6 6"></path>
-		              </svg>
-		              上一页
-		            </a>
-		        </li>
-
-		        <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
-		        	<a href="?page=1" class="page-link">1</a>
-		        </li>
-
-		        {% if page_obj.number - 3 > 2 %}
-		        <li class="page-item">...</li>
-		        {% endif %}
-
-		        {% for i in range(page_obj.number-3, page_obj.number) %}
-		        {% if i >= 2 %}
-		        <li class="page-item {% if page_obj.number == i %}active{% endif %}">
-		        	<a href="?page={{ i }}" class="page-link">{{ i }}</a>
-		        </li>
-		        {% endif %}
-		        {% endfor %}
-
-		        {% for j in range(page_obj.number, page_obj.number + 4) %}
-		        {% if 1 < j < page_obj.paginator.num_pages %}
-		        <li class="page-item {% if page_obj.number == j %}active{% endif %}">
-		        	<a href="?page={{ j }}" class="page-link">{{ j }}</a>
-		        </li>
-		        {% endif %}
-		        {% endfor %}
-
-		        {% if page_obj.number + 4 < page_obj.paginator.num_pages %}
-		        <li class="page-item">...</li>
-		        {% endif %}
-
-		        {% if page_obj.paginator.num_pages > 1 %}
-		        <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}active{% endif %}">
-		        	<a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">{{ page_obj.paginator.num_pages }}</a>
-		        </li>
-		        {% endif %}
-
-				<li class="page-item {% if not page_obj.has_next() %} disabled {% endif %}">
-		            <a class="page-link" href="?page={% if page_obj.has_next() %}{{ page_obj.next_page_number() }}{% endif %}">
-		              下一页
-		              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-		                <path d="M9 6l6 6l-6 6"></path>
-		              </svg>
-		            </a>
-		        </li>
-			</ul>
+			<div class="btn-list justify-content-center">
+		        {% include('dulab/paginator.html') %}
+		    </div>
 		</div>
 	</div>
 </div>

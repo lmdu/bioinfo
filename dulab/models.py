@@ -129,7 +129,7 @@ class Post(BaseModel):
 	thumbnail = models.ImageField(upload_to='dulab/thumbnails/', blank=True, verbose_name=_("缩略图"))
 	banner = models.ImageField(upload_to='dulab/banners/', blank=True, verbose_name=_("Banner图"))
 	approve = models.SmallIntegerField(choices=APPROVES, default=0)
-	author = models.ForeignKey(Member, on_delete=models.CASCADE)
+	author = models.ForeignKey(User, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 
