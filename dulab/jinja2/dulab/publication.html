@@ -2,18 +2,18 @@
 {% extends "dulab/base.html" %}
 {% block title %}{{ _("研究成果") }} - {% endblock %}
 {% block main %}
-<div class="container">
+<div class="container mt-5">
 	<div class="row">
 		<div class="col">
-			{% for research in researches %}
+			{% for research in object_list %}
 			<div class="d-flex flex-wrap flex-md-nowrap papers mt-5">
 				<div class="order-1 pe-5">
 					<div class="animate-hover text-center text-md-left">
-						<img src="{{ research.thumbnail.url }}" class="paper-thumbnail">
+						<img src="{{ research.cover.url }}" class="paper-thumbnail">
 					</div>
 				</div>
 				<div class="flex-md-grow order-3 order-md-2">
-					<p class="lh-lg">
+					<p class="lh-lg fs-3">
 						{{ research.authors }}.
 						<strong>{{ research.title }}</strong>.
 						<i>{{ research.journal }}</i>,

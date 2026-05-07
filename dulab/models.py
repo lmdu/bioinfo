@@ -72,7 +72,7 @@ class Member(BaseModel):
 		1: _("通过"),
 	}
 
-	YEARS = ((i, i) for i in range(2020, timezone.now().year+1))
+	YEARS = ((i, i) for i in range(2000, timezone.now().year+1))
 
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 	name_zh = models.CharField(max_length=30, blank=True, verbose_name=_("中文名"))

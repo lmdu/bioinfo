@@ -3,7 +3,7 @@
 {% block title %}{{ _("研究方向") }} - {% endblock %}
 {% block main %}
 <div class="container">
-	{% for research in researches %}
+	{% for research in object_list %}
 	<div class="row align-items-center mt-5">
 		<div class="col-md-4 col-lg-2 {{ loop.cycle('order-md-first', 'order-md-last') }} text-center">
 			<div class="border border-5 rounded-circle animate-hover d-inline-block">

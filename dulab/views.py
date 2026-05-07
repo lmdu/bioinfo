@@ -51,21 +51,21 @@ class PublicationListView(ListView):
 class MemberListView(TemplateView):
 	template_name = 'dulab/team.html'
 
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		
-		context['faculties'] = Member.objects.filter(position=4)
-		context['postgraduates'] = Member.objects.filter(position=1, status=1)
-		context['undergraduates'] = Member.objects.filter(position=2, status=1)
-		context['graduates'] = Member.objects.filter(status=2)
+	#def get_context_data(self, **kwargs):
+	#	context = super().get_context_data(**kwargs)
 
-		return context
+	#	context['faculties'] = Member.objects.filter(position=4)
+	#	context['postgraduates'] = Member.objects.filter(position=1, status=1)
+	#	context['undergraduates'] = Member.objects.filter(position=2, status=1)
+	#	context['graduates'] = Member.objects.filter(status=2)
+
+	#	return context
 
 class MemberDetailView(DetailView):
 	model = Member
 	template_name = 'dulab/member.html'
 	context_object_name = 'member'
-	slug_field = 'profile__username'
+	slug_field = 'user__username'
 
 class ResearchListView(ListView):
 	model = Research
