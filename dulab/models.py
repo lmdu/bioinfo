@@ -126,8 +126,8 @@ class Post(BaseModel):
 	title_en = models.CharField(max_length=255, blank=True, verbose_name=_("标题(英文)"))
 	content_zh = models.TextField(blank=True, verbose_name=_("内容(中文)"))
 	content_en = models.TextField(blank=True, verbose_name=_("内容(英文)"))
-	thumbnail = models.ImageField(upload_to='dulab/thumbnails/', blank=True, verbose_name=_("缩略图"))
-	banner = models.ImageField(upload_to='dulab/banners/', blank=True, verbose_name=_("Banner图"))
+	thumbnail = models.ImageField(upload_to='dulab/thumbnails/%Y/%m', blank=True, verbose_name=_("缩略图"))
+	banner = models.ImageField(upload_to='dulab/banners/%Y/%m', blank=True, verbose_name=_("Banner图"))
 	approve = models.SmallIntegerField(choices=APPROVES, default=0)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
@@ -140,7 +140,7 @@ class Post(BaseModel):
 		ordering = ['-created']
 
 class Slideshow(BaseModel):
-	slide = models.FileField(upload_to='dulab/slides/')
+	slide = models.FileField(upload_to='dulab/slides/%Y/%m')
 	title_zh = models.CharField(max_length=255, blank=True)
 	title_en = models.CharField(max_length=255, blank=True)
 	description_zh = models.TextField(blank=True)
@@ -173,8 +173,8 @@ class Software(BaseModel):
 	comment_en = models.TextField(blank=True)
 	description_zh = models.TextField(blank=True)
 	description_en = models.TextField(blank=True)
-	thumbnail = models.ImageField(upload_to='dulab/thumbnails/', blank=True)
-	logo = models.ImageField(upload_to='dulab/thumbnails/', blank=True)
+	thumbnail = models.ImageField(upload_to='dulab/thumbnails/%Y/%m', blank=True)
+	logo = models.ImageField(upload_to='dulab/thumbnails/%Y/%m', blank=True)
 	citation = models.TextField(blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 
@@ -232,7 +232,7 @@ class Download(BaseModel):
 class Research(BaseModel):
 	direction_zh = models.TextField()
 	direction_en = models.TextField(blank=True)
-	thumbnail = models.ImageField(upload_to='dulab/thumbnails/')
+	thumbnail = models.ImageField(upload_to='dulab/thumbnails/%Y/%m')
 	rank = models.SmallIntegerField()
 	created = models.DateTimeField(auto_now_add=True)
 

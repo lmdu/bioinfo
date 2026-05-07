@@ -3,58 +3,49 @@
 {% block title %}{{ _("最新动态") }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
-	{% for post in object_list %}
-	<div class="row">
-		<div class="col-md-4">
-			{% if post.banner %}
-			<div class="animate-hover text-center">
-				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}">
-					<img class="mb-3 img-fluid" src="{{ post.banner.url }}">
-				</a>
-			</div>
-			{% elif post.thumbnail %}
-			<div class="animate-hover text-center">
-				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}">
-					<img class="mb-3 img-fluid" src="{{ post.thumbnail.url }}" >
-				</a>
-			</div>
-			{% endif %}
-		</div>
-		<div class="col-md-8 ps-md-5">
-			<h2 class="post-title">
-				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="link-blue text-decoration-none">
-					{{ post.title }}
-				</a>
-			</h2>
-			<div class="my-4 lh-lg post-content fs-3">
-				{{ post.content | striptags | truncate(400) }}
-			</div>
-			<div class="post-meta">
-				<span class="text-muted">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="display: inline-block;vertical-align: -.125em;" viewBox="0 0 16 16">
-					  <path d="M5.5 10.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
-					  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
-					  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
-					</svg>
-					{{ post.created | date('Y-m-d') }}
-					{{ post.created | time('H:i:s') }}
-				</span>
-				<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="btn btn-sm btn-outline-success float-end">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
-					  <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
-					</svg>
-					{{ _("阅读更多") }}
-				</a>
+	<div class="row row-cards gap-4">
+		{% for post in object_list %}
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="row align-items-center">
+						<div class="col-4">
+							{% if post.thumbnail %}
+							<div class="animate-hover text-center rounded">
+								<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}">
+									<img class="mb-3 img-fluid rounded" src="{{ post.thumbnail.url }}">
+								</a>
+							</div>
+							{% endif %}
+						</div>
+						<div class="col ps-4">
+							<h2 class="mb-3">
+								<a href="{{ url('dulab:post', kwargs={'slug': post.slug}) }}" class="text-reset link-blue">
+									{{ post.title }}
+								</a>
+							</h2>
+							<div class="text-secondary">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="display: inline-block;vertical-align: -.125em;">
+								  <path d="M5.5 10.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
+								  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+								  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+								</svg>
+								{{ post.created | date('Y-m-d') }}
+								{{ post.created | time('H:i:s') }}
+							</div>
+							<div class="mt-3 lh-lg fs-3">
+								{{ post.content | striptags | truncate(300) }}
+							</div>
+							
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
+		{% endfor %}
 	</div>
 
-	{% if not loop.last %}
-	<hr class="boder-top my-5">
-	{% endif %}
-	{% endfor %}
-
-	<div class="row">
+	<div class="row mt-5">
 		<div class="col">
 			<div class="btn-list justify-content-center">
 		        {% include('dulab/paginator.html') %}
