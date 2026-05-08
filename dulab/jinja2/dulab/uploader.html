@@ -1,3 +1,4 @@
+<script src="{{ static('dulab/js/fslightbox.min.js') }}"></script>
 <script>
 const E = window.wangEditor
 
@@ -7,7 +8,7 @@ class ImageManager {
 		this.iconSvg = '<svg viewBox="0 0 20 20"><path d="M1.201 1c-.662 0-1.2.47-1.2 1.1v14.248c0 .64.533 1.152 1.185 1.152h6.623v-7.236L6.617 9.15a.694.694 0 0 0-.957-.033L1.602 13.55V2.553l14.798.003V9.7H18V2.1c0-.63-.547-1.1-1.2-1.1zm11.723 2.805a2.1 2.1 0 0 0-1.621.832 2.127 2.127 0 0 0 1.136 3.357 2.13 2.13 0 0 0 2.611-1.506 2.13 2.13 0 0 0-.76-2.244 2.13 2.13 0 0 0-1.366-.44Z"></path><path d="M19.898 12.369v6.187a.844.844 0 0 1-.844.844h-8.719a.844.844 0 0 1-.843-.844v-7.312a.844.844 0 0 1 .843-.844h2.531a.84.84 0 0 1 .597.248l.838.852h4.75c.223 0 .441.114.6.272a.84.84 0 0 1 .247.597m-1.52.654-4.377.02-1.1-1.143H11v6h7.4l-.023-4.877Z" clip-rule="evenodd"></path></svg>'
 		this.tag = 'button'
 		this.showModal = true
-		this.modalWidth = 500
+		this.modalWidth = 600
 	}
 	getValue(editor) {
 		return ''
@@ -26,6 +27,47 @@ class ImageManager {
 	}
 	getModalContentElem(editor) {
 		var content = document.createElement('div')
+		content.className = "row row-deck g-2"
+
+		fetch('{{ url("dulab:photo-list") }}', {
+			method: "POST",
+			headers: {
+				'X-CSRFToken': "{{ csrf_token }}",
+     		}
+     	})
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			data.photos.forEach((url, i) => {
+				var box = document.createElement('div')
+				box.className = 'col'
+				content.append(box)
+				
+				var label = document.createElement('label')
+				label.className = 'form-imagecheck mb-2'
+				box.append(label)
+				
+				var input = document.createElement('input')
+				input.name = 'form-imagecheck-radio'
+				input.type = 'radio'
+				input.className = 'form-imagecheck-input'
+				input.value = url
+				label.append(input)
+
+				var span = document.createElement('a')
+				span.className = 'form-imagecheck-figure'
+				span.dataset.fslightbox = 'gallery'
+				span.href = url
+				label.append(span)
+
+				var img = document.createElement('div')
+				img.className = 'img-responsive img-responsive-1x1 rounded border'
+				img.style.backgroundImage = 'url("' + url + '")'
+				span.append(img)
+			})
+		})
+
 		return content
 	}
 }

@@ -145,9 +145,16 @@ class PhotoUploadView(LoginRequiredMixin, CreateView):
 		self.object = form.save()
 		return JsonResponse({'errno': 0, 'data': {'url': self.object.image.url}})
 
+class PhotoListView(LoginRequiredMixin, View):
+	def post(self, request):
+		photos = Photo.objects.filter(author=request.user)[0:20]
+		urls = [p.image.url for p in photos]
+		print(urls)
+		return JsonResponse({'photos': urls})
+
 class AvatarDeleteView(LoginRequiredMixin, View):
 	def post(self, request):
-		profile = self.request.user.profile
+		profile = request.user.profile
 		profile.avatar.delete()
 		return JsonResponse({'success': True})
 
