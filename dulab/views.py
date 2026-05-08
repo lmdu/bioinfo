@@ -147,9 +147,8 @@ class PhotoUploadView(LoginRequiredMixin, CreateView):
 
 class PhotoListView(LoginRequiredMixin, View):
 	def post(self, request):
-		photos = Photo.objects.filter(author=request.user)[0:20]
+		photos = Photo.objects.filter(author=request.user)[0:12]
 		urls = [p.image.url for p in photos]
-		print(urls)
 		return JsonResponse({'photos': urls})
 
 class AvatarDeleteView(LoginRequiredMixin, View):
