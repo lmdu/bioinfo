@@ -1,22 +1,29 @@
 {% extends 'dulab/subase.html' %}
 {% set submenu = 'postadd' %}
 {% block pagetitle %}
-个人资料
+{{ _("添加文章") }}
 {% endblock %}
+
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{{ static('dulab/css/cropper.min.css') }}">
+<link rel="stylesheet" href="{{ static('dulab/css/wangeditor.min.css') }}?ver=5.1.23">
 {% endblock %}
+
 {% block form %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="card-body">
-      <h2 class="mb-4">添加文章</h2>
+      <h2 class="mb-4">{{ _("添加文章") }}</h2>
       {{ form | crispy }}
     </div>
     <div class="card-footer bg-transparent mt-auto">
       <div class="btn-list justify-content-end">
-        <button type="submit" class="btn btn-primary">保存修改</button>
+        <button type="submit" class="btn btn-primary">{{ _("添加文章") }}</button>
       </div>
     </div>
     {{ csrf_input }}
 </form>
+{% endblock %}
+
+{% block script %}
+<script src="{{ static('dulab/js/wangeditor.js') }}?ver=5.1.23"></script>
+{% include 'dulab/uploader.html' %}
 {% endblock %}

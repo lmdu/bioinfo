@@ -249,6 +249,14 @@ class Media(BaseModel):
 	class Meta:
 		ordering = ['-uploaded']
 
+class Photo(BaseModel):
+	image = models.ImageField(upload_to='dulab/images/%Y/%m')
+	author = models.ForeignKey(User, on_delete=models.CASCADE)
+	uploaded = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['-uploaded']
+
 class Option(BaseModel):
 	slug = models.SlugField(unique=True)
 	title_zh = models.CharField(max_length=255, blank=True)

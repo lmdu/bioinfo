@@ -37,8 +37,9 @@ class IndexView(TemplateView):
 
 class NewsListView(ListView):
 	model = Post
-	template_name = 'dulab/news.html'
 	paginate_by = 10
+	template_name = 'dulab/news.html'
+	queryset = Post.objects.filter(approve=1)
 
 class PostDetailView(DetailView):
 	model = Post
@@ -132,6 +133,18 @@ class AvatarUploadView(LoginRequiredMixin, View):
 
 		return JsonResponse({'success': False})
 
+class PhotoUploadView(LoginRequiredMixin, CreateView):
+	model = Photo
+	fields = ['image']
+
+	def form_invalid(self, form):
+		return JsonResponse({'errno': 1, 'message': form.errors.as_text()}, status=400)
+
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		self.object = form.save()
+		return JsonResponse({'errno': 0, 'data': {'url': self.object.image.url}})
+
 class AvatarDeleteView(LoginRequiredMixin, View):
 	def post(self, request):
 		profile = self.request.user.profile
@@ -159,7 +172,7 @@ class PostAddView(LoginRequiredMixin, CreateView):
 class PostEditView(LoginRequiredMixin, UpdateView):
 	model = Post
 	form_class = PostForm
-	template_name = 'dulab/postadd.html'
+	template_name = 'dulab/postedit.html'
 	success_url = reverse_lazy('dulab:postlist')
 
 	def form_valid(self, form):

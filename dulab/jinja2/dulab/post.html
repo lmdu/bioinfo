@@ -4,12 +4,13 @@
 {% block main %}
 <div class="container mt-5">
 	<div class="card card-lg">
-		<div class="card-body m-5 p-5">
+		{% if object.approve == 1 or object.author == request.user %}
+		<div class="card-body">
 			<h1>
 				{{ object.title }}
 			</h1>
 
-			<div class="text-muted mt-4 fs-4">
+			<div class="text-muted mt-4">
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="display: inline-block;vertical-align: -.125em;">
 				  <path d="M5.5 10.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
 				  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
@@ -19,21 +20,23 @@
 				{{ object.created | time('H:i:s') }}
 			</div>
 
+			{% if post.banner %}
+			<div class="my-4 animate-hover text-center">
+				<img class="img-fluid" src="{{ post.banner.url }}">
+			</div>
+			{% else %}
 			<hr class="border-top my-4 border-success">
+			{% endif %}
 
-			<!--{% if post.banner %}
-			<div class="mt-4 animate-hover text-center">
-				<img class="mb-3 img-fluid" src="{{ post.banner.url }}">
-			</div>
-			{% elif post.thumbnail %}
-			<div class="mt-4 animate-hover text-center">
-				<img class="mb-3 img-fluid" src="{{ post.thumbnail.url }}">
-			</div>
-			{% endif %}-->
-			<div class="lh-xl post-content fs-3">
+			<div class="lh-xl">
 				{{ object.content | safe }}
 			</div>
 		</div>
+		{% else %}
+		<div class="empty">
+			<p class="empty-title">{{ _("文章还在审核中") }}...</p>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

@@ -17,6 +17,7 @@
               <th>{{ _("标题") }}</th>
               <th>{{ _("发表时间") }}</th>
               <th>{{ _("状态") }}</th>
+              <th>{{ _("操作") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -27,11 +28,14 @@
               {% with status_class = ["badge bg-red-lt", "badge bg-green-lt", "badge bg-blue-lt"] %}
               <td>
                 <span class="{{ status_class[object.approve] }}">{{ object.get_approve_display() }}</span>
+              </td>
+              {% endwith %}
+              <td>
+                <a class="btn btn-outline btn-warning btn-sm" href="{{ url('dulab:post', kwargs={'slug': object.slug}) }}">预览</a>
                 {% if object.approve == 2 %}
                 <a class="btn btn-outline btn-danger btn-sm" href="{{ url('dulab:postedit', kwargs={'slug':object.slug}) }}">编辑</a>
                 {% endif %}
               </td>
-              {% endwith %}
             </tr>
             {% endfor %}
           </tbody>

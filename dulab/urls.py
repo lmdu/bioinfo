@@ -24,6 +24,7 @@ urlpatterns = [
 	path('profile', ProfileView.as_view(), name='profile'),
 	path('avatar/upload', AvatarUploadView.as_view(), name='avatar-upload'),
 	path('avatar/delete', AvatarDeleteView.as_view(), name='avatar-delete'),
+	path('photo/upload', PhotoUploadView.as_view(), name='photo-upload'),
 	path('setpasswd', PasswordSetView.as_view(), name='setpasswd'),
 	path('postlist', PostListView.as_view(), name='postlist'),
 	path('postadd', PostAddView.as_view(), name='postadd'),
