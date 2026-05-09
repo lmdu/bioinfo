@@ -1,4 +1,3 @@
-<script src="{{ static('dulab/js/fslightbox.min.js') }}"></script>
 <script>
 const E = window.wangEditor
 
@@ -57,8 +56,6 @@ class ImageManager {
 
 		})
 
-		
-		
 		fetch('{{ url("dulab:photo-list") }}', {
 			method: "POST",
 			headers: {
@@ -92,7 +89,7 @@ class ImageManager {
 				label.append(span)
 
 				var img = document.createElement('img')
-				img.className = 'form-imagecheck-image img-fluid'
+				img.className = 'form-imagecheck-image object-fit-cover'
 				img.src = url
 				//img.style.backgroundImage = 'url("' + url + '")'
 				span.append(img)
@@ -165,5 +162,6 @@ ts.forEach((t, i) => {
 		},
 		mode: 'default'
 	});
+
 });
 </script>
