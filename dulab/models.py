@@ -82,6 +82,7 @@ class Member(BaseModel):
 	phone = models.CharField(max_length=15, blank=True, verbose_name=_("电话"))
 	qq = models.CharField(max_length=20, blank=True, verbose_name=_("QQ号"))
 	weixin = models.CharField(max_length=30, blank=True, verbose_name=_("微信号"))
+	number = models.CharField(max_length=30, blank=True, verbose_name=_("学号或工号"))
 	major_zh = models.CharField(max_length=30, blank=True, verbose_name=_("专业(中文)"))
 	major_en = models.CharField(max_length=50, blank=True, verbose_name=_("专业(英文)"))
 	grade = models.IntegerField(choices=YEARS, blank=True, default=2020, verbose_name=_("年级"))
@@ -169,13 +170,15 @@ class Software(BaseModel):
 	doc = models.CharField(max_length=255, blank=True)
 	language = models.CharField(max_length=30, blank=True)
 	category = models.SmallIntegerField(choices=TYPES, default=0)
+	title_en = models.CharField(max_length=255, blank=True)
+	title_zh = models.CharField(max_length=255, blank=True)
 	comment_zh = models.TextField(blank=True)
 	comment_en = models.TextField(blank=True)
 	description_zh = models.TextField(blank=True)
 	description_en = models.TextField(blank=True)
 	thumbnail = models.ImageField(upload_to='dulab/thumbnails/%Y/%m', blank=True)
 	logo = models.ImageField(upload_to='dulab/thumbnails/%Y/%m', blank=True)
-	citation = models.TextField(blank=True)
+	citation = models.ForeignKey(Publication, on_delete=models.CASCADE, null=True, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
@@ -189,10 +192,10 @@ class Version(BaseModel):
 	changelog_zh = models.TextField(blank=True)
 	changelog_en = models.TextField(blank=True)
 	created = models.DateTimeField(auto_now_add=True)
-	software = models.ForeignKey(Software, on_delete=models.CASCADE)
+	software = models.ForeignKey(Software, on_delete=models.CASCADE, related_name='versions')
 
 	def __str__(self):
-		return '{} - {}'.format(self.software, self.version)
+		return '{} v{}'.format(self.software, self.version)
 
 	class Meta:
 		ordering = ['-created']
@@ -220,14 +223,15 @@ class Download(BaseModel):
 	comment_en = models.CharField(max_length=255, blank=True)
 	package = models.FileField(upload_to='dulab/files/%Y/%m')
 	represent = models.BooleanField(default=False)
+	visitor = models.IntegerField(default=0)
 	uploaded = models.DateTimeField(auto_now_add=True)
-	version = models.ForeignKey(Version, on_delete=models.CASCADE)
+	version = models.ForeignKey(Version, on_delete=models.CASCADE, related_name='downloads')
 
 	def __str__(self):
 		return self.package.name
 
 	class Meta:
-		ordering = ['-uploaded']
+		ordering = ['-uploaded', 'system']
 
 class Research(BaseModel):
 	direction_zh = models.TextField()

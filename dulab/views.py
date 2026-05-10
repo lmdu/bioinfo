@@ -77,6 +77,7 @@ class SoftwareListView(ListView):
 	template_name = 'dulab/softwares.html'
 
 class SoftwareDetailView(DetailView):
+	model = Software
 	template_name = 'dulab/software.html'
 
 class PageDetailView(DetailView):

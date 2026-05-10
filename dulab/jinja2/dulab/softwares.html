@@ -2,45 +2,42 @@
 {% extends "dulab/base.html" %}
 {% block title %}{{ _("软件资源") }} - {% endblock %}
 {% block main %}
-<div class="container">
-	<div class="row">
-		<div class="col">
-			{% for s in softwares %}
-			<div class="card bg-light mt-5">
-				<div class="card-body">
-					<h5 class="card-title border-bottom border-success border-3 pb-3">
-						<span class="badge bg-secondary">
-							{{ s.get_category_display() }}
-						</span>
-						{{ s.name }}
-						<small class="float-end">
-							{% if s.category == 1 %}
-							<a href="{{ s.url }}" target="_blank">
-								<img src="{{ static('dulab/image/github.svg') }}">
-							</a>
-							{% else %}
-							<a href="{{ s.url }}" target="_blank">
-								<img src="{{ static('dulab/image/globe.svg') }}">
-							</a>
-							{% endif %}
-						</small>
-					</h5>
-					<div class="row mt-4 gy-3 gy-md-0">
-						<div class="col-sm-4 col-md-3">
-							{% if s.thumbnail %}
-							<div class="animate-hover">
-								<a href="{{ url('dulab:software', kwargs={'sname':s.short}) }}"><img src="{{ s.thumbnail.url }}" class="img-fluid"></a>
-							</div>
-							{% endif %}
-						</div>
-						<div class="col-sm-8 col-md-9 ps-sm-3 ps-md-5 lh-lg">
-							{{ s.description | safe }}
-						</div>
+<div class="container mt-5">
+	{% for s in object_list %}
+	<div class="card card-md">
+		<span class="ribbon bg-red fs-4">
+			{{ s.get_category_display() }}
+		</span>
+		<div class="card-header">
+			<div>
+				<div class="row align-items-center">
+					{% if s.logo %}
+					<div class="col-auto">
+						<a class="avatar avatar-1" style="background-image: url({{ s.logo.url }})" href="{{ url('dulab:software', kwargs={'slug':s.slug}) }}"></a>
+					</div>
+					{% endif %}
+					<div class="col">
+						<div class="card-title"><strong>{{ s.name }}</strong></div>
+						<div class="card-subtitle">{{ s.title }}</div>
 					</div>
 				</div>
 			</div>
-			{% endfor %}
+		</div>
+		<div class="card-body">
+			<div class="row align-items-center">
+				<div class="col-sm-6 col-md-4">
+					{% if s.thumbnail %}
+					<div class="animate-hover">
+						<a href="{{ url('dulab:software', kwargs={'slug':s.slug}) }}"><img src="{{ s.thumbnail.url }}" class="img-fluid"></a>
+					</div>
+					{% endif %}
+				</div>
+				<div class="col-sm-6 col-md-8 ps-sm-3 ps-md-5 lh-lg">
+					{{ s.description | safe }}
+				</div>
+			</div>
 		</div>
 	</div>
+	{% endfor %}
 </div>
 {% endblock %}

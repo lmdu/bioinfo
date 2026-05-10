@@ -4,7 +4,7 @@
 {% block main %}
 <div class="container mt-5">
 	{% for research in object_list %}
-	<div class="row g-3">
+	<div class="row g-3 mb-5">
 		<div class="col-sm-12 col-md-auto">
 			<div class="animate-hover text-center text-md-start">
 				{% if research.cover %}
@@ -22,7 +22,7 @@
 				{{ research.year }},
 				{% if research.volume %}{{ research.volume }}{% endif -%}
 				{%- if research.issue %}({{ research.issue }}){% endif -%}
-				{%- if research.pages %}:{{ research.pages }}{% endif %}.
+				{%- if research.pages %}: {{ research.pages }}{% endif %}.
 			</p>
 			<p class="collapse" id="abstract-{{ research.id }}">{{ research.abstract }}</p>
 			<div class="mt-4">
@@ -52,7 +52,7 @@
 		</div>
 		<div class="col-sm-12 col-md-auto">
 			<div class="text-center text-md-end">
-				<span class="__dimensions_badge_embed__" data-style="small_circle" data-doi="{{ research.doi }}"></span>
+				<span class="__dimensions_badge_embed__ text-center" data-style="small_circle" data-doi="{{ research.doi }}"></span>
 			</div>
 		</div>
 	</div>
