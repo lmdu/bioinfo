@@ -53,11 +53,17 @@ class Member(BaseModel):
 
 	POSITIONS = {
 		0: _("未设置"),
-		1: _("研究生"),
-		2: _("本科生"),
-		3: _("博士后"),
-		4: _("教职工"),
-		5: _("访问学者"),
+		1: _("教授"),
+		2: _("研究员"),
+		3: _("副教授"),
+		4: _("副研究员"),
+		5: _("讲师"),
+		6: _("助理研究员"),
+		7: _("教职员"),
+		8: _("访问学者"),
+		9: _("博士后"),
+		10: _("研究生"),
+		11: _("本科生"),
 	}
 
 	STATUS = {
@@ -85,10 +91,10 @@ class Member(BaseModel):
 	number = models.CharField(max_length=30, blank=True, verbose_name=_("学号或工号"))
 	major_zh = models.CharField(max_length=30, blank=True, verbose_name=_("专业(中文)"))
 	major_en = models.CharField(max_length=50, blank=True, verbose_name=_("专业(英文)"))
-	grade = models.IntegerField(choices=YEARS, blank=True, default=2020, verbose_name=_("年级"))
-	degree = models.SmallIntegerField(choices=DEGREES, blank=True, default=0, verbose_name=_("学位"))
-	position = models.SmallIntegerField(choices=POSITIONS, blank=True, default=0, verbose_name=_("职位"))
-	status = models.SmallIntegerField(choices=STATUS, blank=True, default=0, verbose_name=_("状态"))
+	grade = models.IntegerField(choices=YEARS, default=2020, verbose_name=_("年级"))
+	degree = models.SmallIntegerField(choices=DEGREES, default=0, verbose_name=_("学位"))
+	position = models.SmallIntegerField(choices=POSITIONS, default=0, verbose_name=_("职位"))
+	status = models.SmallIntegerField(choices=STATUS, default=0, verbose_name=_("状态"))
 	direct_zh = models.CharField(max_length=255, blank=True, verbose_name=_("研究方向(中文)"))
 	direct_en = models.CharField(max_length=255, blank=True, verbose_name=_("研究方向(英文)"))
 	avatar = models.ImageField(upload_to='dulab/avatars/', blank=True)
@@ -97,7 +103,7 @@ class Member(BaseModel):
 	github = models.CharField(max_length=255, blank=True)
 	researchgate = models.CharField(max_length=255, blank=True)
 	google = models.CharField(max_length=255, blank=True)
-	allowed = models.SmallIntegerField(choices=ALLOWS, blank=True, default=0)
+	allowed = models.SmallIntegerField(choices=ALLOWS, default=0, verbose_name=_("资格审查"))
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
@@ -219,6 +225,7 @@ class Download(BaseModel):
 	}
 
 	system = models.SmallIntegerField(choices=SYSTEMS, default=0)
+	name = models.CharField(max_length=100, blank=True)
 	comment_zh = models.CharField(max_length=255, blank=True)
 	comment_en = models.CharField(max_length=255, blank=True)
 	package = models.FileField(upload_to='dulab/files/%Y/%m')
@@ -231,7 +238,7 @@ class Download(BaseModel):
 		return self.package.name
 
 	class Meta:
-		ordering = ['-uploaded', 'system']
+		ordering = ['-uploaded']
 
 class Research(BaseModel):
 	direction_zh = models.TextField()

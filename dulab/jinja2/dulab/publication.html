@@ -3,60 +3,64 @@
 {% block title %}{{ _("研究成果") }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
-	{% for research in object_list %}
-	<div class="row g-3 mb-5">
-		<div class="col-sm-12 col-md-auto">
-			<div class="animate-hover text-center text-md-start">
-				{% if research.cover %}
-				<img src="{{ research.cover.url }}" class="paper-thumbnail">
-				{% else %}
+	<div class="card card-lg">
+		<div class="card-body">
+			{% for research in object_list %}
+			<div class="row g-3 mb-5">
+				<div class="col-sm-12 col-md-auto">
+					<div class="animate-hover text-center text-md-start">
+						{% if research.cover %}
+						<img src="{{ research.cover.url }}" class="paper-thumbnail">
+						{% else %}
 
-				{% endif %}
-			</div>
-		</div>
-		<div class="col">
-			<p class="lh-lg">
-				{{ research.authors }}.
-				<strong>{{ research.title }}</strong>.
-				<i>{{ research.journal }}</i>,
-				{{ research.year }},
-				{% if research.volume %}{{ research.volume }}{% endif -%}
-				{%- if research.issue %}({{ research.issue }}){% endif -%}
-				{%- if research.pages %}: {{ research.pages }}{% endif %}.
-			</p>
-			<p class="collapse" id="abstract-{{ research.id }}">{{ research.abstract }}</p>
-			<div class="mt-4">
-				<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
-					<button class="btn btn-primary">DOI</button>
-					<a class="btn btn-outline-primary" href="https://doi.org/{{ research.doi }}" target="_blank">{{ research.doi }}</a>
+						{% endif %}
+					</div>
 				</div>
-				{% if research.pmid %}
-				<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
-					<button class="btn btn-teal">PMID</button>
-					<a class="btn btn-outline-teal" href="https://pubmed.ncbi.nlm.nih.gov/{{ research.pmid }}" target="_blank">{{ research.pmid }}</a>
+				<div class="col">
+					<p class="lh-lg">
+						{{ research.authors }}.
+						<strong>{{ research.title }}</strong>.
+						<i>{{ research.journal }}</i>,
+						{{ research.year }},
+						{% if research.volume %}{{ research.volume }}{% endif -%}
+						{%- if research.issue %}({{ research.issue }}){% endif -%}
+						{%- if research.pages %}: {{ research.pages }}{% endif %}.
+					</p>
+					<p class="collapse" id="abstract-{{ research.id }}">{{ research.abstract }}</p>
+					<div class="mt-4">
+						<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
+							<button class="btn btn-primary">DOI</button>
+							<a class="btn btn-outline-primary" href="https://doi.org/{{ research.doi }}" target="_blank">{{ research.doi }}</a>
+						</div>
+						{% if research.pmid %}
+						<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
+							<button class="btn btn-teal">PMID</button>
+							<a class="btn btn-outline-teal" href="https://pubmed.ncbi.nlm.nih.gov/{{ research.pmid }}" target="_blank">{{ research.pmid }}</a>
+						</div>
+						{% endif %}
+						{% if research.factor %}
+						<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
+							<button class="btn btn-pink">IF</button>
+							<button class="btn btn-outline-pink">{{ research.factor }}</button>
+						</div>
+						{% endif %}
+						{% if research.pdf %}
+						<a class="btn btn-sm btn-outline-orange mt-2 mt-lg-0" href="{{ research.pdf.url }}" target="_blank">PDF</a>
+						{% endif %}
+						{% if research.abstract %}
+						<button class="btn btn-sm btn-outline-secondary mt-2 mt-lg-0" data-bs-toggle="collapse" data-bs-target="#abstract-{{ research.id }}">Abstract</button>
+						{% endif %}
+					</div>
 				</div>
-				{% endif %}
-				{% if research.factor %}
-				<div class="btn-group btn-group-sm mt-2 mt-lg-0" role="group">
-					<button class="btn btn-pink">IF</button>
-					<button class="btn btn-outline-pink">{{ research.factor }}</button>
+				<div class="col-sm-12 col-md-auto">
+					<div class="text-center text-md-end">
+						<span class="__dimensions_badge_embed__ text-center" data-style="small_circle" data-doi="{{ research.doi }}"></span>
+					</div>
 				</div>
-				{% endif %}
-				{% if research.pdf %}
-				<a class="btn btn-sm btn-outline-orange mt-2 mt-lg-0" href="{{ research.pdf.url }}" target="_blank">PDF</a>
-				{% endif %}
-				{% if research.abstract %}
-				<button class="btn btn-sm btn-outline-secondary mt-2 mt-lg-0" data-bs-toggle="collapse" data-bs-target="#abstract-{{ research.id }}">Abstract</button>
-				{% endif %}
 			</div>
-		</div>
-		<div class="col-sm-12 col-md-auto">
-			<div class="text-center text-md-end">
-				<span class="__dimensions_badge_embed__ text-center" data-style="small_circle" data-doi="{{ research.doi }}"></span>
-			</div>
+			{% endfor %}
 		</div>
 	</div>
-	{% endfor %}
 </div>
 {% endblock %}
 

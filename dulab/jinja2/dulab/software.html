@@ -8,13 +8,13 @@
 			<div class="row align-items-center row-gap-4">
 				<div class="col-md-6">
 					<div class="h1">{{ object.name }}</div>
-					<div class="mt-4 lh-lg">{{ object.comment | safe }}</div>
+					<div class="mt-4 lh-xl pe-md-5">{{ object.comment | safe }}</div>
 					<div class="mt-4">
 						{% if object.url %}
 						<a href="{{ object.url }}" class="btn btn-primary">{{ _("查看主页") }}</a>
 						{% endif %}
 						{% if object.doc %}
-						<a href="{{ object.doc }}" class="btn btn-warning">{{ _("查看文档") }}</a>
+						<a href="{{ object.doc }}" class="btn btn-danger">{{ _("查看文档") }}</a>
 						{% endif %}
 					</div>
 				</div>
@@ -32,25 +32,6 @@
 					</div>
 				</div>
 			</div>
-			<hr>
-			<div class="row mt-5">
-				<div class="col">
-					<h2>{{ _("描述") }}</h2>
-					<div class="lh-lg">
-						{{ object.description | safe }}
-					</div>
-				</div>
-			</div>
-			{% if object.citation %}
-			<div class="row mt-5">
-				<div class="col">
-					<h2>{{ _("引用") }}</h2>
-					<div class="lh-lg">
-						{{ object.citation }}
-					</div>
-				</div>
-			</div>
-			{% endif %}
 		</div>
 	</div>
 
@@ -66,6 +47,7 @@
 						<thead>
 							<tr>
 								<th>{{ _("版本") }}</th>
+								<th>{{ _("更新日志") }}</th>
 								<th>{{ _("发布时间") }}</th>
 								<th>{{ _("下载地址") }}</th>
 							</tr>
@@ -73,15 +55,42 @@
 						<tbody>
 							{% for v in object.versions.all() %}
 							<tr>
-								<td>{{ v.version }}</td>
+								<td>
+									{% if loop.first %}
+									<span class="badge bg-red-lt">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-2">
+			                              <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"></path>
+			                            </svg>
+										{{ v.version }}
+									</span>
+									{% else %}
+									<span class="badge bg-default-lt">
+										{{ v.version }}
+									</span>
+									{% endif %}
+								</td>
+								<td></td>
 								<td>
 									{{ v.created | date('Y-m-d') }}
 									{{ v.created | time('H:i:s') }}
 								</td>
 								<td>
-									{% for d in v.downloads.all() %}
-
+									<div class="btn-list">
+									{% with colors = {1: 'azure', 2: 'secondary', 3: 'yellow'} %}	
+									{% for d in v.downloads.all().order_by('system') %}
+										<a class="btn btn-sm btn-outline-{{ colors.get(d.system, 'yellow') }}" href="{{ d.package.url }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ d.package.name.split('/')[-1] }}">
+											{% if d.system == 1 %}
+											<img src="{{ static('dulab/img/win.svg') }}" class="img-fluid" width="20"> 
+											{% elif d.system == 2 %}
+											<img src="{{ static('dulab/img/apple.svg') }}" class="img-fluid" width="20">
+											{% elif d.system == 3 %}
+											<img src="{{ static('dulab/img/linux.svg') }}" class="img-fluid" width="20">
+											{% endif %}
+											<span class="ms-2">{{ d.name }}</span>
+										</a>
 									{% endfor %}
+									{% endwith %}
+									</div>
 								</td>
 							</tr>
 							{% endfor %}
@@ -93,5 +102,26 @@
 		</div>
 	</div>
 	{% endif %}
+
+	<div class="card card-lg mt-5">
+		<div class="card-body"> 
+			<div class="row mt-5">
+				<div class="col">
+					<div class="lh-xl">
+						{{ object.description | safe }}
+					</div>
+				</div>
+			</div>
+			{% if object.citation %}
+			<div class="row mt-5">
+				<div class="col">
+					<div class="lh-lg">
+						{{ object.citation }}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
 </div>
 {% endblock %}

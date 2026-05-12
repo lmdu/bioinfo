@@ -3,100 +3,39 @@
 {% block title %}{{ _("团队成员") }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
-	{% if faculties %}
-	<h5 class="my-5 pb-2 border-bottom border-success border-2">
-		<strong>{{ _("主研人") }}</strong>
-	</h5>
-	{% for faculty in faculties %}
-	<div class="row g-5 align-items-center">
-		<div class="col-12 col-md-4 col-lg-3 text-center">
-			<p>
-				<a href="{{ url('dulab:member', kwargs={'uname': faculty.uname}) }}" class="animate-hover rounded-circle border border-5 d-inline-block">
-					{% if faculty.avatar %}
-					<img src="{{ faculty.avatar.url }}" alt="avatar" class="rounded-circle img-fluid">
+	<div class="row row-cards">
+		{% for m in object_list %}
+		<div class="col-md-6 col-lg-3">
+			<div class="card">
+				<div class="card-body p-4 text-center">
+					{% if m.avatar %}
+					<span class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ m.avatar.url }});"></span>
 					{% else %}
-					<img src="{{ static('dulab/image/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid">
+					<span class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ static('dulab/avatar.png') }});"></span>
 					{% endif %}
-				</a>
-			</p>
-		</div>
-		<div class="col-12 col-md-8 col-lg-9">
-			<div class="lh-lg ps-lg-5">
-				<p><span class="fs-4">{{ faculty.name }}</span><span class="ms-3">{{ faculty.title }}</span></p>
-				{{ faculty.bio.split('\n')[0] | safe }}
+					<h2 class="m-0 mb-1">
+						<a href="{{ url('dulab:member', kwargs={'slug': user.username}) }}">{{ m.name }}</a>
+					</h2>
+					
+					<div class="text-secondary">
+						{% if m.position > 9 %}
+						{% if lang %}
+						{{ m.grade }}{{ _("级") }} {{ m.major }}
+						{% else %}
+						{{ m.major }}, {{ _("级") }} {{ m.grade }}
+						{% endif %}
+						{% else %}
+						{{ m.title }}
+						{% endif %}
+					</div>
+
+					<div class="mt-3">
+						<span class="badge {% if m.position <= 7 %}bg-blue-lt{% else %}bg-green-lt{% endif %}">{{ m.get_position_display() }}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	{% endfor %}
-	{% endif %}
-	{% if postgraduates %}
-	<h5 class="my-5 pb-2 border-bottom border-success border-2">
-		<strong>{{ _("研究生") }}</strong>
-	</h5>
-	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-5">
-		{% for pg in postgraduates %}
-		<div class="col text-center">
-			<p>
-				<a href="{{ url('dulab:member', kwargs={'uname': pg.uname}) }}" class="animate-hover rounded-circle border border-5 d-inline-block">
-					{% if pg.avatar %}
-					<img src="{{ pg.avatar.url }}" alt="avatar" class="rounded-circle img-fluid">
-					{% else %}
-					<img src="{{ static('dulab/image/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid">
-					{% endif %}
-				</a>
-			</p>
-			<p><strong>{{ pg.name }}</strong></p>
-			<p>{{ pg.direct }}</p>
-		</div>
 		{% endfor %}
 	</div>
-	{% endif %}
-	{% if undergraduates %}
-	<h5 class="my-5 pb-2 border-bottom border-success border-2">
-		<strong>{{ _("本科生") }}</strong>
-	</h5>
-	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-5">
-		{% for ug in undergraduates %}
-		<div class="col text-center">
-			<p>
-				<a href="{{ url('dulab:member', kwargs={'uname': ug.uname}) }}" class="animate-hover rounded-circle border border-5 d-inline-block">
-					{% if ug.avatar %}
-					<img src="{{ ug.avatar.url }}" alt="avatar"  class="rounded-circle img-fluid">
-					{% else %}
-					<img src="{{ static('dulab/image/avatar.png') }}" alt="avatar" class="rounded-circle img-fluid">
-					{% endif %}
-				</a>
-			</p>
-			<p><strong>{{ ug.name }}</strong></p>
-			<p>{{ ug.direct }}</p>
-		</div>
-		{% endfor %}
-	</div>
-	{% endif %}
-	{% if graduates %}
-	<h5 class="my-5 pb-2 border-bottom border-success border-2">
-		<strong>{{ _("毕业生") }}</strong>
-	</h5>
-	<div class="row">
-		<div class="col">
-			<ul class="list-inline graduate-students">
-				{% for g in graduates %}
-				<li class="list-inline-item me-3 mb-3">
-					<span class="rounded-circle">
-						{% if g.avatar %}
-						<img src="{{ g.avatar.url }}" alt="avatar"  class="rounded-circle img-fluid">
-						{% else %}
-						<img src="{{ static('dulab/image/avatar.png') }}" alt="avatar" width="24" height="24" class="rounded-circle img-fluid">
-						{% endif %}
-					</span>
-					<a href="{{ url('dulab:member', kwargs={'uname': g.uname}) }}">
-						{{ g.name }}
-					</a>
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-	{% endif %}
 </div>
 {% endblock %}

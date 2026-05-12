@@ -32,4 +32,16 @@ class Migration(migrations.Migration):
             name='software',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='versions', to='dulab.software'),
         ),
+        migrations.CreateModel(
+            name='Photo',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('image', models.ImageField(upload_to='dulab/images/%Y/%m')),
+                ('uploaded', models.DateTimeField(auto_now_add=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-uploaded'],
+            },
+        ),
     ]

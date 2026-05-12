@@ -1,3 +1,7 @@
+* {
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Helvetica", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif !important;
+}
+
 :root {
     --tblr-body-font-size: 1rem;
 }

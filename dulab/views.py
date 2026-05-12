@@ -49,18 +49,10 @@ class PublicationListView(ListView):
 	model = Publication
 	template_name = 'dulab/publication.html'
 
-class MemberListView(TemplateView):
+class MemberListView(ListView):
+	model = Member
 	template_name = 'dulab/team.html'
-
-	#def get_context_data(self, **kwargs):
-	#	context = super().get_context_data(**kwargs)
-
-	#	context['faculties'] = Member.objects.filter(position=4)
-	#	context['postgraduates'] = Member.objects.filter(position=1, status=1)
-	#	context['undergraduates'] = Member.objects.filter(position=2, status=1)
-	#	context['graduates'] = Member.objects.filter(status=2)
-
-	#	return context
+	queryset = Member.objects.filter(allowed=1).order_by('position')
 
 class MemberDetailView(DetailView):
 	model = Member

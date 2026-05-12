@@ -37,8 +37,8 @@
 			<ul class="navbar-nav ms-3">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="profile-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						{% if request.session.avatar %}
-						<img src="{{ request.session.avatar }}" class="align-middle rounded-circle border border-white border-2" width="36" height="36">
+						{% if request.user.profile.avatar %}
+						<img src="{{ request.user.profile.avatar.url }}" class="align-middle rounded-circle border border-white border-2" width="36" height="36">
 						{% else %}
 						<img src="{{ static('dulab/img/avatar.png') }}" class="align-middle rounded-circle border border-white border-2" width="36" height="36">
 						{% endif %}
