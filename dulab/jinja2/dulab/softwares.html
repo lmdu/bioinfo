@@ -4,7 +4,7 @@
 {% block main %}
 <div class="container mt-5">
 	{% for s in object_list %}
-	<div class="card card-md">
+	<div class="card card-lg">
 		<span class="ribbon bg-red fs-4">
 			{{ s.get_category_display() }}
 		</span>
@@ -33,7 +33,7 @@
 					{% endif %}
 				</div>
 				<div class="col-sm-6 col-md-8 ps-sm-3 ps-md-5 lh-lg">
-					{{ s.description | safe }}
+					{{ s.comment | safe }}
 				</div>
 			</div>
 		</div>

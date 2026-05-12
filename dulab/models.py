@@ -197,6 +197,8 @@ class Version(BaseModel):
 	version = models.CharField(max_length=20)
 	changelog_zh = models.TextField(blank=True)
 	changelog_en = models.TextField(blank=True)
+	comment_zh = models.TextField(blank=True)
+	comment_en = models.TextField(blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	software = models.ForeignKey(Software, on_delete=models.CASCADE, related_name='versions')
 
@@ -212,16 +214,6 @@ class Download(BaseModel):
 		1: 'Windows',
 		2: 'MacOS',
 		3: 'Linux',
-		4: 'Ubuntu',
-		5: 'Fedora',
-		6: 'Debian',
-		7: 'RedHat',
-		8: 'ArchLinux',
-		9: 'openSUSE',
-		10: 'AlmaLinux',
-		11: 'Deepin',
-		12: 'Centos',
-		13: 'RockyLinux',
 	}
 
 	system = models.SmallIntegerField(choices=SYSTEMS, default=0)

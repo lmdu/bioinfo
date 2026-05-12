@@ -8,7 +8,7 @@
 			<div class="row align-items-center row-gap-4">
 				<div class="col-md-6">
 					<div class="h1">{{ object.name }}</div>
-					<div class="mt-4 lh-xl pe-md-5">{{ object.comment | safe }}</div>
+					<div class="mt-4 lh-lg pe-md-5">{{ object.comment | safe }}</div>
 					<div class="mt-4">
 						{% if object.url %}
 						<a href="{{ object.url }}" class="btn btn-primary">{{ _("查看主页") }}</a>
@@ -69,7 +69,12 @@
 									</span>
 									{% endif %}
 								</td>
-								<td></td>
+								<td>
+									{{ v.comment }}
+									{% if v.changelog %}
+									<button type="button" class="badge badge-sm bg-green-lt" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="Changelogs" data-bs-content="{{ v.changelog | safe }}">{{ _("More") }}</button>
+									{% endif %}
+								</td>
 								<td>
 									{{ v.created | date('Y-m-d') }}
 									{{ v.created | time('H:i:s') }}

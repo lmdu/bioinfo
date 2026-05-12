@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-12 15:51+0800\n"
+"POT-Creation-Date: 2026-05-12 20:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,473 +18,478 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\dulab\forms.py:15
+#: dulab/forms.py:15
 msgid "邮箱"
 msgstr "Email"
 
-#: .\dulab\forms.py:15
+#: dulab/forms.py:15
 msgid "不要用QQ邮箱, 用于以后投稿"
 msgstr ""
 "Please do not use QQ email, it will be used for future paper submission"
 
-#: .\dulab\forms.py:16
+#: dulab/forms.py:16
 msgid "姓名"
 msgstr "Real name"
 
-#: .\dulab\forms.py:16
+#: dulab/forms.py:16
 msgid "输入真实姓名, 才能通过审核"
 msgstr "You must enter your real name to pass the verification"
 
-#: .\dulab\jinja2\dulab\base.html:11 .\dulab\jinja2\dulab\base.html:18
+#: dulab/jinja2/dulab/base.html:11 dulab/jinja2/dulab/base.html:18
 msgid "生物信息学与整合基因组学课题组"
 msgstr "Bioinformatics and Integrative Genomics"
 
-#: .\dulab\jinja2\dulab\base.html:23
+#: dulab/jinja2/dulab/base.html:23
 msgid "首页"
 msgstr "Home"
 
-#: .\dulab\jinja2\dulab\base.html:23 .\dulab\jinja2\dulab\news.html:3
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/news.html:3
 msgid "最新动态"
 msgstr "News"
 
-#: .\dulab\jinja2\dulab\base.html:23 .\dulab\jinja2\dulab\team.html:3
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/team.html:3
 msgid "团队成员"
 msgstr "Member"
 
-#: .\dulab\jinja2\dulab\base.html:23 .\dulab\jinja2\dulab\member.html:37
-#: .\dulab\jinja2\dulab\research.html:3
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/member.html:37
+#: dulab/jinja2/dulab/research.html:3
 msgid "研究方向"
 msgstr "Research"
 
-#: .\dulab\jinja2\dulab\base.html:23 .\dulab\jinja2\dulab\publication.html:3
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/publication.html:3
 msgid "研究成果"
 msgstr "Publication"
 
-#: .\dulab\jinja2\dulab\base.html:23 .\dulab\jinja2\dulab\software.html:3
-#: .\dulab\jinja2\dulab\softwares.html:3
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/software.html:3
+#: dulab/jinja2/dulab/softwares.html:3
 msgid "软件资源"
 msgstr "Software"
 
-#: .\dulab\jinja2\dulab\base.html:49
+#: dulab/jinja2/dulab/base.html:49
 msgid "控制面板"
 msgstr "Admin panel"
 
-#: .\dulab\jinja2\dulab\base.html:54
+#: dulab/jinja2/dulab/base.html:54
 msgid "个人主页"
 msgstr "My profile"
 
-#: .\dulab\jinja2\dulab\base.html:57
+#: dulab/jinja2/dulab/base.html:57
 msgid "修改资料"
 msgstr "Edit profile"
 
-#: .\dulab\jinja2\dulab\base.html:61 .\dulab\jinja2\dulab\postlist.html:12
-#: .\dulab\jinja2\dulab\subase.html:18
+#: dulab/jinja2/dulab/base.html:61 dulab/jinja2/dulab/postlist.html:12
+#: dulab/jinja2/dulab/subase.html:18
 msgid "文章列表"
 msgstr "Article list"
 
-#: .\dulab\jinja2\dulab\base.html:64 .\dulab\jinja2\dulab\postadd.html:4
-#: .\dulab\jinja2\dulab\postadd.html:14 .\dulab\jinja2\dulab\postadd.html:19
-#: .\dulab\jinja2\dulab\subase.html:19
+#: dulab/jinja2/dulab/base.html:64 dulab/jinja2/dulab/postadd.html:4
+#: dulab/jinja2/dulab/postadd.html:14 dulab/jinja2/dulab/postadd.html:19
+#: dulab/jinja2/dulab/subase.html:19
 msgid "添加文章"
 msgstr "Add article"
 
-#: .\dulab\jinja2\dulab\base.html:68
+#: dulab/jinja2/dulab/base.html:68
 msgid "退出登录"
 msgstr "Signout"
 
-#: .\dulab\jinja2\dulab\base.html:89
+#: dulab/jinja2/dulab/base.html:89
 msgid "关于我们"
 msgstr "About us"
 
-#: .\dulab\jinja2\dulab\base.html:90
+#: dulab/jinja2/dulab/base.html:90
 msgid "联系我们"
 msgstr "Contact us"
 
-#: .\dulab\jinja2\dulab\base.html:91
+#: dulab/jinja2/dulab/base.html:91
 msgid "加入我们"
 msgstr "Join us"
 
-#: .\dulab\jinja2\dulab\base.html:92
+#: dulab/jinja2/dulab/base.html:92
 msgid "中文"
 msgstr "Chinese"
 
-#: .\dulab\jinja2\dulab\base.html:93
+#: dulab/jinja2/dulab/base.html:93
 msgid "英文"
 msgstr "English"
 
-#: .\dulab\jinja2\dulab\expense.html:3
+#: dulab/jinja2/dulab/expense.html:3
 msgid "项目报销"
 msgstr ""
 
-#: .\dulab\jinja2\dulab\fund.html:3
+#: dulab/jinja2/dulab/fund.html:3
 msgid "项目列表"
 msgstr ""
 
-#: .\dulab\jinja2\dulab\index.html:60 .\dulab\jinja2\dulab\index.html:91
+#: dulab/jinja2/dulab/index.html:60 dulab/jinja2/dulab/index.html:91
 msgid "了解更多"
 msgstr "Learn more"
 
-#: .\dulab\jinja2\dulab\index.html:99
+#: dulab/jinja2/dulab/index.html:99
 msgid "组学技术"
 msgstr "Omics Technologies"
 
-#: .\dulab\jinja2\dulab\index.html:100
-msgid "课题组使用高通量测序技术结合多组学分析技术解密基因组信息"
+#: dulab/jinja2/dulab/index.html:100
+#, fuzzy
+msgid "我们使用高通量测序技术及多组学分析方法解密基因组信息"
 msgstr ""
-"Our research group mainly use high-throughput sequencing technology combined with "
-"multi-omics analysis to decipher genomic information."
+"We use high-throughput sequencing technologies and multi-omics analysis methods to decipher genomic information"
 
-#: .\dulab\jinja2\dulab\index.html:116
+#: dulab/jinja2/dulab/index.html:116
 msgid "最新成果"
 msgstr "Latest Publication"
 
-#: .\dulab\jinja2\dulab\index.html:141
+#: dulab/jinja2/dulab/index.html:143
 msgid "最新消息"
 msgstr "Latest News"
 
-#: .\dulab\jinja2\dulab\member.html:36
+#: dulab/jinja2/dulab/member.html:36
 msgid "专业"
 msgstr "Major"
 
-#: .\dulab\jinja2\dulab\post.html:37
+#: dulab/jinja2/dulab/post.html:37
 msgid "文章还在审核中"
 msgstr "Under review"
 
-#: .\dulab\jinja2\dulab\postedit.html:4 .\dulab\jinja2\dulab\postedit.html:14
+#: dulab/jinja2/dulab/postedit.html:4 dulab/jinja2/dulab/postedit.html:14
 msgid "修改文章"
 msgstr "Edit post"
 
-#: .\dulab\jinja2\dulab\postedit.html:19 .\dulab\jinja2\dulab\profile.html:28
+#: dulab/jinja2/dulab/postedit.html:19 dulab/jinja2/dulab/profile.html:28
 msgid "保存修改"
 msgstr "Save changes"
 
-#: .\dulab\jinja2\dulab\postlist.html:17
+#: dulab/jinja2/dulab/postlist.html:17
 msgid "标题"
 msgstr "Title"
 
-#: .\dulab\jinja2\dulab\postlist.html:18
+#: dulab/jinja2/dulab/postlist.html:18
 msgid "发表时间"
 msgstr "Published"
 
-#: .\dulab\jinja2\dulab\postlist.html:19 .\dulab\models.py:97
+#: dulab/jinja2/dulab/postlist.html:19 dulab/models.py:97
 msgid "状态"
 msgstr "Status"
 
-#: .\dulab\jinja2\dulab\postlist.html:20
+#: dulab/jinja2/dulab/postlist.html:20
 msgid "操作"
 msgstr "Actions"
 
-#: .\dulab\jinja2\dulab\postlist.html:34
+#: dulab/jinja2/dulab/postlist.html:34
 msgid "预览"
 msgstr "Preview"
 
-#: .\dulab\jinja2\dulab\postlist.html:36
+#: dulab/jinja2/dulab/postlist.html:36
 msgid "编辑"
 msgstr "Edit"
 
-#: .\dulab\jinja2\dulab\profile.html:4 .\dulab\jinja2\dulab\subase.html:3
+#: dulab/jinja2/dulab/profile.html:4 dulab/jinja2/dulab/subase.html:3
 msgid "个人资料"
 msgstr "Profile"
 
-#: .\dulab\jinja2\dulab\profile.html:13 .\dulab\jinja2\dulab\subase.html:13
+#: dulab/jinja2/dulab/profile.html:13 dulab/jinja2/dulab/subase.html:13
 msgid "我的帐号"
 msgstr "My Account"
 
-#: .\dulab\jinja2\dulab\profile.html:14
+#: dulab/jinja2/dulab/profile.html:14
 msgid "头像"
 msgstr "Avatar"
 
-#: .\dulab\jinja2\dulab\profile.html:20 .\dulab\jinja2\dulab\profile.html:38
+#: dulab/jinja2/dulab/profile.html:20 dulab/jinja2/dulab/profile.html:38
 msgid "修改头像"
 msgstr "Change avatar"
 
-#: .\dulab\jinja2\dulab\profile.html:21
+#: dulab/jinja2/dulab/profile.html:21
 msgid "删除头像"
 msgstr "Delete avatar"
 
-#: .\dulab\jinja2\dulab\profile.html:43
+#: dulab/jinja2/dulab/profile.html:43
 msgid "选择图片文件"
 msgstr "Select image"
 
-#: .\dulab\jinja2\dulab\profile.html:51
+#: dulab/jinja2/dulab/profile.html:51
 msgid "关闭"
 msgstr "Close"
 
-#: .\dulab\jinja2\dulab\profile.html:52
+#: dulab/jinja2/dulab/profile.html:52
 #, fuzzy
+#| msgid "确定"
+msgid "确认"
+msgstr "Ok"
 
-#: .\dulab\jinja2\dulab\profile.html:83
+#: dulab/jinja2/dulab/profile.html:83
+#, fuzzy
 msgid "你确定要删除头像吗?"
 msgstr "Are you sure you want to delete your avatar?"
 
-#: .\dulab\jinja2\dulab\profile.html:85
+#: dulab/jinja2/dulab/profile.html:85
 msgid "删除头像不可恢复, 请谨慎操作, 头像删除后将使用默认头像"
-msgstr "Deleting your avatar is irreversible; please proceed with caution. Once deleted, the default avatar will be used."
+msgstr ""
+"Deleting your avatar is irreversible; please proceed with caution. Once "
+"deleted, the default avatar will be used."
 
-#: .\dulab\jinja2\dulab\profile.html:92
+#: dulab/jinja2/dulab/profile.html:92
 msgid "取消"
 msgstr "Cancel"
 
-#: .\dulab\jinja2\dulab\profile.html:95
+#: dulab/jinja2/dulab/profile.html:95
 msgid "确定"
 msgstr "Ok"
 
-#: .\dulab\jinja2\dulab\resetpasswd.html:2
-#: .\dulab\jinja2\dulab\resetpasswd.html:15
-#: .\dulab\jinja2\dulab\resetpasswd.html:31 .\dulab\jinja2\dulab\subase.html:14
+#: dulab/jinja2/dulab/resetpasswd.html:2 dulab/jinja2/dulab/resetpasswd.html:15
+#: dulab/jinja2/dulab/resetpasswd.html:31 dulab/jinja2/dulab/subase.html:14
 msgid "修改密码"
 msgstr "Edit password"
 
-#: .\dulab\jinja2\dulab\resetpasswd.html:19
+#: dulab/jinja2/dulab/resetpasswd.html:19
 msgid "原始密码"
 msgstr "Old password"
 
-#: .\dulab\jinja2\dulab\resetpasswd.html:23
+#: dulab/jinja2/dulab/resetpasswd.html:23
 msgid "新密码"
 msgstr "New password"
 
-#: .\dulab\jinja2\dulab\resetpasswd.html:27
+#: dulab/jinja2/dulab/resetpasswd.html:27
 msgid "确认密码"
 msgstr "Confirm password"
 
-#: .\dulab\jinja2\dulab\signin.html:2 .\dulab\jinja2\dulab\signin.html:7
-#: .\dulab\jinja2\dulab\signin.html:12
+#: dulab/jinja2/dulab/signin.html:2 dulab/jinja2/dulab/signin.html:7
+#: dulab/jinja2/dulab/signin.html:12
 msgid "登录"
 msgstr "Signin"
 
-#: .\dulab\jinja2\dulab\signup.html:2 .\dulab\jinja2\dulab\signup.html:7
-#: .\dulab\jinja2\dulab\signup.html:12
+#: dulab/jinja2/dulab/signup.html:2 dulab/jinja2/dulab/signup.html:7
+#: dulab/jinja2/dulab/signup.html:12
 msgid "注册"
 msgstr "Signup"
 
-#: .\dulab\jinja2\dulab\software.html:14
+#: dulab/jinja2/dulab/software.html:14
 msgid "查看主页"
 msgstr "View Homepage"
 
-#: .\dulab\jinja2\dulab\software.html:17
+#: dulab/jinja2/dulab/software.html:17
 msgid "查看文档"
 msgstr "View Documentation"
 
-#: .\dulab\jinja2\dulab\software.html:43
+#: dulab/jinja2/dulab/software.html:43
 msgid "下载列表"
 msgstr "Downloads"
 
-#: .\dulab\jinja2\dulab\software.html:49
+#: dulab/jinja2/dulab/software.html:49
 msgid "版本"
 msgstr "Version"
 
-#: .\dulab\jinja2\dulab\software.html:50
+#: dulab/jinja2/dulab/software.html:50
 msgid "更新日志"
 msgstr "Changelogs"
 
-#: .\dulab\jinja2\dulab\software.html:51
+#: dulab/jinja2/dulab/software.html:51
 msgid "发布时间"
 msgstr "Published"
 
-#: .\dulab\jinja2\dulab\software.html:52
+#: dulab/jinja2/dulab/software.html:52
 msgid "下载地址"
 msgstr "Download"
 
-#: .\dulab\jinja2\dulab\subase.html:11
+#: dulab/jinja2/dulab/subase.html:11
 msgid "帐号信息"
 msgstr "Account information"
 
-#: .\dulab\jinja2\dulab\subase.html:16
+#: dulab/jinja2/dulab/subase.html:16
 msgid "发表文章"
 msgstr "Write articles"
 
-#: .\dulab\jinja2\dulab\team.html:23 .\dulab\jinja2\dulab\team.html:25
+#: dulab/jinja2/dulab/team.html:23 dulab/jinja2/dulab/team.html:25
 msgid "级"
 msgstr "Grade"
 
-#: .\dulab\models.py:48 .\dulab\models.py:55 .\dulab\models.py:70
+#: dulab/models.py:48 dulab/models.py:55 dulab/models.py:70
 msgid "未设置"
 msgstr "No settings"
 
-#: .\dulab\models.py:49
+#: dulab/models.py:49
 msgid "博士"
 msgstr "PhD"
 
-#: .\dulab\models.py:50
+#: dulab/models.py:50
 msgid "硕士"
 msgstr "Master"
 
-#: .\dulab\models.py:51
+#: dulab/models.py:51
 msgid "学士"
 msgstr "Bachelor"
 
-#: .\dulab\models.py:56
+#: dulab/models.py:56
 msgid "教授"
 msgstr "Professor"
 
-#: .\dulab\models.py:57
+#: dulab/models.py:57
 msgid "研究员"
 msgstr "Research Fellow"
 
-#: .\dulab\models.py:58
+#: dulab/models.py:58
 msgid "副教授"
 msgstr "Associate Professor"
 
-#: .\dulab\models.py:59
+#: dulab/models.py:59
 msgid "副研究员"
 msgstr "Associate Research Fellow"
 
-#: .\dulab\models.py:60
+#: dulab/models.py:60
 msgid "讲师"
 msgstr "Lecturer"
 
-#: .\dulab\models.py:61
+#: dulab/models.py:61
 msgid "助理研究员"
 msgstr "Assistant Research Fellow"
 
-#: .\dulab\models.py:62
+#: dulab/models.py:62
 msgid "教职员"
 msgstr "Faculty"
 
-#: .\dulab\models.py:63
+#: dulab/models.py:63
 msgid "访问学者"
 msgstr "Visiting Scholar"
 
-#: .\dulab\models.py:64
+#: dulab/models.py:64
 msgid "博士后"
 msgstr "Postdoc"
 
-#: .\dulab\models.py:65
+#: dulab/models.py:65
 msgid "研究生"
 msgstr "Postgraduate"
 
-#: .\dulab\models.py:66
+#: dulab/models.py:66
 msgid "本科生"
 msgstr "Undergraduate"
 
-#: .\dulab\models.py:71
+#: dulab/models.py:71
 msgid "在读"
 msgstr "Current student"
 
-#: .\dulab\models.py:72
+#: dulab/models.py:72
 msgid "毕业"
 msgstr "Graduated"
 
-#: .\dulab\models.py:73
+#: dulab/models.py:73
 msgid "退学"
 msgstr "Dropout"
 
-#: .\dulab\models.py:77
+#: dulab/models.py:77
 msgid "待审"
 msgstr "Pending review"
 
-#: .\dulab\models.py:78
+#: dulab/models.py:78
 msgid "通过"
 msgstr "Approved"
 
-#: .\dulab\models.py:84
+#: dulab/models.py:84
 msgid "中文名"
 msgstr "Chinese name"
 
-#: .\dulab\models.py:85
+#: dulab/models.py:85
 msgid "英文名"
 msgstr "English name"
 
-#: .\dulab\models.py:86
+#: dulab/models.py:86
 msgid "头衔(中文)"
 msgstr "Title(Chinese)"
 
-#: .\dulab\models.py:87
+#: dulab/models.py:87
 msgid "头衔(英文)"
 msgstr "Title(English)"
 
-#: .\dulab\models.py:88
+#: dulab/models.py:88
 msgid "电话"
 msgstr "Phone"
 
-#: .\dulab\models.py:89
+#: dulab/models.py:89
 msgid "QQ号"
 msgstr "QQ number"
 
-#: .\dulab\models.py:90
+#: dulab/models.py:90
 msgid "微信号"
 msgstr "Weixin number"
 
-#: .\dulab\models.py:91
+#: dulab/models.py:91
 msgid "学号或工号"
 msgstr "Student or staff No."
 
-#: .\dulab\models.py:92
+#: dulab/models.py:92
 msgid "专业(中文)"
 msgstr "Major(Chinese)"
 
-#: .\dulab\models.py:93
+#: dulab/models.py:93
 msgid "专业(英文)"
 msgstr "Major(English)"
 
-#: .\dulab\models.py:94
+#: dulab/models.py:94
 msgid "年级"
 msgstr "Grade"
 
-#: .\dulab\models.py:95
+#: dulab/models.py:95
 msgid "学位"
 msgstr "Degree"
 
-#: .\dulab\models.py:96
+#: dulab/models.py:96
 msgid "职位"
 msgstr "Position"
 
-#: .\dulab\models.py:98
+#: dulab/models.py:98
 msgid "研究方向(中文)"
 msgstr "Research Interests(Chinese)"
 
-#: .\dulab\models.py:99
+#: dulab/models.py:99
 msgid "研究方向(英文)"
 msgstr "Research Interests(English)"
 
-#: .\dulab\models.py:106
+#: dulab/models.py:106
 msgid "资格审查"
 msgstr "Eligibility review"
 
-#: .\dulab\models.py:126
+#: dulab/models.py:126
 msgid "等待审核"
 msgstr "Awaiting review"
 
-#: .\dulab\models.py:127
+#: dulab/models.py:127
 msgid "通过审核"
 msgstr "Approved"
 
-#: .\dulab\models.py:128
+#: dulab/models.py:128
 msgid "退回修改"
 msgstr "Returned for revision"
 
-#: .\dulab\models.py:131
+#: dulab/models.py:131
 msgid "文章缩写名"
 msgstr "Post slug"
 
-#: .\dulab\models.py:132
+#: dulab/models.py:132
 msgid "标题(中文)"
 msgstr "Title(Chinese)"
 
-#: .\dulab\models.py:133
+#: dulab/models.py:133
 msgid "标题(英文)"
 msgstr "Title(English)"
 
-#: .\dulab\models.py:134
+#: dulab/models.py:134
 msgid "内容(中文)"
 msgstr "Content(Chinese)"
 
-#: .\dulab\models.py:135
+#: dulab/models.py:135
 msgid "内容(英文)"
 msgstr "Content(English)"
 
-#: .\dulab\models.py:136
+#: dulab/models.py:136
 msgid "缩略图"
 msgstr "Thumbnail"
 
-#: .\dulab\models.py:137
+#: dulab/models.py:137
 msgid "Banner图"
 msgstr "Banner"
 
-#: .\dulab\models.py:168
+#: dulab/models.py:168
 msgid "软件"
 msgstr "Software"
 
-#: .\dulab\models.py:169
+#: dulab/models.py:169
 msgid "数据库"
 msgstr "Database"
