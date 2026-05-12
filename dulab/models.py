@@ -277,52 +277,6 @@ class Option(BaseModel):
 	thumbnail = models.ImageField(upload_to='dulab/thumbnails', blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 
-class Fund(BaseModel):	
-	name = models.CharField(max_length=255)
-	approve_code = models.CharField(max_length=50, blank=True)
-	finance_code = models.CharField(max_length=50, blank=True)
-	category = models.CharField(max_length=50, blank=True)
-	source = models.CharField(max_length=255, blank=True)
-	approve_amount = models.FloatField(default=0)
-	approve_time = models.DateField(blank=True)
-	start_time = models.DateField(blank=True)
-	end_time = models.DateField(blank=True)
-	comment = models.TextField(blank=True)
-	create_time = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return self.name
-
-	class Meta:
-		ordering = ['-create_time']
-
-class Expense(BaseModel):
-	CATEGORIES = {
-		0: _("其他费"),
-		1: _("材料费"),
-		2: _("测序费"),
-		3: _("设备费"),
-		4: _("劳务费"),
-		5: _("差旅费"),
-		6: _("版面费"),
-		7: _("咨询费"),
-		8: _("绩效"),
-		9: _("管理费"),
-		10: _("税费"),
-	}
-
-	fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
-	category = models.SmallIntegerField(choices=CATEGORIES, default=0)
-	amount = models.FloatField()
-	company = models.CharField(max_length=255, blank=True)
-	invoice = models.FileField(upload_to='dulab/invoices/%Y/%m', blank=True)
-	ticket = models.FileField(upload_to='dulab/tickets/%Y/%m', blank=True)
-	comment = models.TextField(blank=True)
-	created = models.DateTimeField(auto_now_add=True)
-
-	class Meta:
-		ordering = ['-created']
-
 @receiver(pre_delete, sender=Slideshow)
 def delete_slide(sender, instance, **kwargs):
 	instance.image.delete(True)

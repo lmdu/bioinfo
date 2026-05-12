@@ -64,7 +64,6 @@ class VersionAdmin(ModelAdmin):
 		}
 	}
 
-
 @admin.register(Download)
 class DownloadAdmin(ModelAdmin):
 	list_display = ('id', 'system', 'package', 'uploaded', 'version')
@@ -76,12 +75,4 @@ class MediaAdmin(ModelAdmin):
 @admin.register(Option)
 class OptionAdmin(ModelAdmin):
 	list_display = ('id', 'slug', 'title_zh', 'content_zh', 'created')
-
-@admin.register(Fund)
-class FundAdmin(ModelAdmin):
-	list_display = ('id', 'name', 'category', 'approve_code', 'approve_amount', 'approve_time')
-
-@admin.register(Expense)
-class ExpenseAdmin(ModelAdmin):
-	list_display = ('id', 'fund', 'category', 'amount', 'created')
 

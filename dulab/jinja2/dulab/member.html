@@ -20,7 +20,6 @@
 				<div class="col-md-6">
 					<div class="text-center text-md-start ms-md-5">
 						<h2>{{ member.name }}</h2>
-						<!--<p>{{ member.email }}</p>-->
 						{% if member.position == 4 %}
 						<p>{{ member.title }}</p>
 						{% elif member.position in [3, 5] %}
@@ -35,7 +34,7 @@
 						</p>
 						{% endif %}
 						<p>{{ _("专业") }}: {{ member.major }}</p>
-						<p>{{ _("研究兴趣") }}: {{ member.direct}}</p>
+						<p>{{ _("研究方向") }}: {{ member.direct}}</p>
 						<div class="btn-list">
 							{% if member.user.email %}
 							<a href="#" data-bs-toggle="tooltip" title="{{ member.user.email }}" data-bs-placement="bottom" class="btn btn-icon">

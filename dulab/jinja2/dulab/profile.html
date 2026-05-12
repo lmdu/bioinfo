@@ -1,30 +1,31 @@
 {% extends 'dulab/subase.html' %}
 {% set submenu = 'account' %}
 {% block pagetitle %}
-个人资料
+{{ _("个人资料") }}
 {% endblock %}
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ static('dulab/css/cropper.min.css') }}">
+<link rel="stylesheet" href="{{ static('dulab/css/wangeditor.min.css') }}?ver=5.1.23">
 {% endblock %}
 {% block form %}
 <form method="post">
     <div class="card-body">
-      <h2 class="mb-4">我的帐号</h2>
-      <h3 class="card-title"><strong>头像</strong></h3>
+      <h2 class="mb-4">{{ _("我的帐号") }}</h2>
+      <h3 class="card-title"><strong>{{ _("头像") }}</strong></h3>
       <div class="row align-items-center">
         <div class="col-auto">
           <span id="avatar-show" class="avatar avatar-xl" style="background-image: url({% if object.avatar %}{{ object.avatar.url }}{% else %}{{ static('dulab/img/avatar.png') }}{% endif %})"></span>
         </div>
         <div class="col-auto">
-          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#avatar-uploader-dialog">修改头像</button>
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#avatar-delete-dialog">删除头像</button>
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#avatar-uploader-dialog">{{ _("修改头像") }}</button>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#avatar-delete-dialog">{{ _("删除头像") }}</button>
         </div>
       </div>
       {{ crispy(form) }}
     </div>
     <div class="card-footer bg-transparent mt-auto">
       <div class="btn-list justify-content-end">
-        <button type="submit" class="btn btn-primary">保存修改</button>
+        <button type="submit" class="btn btn-primary">{{ _("保存修改") }}</button>
       </div>
     </div>
     {{ csrf_input }}
@@ -34,12 +35,12 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <form method="POST" class="modal-content" enctype="multipart/form-data" id="avatar-form">
       <div class="modal-header">
-        <h5 class="modal-title">修改头像</h5>
+        <h5 class="modal-title">{{ _("修改头像") }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="mb-3">
-          <button type="button" class="btn btn-primary" id="avatar-select">选择图片文件</button>
+          <button type="button" class="btn btn-primary" id="avatar-select">{{ _("选择图片文件") }}</button>
           <input type="file" id="avatar-input" class="visually-hidden" name="avatar" accept="image/*">
         </div>
         <div class="avatar-preview">
@@ -47,8 +48,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn me-auto" data-bs-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="avatar-send">确认</button>
+        <button type="button" class="btn me-auto" data-bs-dismiss="modal">{{ _("关闭") }}</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="avatar-send">{{ _("确认") }}</button>
       </div>
       {{ csrf_input }}
     </form>
@@ -79,19 +80,19 @@
             d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
           />
         </svg>
-        <h3>你确定要删除头像吗?</h3>
+        <h3>{{ _("你确定要删除头像吗?") }}</h3>
         <div class="text-secondary">
-          删除头像不可恢复, 请谨慎操作, 头像删除后将使用默认头像
+          {{ _("删除头像不可恢复, 请谨慎操作, 头像删除后将使用默认头像") }}
         </div>
       </div>
       <div class="modal-footer">
         <div class="w-100">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn w-100" data-bs-dismiss="modal">取消</a>
+              <button type="button" class="btn w-100" data-bs-dismiss="modal">{{ _("取消") }}</a>
             </div>
             <div class="col">
-              <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" id="avatar-delete">确定</a>
+              <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" id="avatar-delete">{{ _("确定") }}</a>
             </div>
           </div>
         </div>
@@ -103,7 +104,6 @@
 
 {% block script %}
 <script src="{{ static('dulab/js/cropper.min.js') }}"></script>
-
 <script type="text/javascript">
 const avatar_image = document.querySelector('#avatar-image');
 const avatar_select = document.querySelector('#avatar-select');
@@ -170,4 +170,6 @@ avatar_delete.addEventListener('click', () => {
   });
 });
 </script>
+<script src="{{ static('dulab/js/wangeditor.js') }}?ver=5.1.23"></script>
+{% include 'dulab/uploader.html' %}
 {% endblock %}

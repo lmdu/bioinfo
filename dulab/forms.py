@@ -42,6 +42,7 @@ class ProfileForm(forms.ModelForm):
 				Column('name_en', css_class='col-md-6'),
 				Column('title_zh', css_class='col-md-6'),
 				Column('title_en', css_class='col-md-6'),
+				Column('number', css_class='col-md-6'),
 				css_class = 'g-3'
 			),
 			HTML('<h3 class="card-title mt-4"><strong>专业研究</strong></h3>'),
@@ -74,15 +75,15 @@ class ProfileForm(forms.ModelForm):
 				css_class = 'g-3'
 			),
 			HTML('<h3 class="card-title mt-4"><strong>个人简介</strong></h3>'),
-			TabHolder(
-				Tab('中文', 'bio_zh'),
-				Tab('英文', 'bio_en')
+			Row(
+				Column('bio_zh', css_class='col-12'),
+				Column('bio_en', css_class='col-12')
 			)
 		)
 
 	class Meta:
 		model = Member
-		exclude = ('user', 'avatar', 'allowed', 'created')
+		exclude = ('user', 'status', 'avatar', 'allowed', 'created')
 
 class AvatarCropForm(forms.ModelForm):
 	x = forms.FloatField(widget=forms.HiddenInput())

@@ -31,9 +31,9 @@
               </td>
               {% endwith %}
               <td>
-                <a class="btn btn-outline btn-warning btn-sm" href="{{ url('dulab:post', kwargs={'slug': object.slug}) }}">预览</a>
+                <a class="btn btn-outline btn-warning btn-sm" href="{{ url('dulab:post', kwargs={'slug': object.slug}) }}">{{ _("预览") }}</a>
                 {% if object.approve == 2 %}
-                <a class="btn btn-outline btn-danger btn-sm" href="{{ url('dulab:postedit', kwargs={'slug':object.slug}) }}">编辑</a>
+                <a class="btn btn-outline btn-danger btn-sm" href="{{ url('dulab:postedit', kwargs={'slug':object.slug}) }}">{{ _("编辑") }}</a>
                 {% endif %}
               </td>
             </tr>
