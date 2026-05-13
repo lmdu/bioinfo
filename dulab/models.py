@@ -269,6 +269,9 @@ class Option(BaseModel):
 	thumbnail = models.ImageField(upload_to='dulab/thumbnails', blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 
+	class Meta:
+		ordering = ['-created']
+
 @receiver(pre_delete, sender=Slideshow)
 def delete_slide(sender, instance, **kwargs):
 	instance.image.delete(True)

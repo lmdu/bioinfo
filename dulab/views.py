@@ -31,7 +31,7 @@ class IndexView(TemplateView):
 		context['posts'] = Post.objects.filter(approve=1)[0:8]
 		context['introduce'] = Option.objects.filter(slug='introduce').first()
 		context['interest'] = Option.objects.filter(slug='interest').first()
-		context['supports'] = Option.objects.filter(slug='supports')
+		context['supports'] = Option.objects.filter(slug__in=['genome', 'transcriptome', 'epigenome', 'translatome']).order_by('pk')
 
 		return context
 
