@@ -52,7 +52,7 @@ class PublicationListView(ListView):
 class MemberListView(ListView):
 	model = Member
 	template_name = 'dulab/team.html'
-	queryset = Member.objects.filter(allowed=1).order_by('position')
+	queryset = Member.objects.filter(allowed__gt=0).order_by('identity', 'position', 'degree', 'grade')
 
 class MemberDetailView(DetailView):
 	model = Member

@@ -45,37 +45,44 @@ class Publication(BaseModel):
 
 class Member(BaseModel):
 	DEGREES = {
-		0: _("未设置"),
+		0: _("无"),
 		1: _("博士"),
 		2: _("硕士"),
 		3: _("学士"),
 	}
 
+	IDENTITIES = {
+		0: _("无"),
+		1: _("教职工"),
+		2: _("研究生"),
+		3: _("本科生"),
+	}
+
 	POSITIONS = {
-		0: _("未设置"),
+		0: _("无"),
 		1: _("教授"),
 		2: _("研究员"),
 		3: _("副教授"),
 		4: _("副研究员"),
 		5: _("讲师"),
 		6: _("助理研究员"),
-		7: _("教职员"),
-		8: _("访问学者"),
-		9: _("博士后"),
-		10: _("研究生"),
-		11: _("本科生"),
+		7: _("访问学者"),
+		8: _("博士后"),
 	}
 
 	STATUS = {
-		0: _("未设置"),
+		0: _("无"),
 		1: _("在读"),
 		2: _("毕业"),
 		3: _("退学"),
+		4: _("在职"),
+		5: _("离职"),
 	}
 
 	ALLOWS = {
 		0: _("待审"),
 		1: _("通过"),
+		2: _("锁定"),
 	}
 
 	YEARS = ((i, i) for i in range(2000, timezone.now().year+1))
@@ -93,8 +100,9 @@ class Member(BaseModel):
 	major_en = models.CharField(max_length=50, blank=True, verbose_name=_("专业(英文)"))
 	grade = models.IntegerField(choices=YEARS, default=2020, verbose_name=_("年级"))
 	degree = models.SmallIntegerField(choices=DEGREES, default=0, verbose_name=_("学位"))
-	position = models.SmallIntegerField(choices=POSITIONS, default=0, verbose_name=_("职位"))
+	position = models.SmallIntegerField(choices=POSITIONS, default=0, verbose_name=_("职称"))
 	status = models.SmallIntegerField(choices=STATUS, default=0, verbose_name=_("状态"))
+	identity = models.SmallIntegerField(choices=IDENTITIES, default=0, verbose_name=_("身份"))
 	direct_zh = models.CharField(max_length=255, blank=True, verbose_name=_("研究方向(中文)"))
 	direct_en = models.CharField(max_length=255, blank=True, verbose_name=_("研究方向(英文)"))
 	avatar = models.ImageField(upload_to='dulab/avatars/', blank=True)
@@ -110,7 +118,7 @@ class Member(BaseModel):
 		return self.name_zh
 
 	class Meta:
-		ordering = ['degree', 'grade']
+		ordering = ['-created']
 
 @receiver(post_save, sender=User)
 def create_member(sender, instance, created, **kwargs):
