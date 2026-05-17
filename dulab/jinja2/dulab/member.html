@@ -5,7 +5,7 @@
 <div class="container mt-5">
 	<div class="card card-lg">
 		<div class="card-body">
-			<div class="row align-items-center mt-5">
+			<div class="row align-items-center">
 				<div class="col-md-6">
 					<div class="text-center text-md-end me-md-5">
 						<div class="rounded-circle border border-5 d-inline-block animate-hover">
@@ -20,17 +20,16 @@
 				<div class="col-md-6">
 					<div class="text-center text-md-start ms-md-5">
 						<h2>{{ member.name }}</h2>
-						{% if member.position == 4 %}
+						{% if member.identity == 1 %}
 						<p>{{ member.title }}</p>
-						{% elif member.position in [3, 5] %}
-						<p>{{ member.get_position_display() }}</p>
 						{% else %}
 						<p>
 							{% if lang %}
-							{{ member.grade }}级 {{ member.get_degree_display() }}{{ member.get_position_display() }}
+							{{ member.grade }}{{ _("级") }}
 							{% else %}
-							{{ member.get_degree_display() }} student
+							{{ _("级") }} {{ member.grade }},
 							{% endif %}
+							{{ member.get_degree_display() }}{{ member.get_identity_display() }}
 						</p>
 						{% endif %}
 						<p>{{ _("专业") }}: {{ member.major }}</p>
@@ -60,7 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<hr class="border-bottom border-2 my-5">
+			<hr class="border-bottom border-1 my-5">
 			<div class="row">
 				<div class="col lh-xl">
 					{{ member.bio | safe }}
@@ -71,11 +70,3 @@
 </div>
 {% endblock %}
 
-{% block script %}
-<script type="text/javascript">
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
-});
-</script>
-{% endblock %}

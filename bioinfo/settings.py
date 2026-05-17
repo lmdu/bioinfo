@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@!&$(fwz!d39tsqs&cgslr&@h9bpo6_h%#f=7s4os9y$a@$*7c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -146,10 +146,10 @@ LOCALE_PATHS = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'bioinfo/static/'
 STATIC_ROOT = Path(BASE_DIR) / 'static'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = 'bioinfo/media/'
 MEDIA_ROOT = Path(BASE_DIR) / 'media'
 
 

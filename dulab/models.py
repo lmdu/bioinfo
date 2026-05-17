@@ -56,6 +56,7 @@ class Member(BaseModel):
 		1: _("教职工"),
 		2: _("研究生"),
 		3: _("本科生"),
+		4: _("毕业生"),
 	}
 
 	POSITIONS = {
@@ -145,7 +146,7 @@ class Post(BaseModel):
 	banner = models.ImageField(upload_to='dulab/banners/%Y/%m', blank=True, verbose_name=_("Banner图"))
 	approve = models.SmallIntegerField(choices=APPROVES, default=0)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
-	created = models.DateTimeField(auto_now_add=True)
+	created = models.DateTimeField(auto_now_add=True, verbose_name=_("创建时间"))
 	updated = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
@@ -184,8 +185,8 @@ class Software(BaseModel):
 	doc = models.CharField(max_length=255, blank=True)
 	language = models.CharField(max_length=30, blank=True)
 	category = models.SmallIntegerField(choices=TYPES, default=0)
-	title_en = models.CharField(max_length=255, blank=True)
 	title_zh = models.CharField(max_length=255, blank=True)
+	title_en = models.CharField(max_length=255, blank=True)
 	comment_zh = models.TextField(blank=True)
 	comment_en = models.TextField(blank=True)
 	description_zh = models.TextField(blank=True)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-12 20:20+0800\n"
+"POT-Creation-Date: 2026-05-16 14:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr "News"
 msgid "团队成员"
 msgstr "Member"
 
-#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/member.html:37
+#: dulab/jinja2/dulab/base.html:23 dulab/jinja2/dulab/member.html:36
 #: dulab/jinja2/dulab/research.html:3
 msgid "研究方向"
 msgstr "Research"
@@ -112,14 +112,6 @@ msgstr "Chinese"
 msgid "英文"
 msgstr "English"
 
-#: dulab/jinja2/dulab/expense.html:3
-msgid "项目报销"
-msgstr ""
-
-#: dulab/jinja2/dulab/fund.html:3
-msgid "项目列表"
-msgstr ""
-
 #: dulab/jinja2/dulab/index.html:60 dulab/jinja2/dulab/index.html:91
 msgid "了解更多"
 msgstr "Learn more"
@@ -129,10 +121,10 @@ msgid "组学技术"
 msgstr "Omics Technologies"
 
 #: dulab/jinja2/dulab/index.html:100
-#, fuzzy
 msgid "我们使用高通量测序技术及多组学分析方法解密基因组信息"
 msgstr ""
-"We use high-throughput sequencing technologies and multi-omics analysis methods to decipher genomic information"
+"We use high-throughput sequencing technologies and multi-omics analysis "
+"methods to decipher genomic information"
 
 #: dulab/jinja2/dulab/index.html:116
 msgid "最新成果"
@@ -142,7 +134,12 @@ msgstr "Latest Publication"
 msgid "最新消息"
 msgstr "Latest News"
 
-#: dulab/jinja2/dulab/member.html:36
+#: dulab/jinja2/dulab/member.html:28 dulab/jinja2/dulab/member.html:30
+#: dulab/jinja2/dulab/team.html:25 dulab/jinja2/dulab/team.html:27
+msgid "级"
+msgstr "Grade"
+
+#: dulab/jinja2/dulab/member.html:35
 msgid "专业"
 msgstr "Major"
 
@@ -166,7 +163,7 @@ msgstr "Title"
 msgid "发表时间"
 msgstr "Published"
 
-#: dulab/jinja2/dulab/postlist.html:19 dulab/models.py:97
+#: dulab/jinja2/dulab/postlist.html:19 dulab/models.py:105
 msgid "状态"
 msgstr "Status"
 
@@ -211,13 +208,10 @@ msgid "关闭"
 msgstr "Close"
 
 #: dulab/jinja2/dulab/profile.html:52
-#, fuzzy
-#| msgid "确定"
 msgid "确认"
 msgstr "Ok"
 
 #: dulab/jinja2/dulab/profile.html:83
-#, fuzzy
 msgid "你确定要删除头像吗?"
 msgstr "Are you sure you want to delete your avatar?"
 
@@ -290,6 +284,10 @@ msgstr "Published"
 msgid "下载地址"
 msgstr "Download"
 
+#: dulab/jinja2/dulab/software.html:75
+msgid "更多"
+msgstr "More"
+
 #: dulab/jinja2/dulab/subase.html:11
 msgid "帐号信息"
 msgstr "Account information"
@@ -298,17 +296,29 @@ msgstr "Account information"
 msgid "发表文章"
 msgstr "Write articles"
 
-#: dulab/jinja2/dulab/team.html:23 dulab/jinja2/dulab/team.html:25
-msgid "级"
-msgstr "Grade"
+#: dulab/jinja2/dulab/team.html:6 dulab/models.py:56
+msgid "教职工"
+msgstr "Faculty"
 
-#: dulab/models.py:48 dulab/models.py:55 dulab/models.py:70
-msgid "未设置"
-msgstr "No settings"
+#: dulab/jinja2/dulab/team.html:6 dulab/models.py:57
+msgid "研究生"
+msgstr "Postgraduate"
+
+#: dulab/jinja2/dulab/team.html:6 dulab/models.py:58
+msgid "本科生"
+msgstr "Undergraduate"
+
+#: dulab/jinja2/dulab/team.html:6 dulab/models.py:59
+msgid "毕业生"
+msgstr "Graduated"
+
+#: dulab/models.py:48 dulab/models.py:55 dulab/models.py:63 dulab/models.py:75
+msgid "无"
+msgstr "None"
 
 #: dulab/models.py:49
 msgid "博士"
-msgstr "PhD"
+msgstr "Ph.D."
 
 #: dulab/models.py:50
 msgid "硕士"
@@ -318,178 +328,188 @@ msgstr "Master"
 msgid "学士"
 msgstr "Bachelor"
 
-#: dulab/models.py:56
+#: dulab/models.py:64
 msgid "教授"
 msgstr "Professor"
 
-#: dulab/models.py:57
+#: dulab/models.py:65
 msgid "研究员"
 msgstr "Research Fellow"
 
-#: dulab/models.py:58
+#: dulab/models.py:66
 msgid "副教授"
 msgstr "Associate Professor"
 
-#: dulab/models.py:59
+#: dulab/models.py:67
 msgid "副研究员"
 msgstr "Associate Research Fellow"
 
-#: dulab/models.py:60
+#: dulab/models.py:68
 msgid "讲师"
 msgstr "Lecturer"
 
-#: dulab/models.py:61
+#: dulab/models.py:69
 msgid "助理研究员"
 msgstr "Assistant Research Fellow"
 
-#: dulab/models.py:62
-msgid "教职员"
-msgstr "Faculty"
-
-#: dulab/models.py:63
+#: dulab/models.py:70
 msgid "访问学者"
 msgstr "Visiting Scholar"
 
-#: dulab/models.py:64
+#: dulab/models.py:71
 msgid "博士后"
 msgstr "Postdoc"
 
-#: dulab/models.py:65
-msgid "研究生"
-msgstr "Postgraduate"
-
-#: dulab/models.py:66
-msgid "本科生"
-msgstr "Undergraduate"
-
-#: dulab/models.py:71
+#: dulab/models.py:76
 msgid "在读"
-msgstr "Current student"
+msgstr "Student"
 
-#: dulab/models.py:72
+#: dulab/models.py:77
 msgid "毕业"
 msgstr "Graduated"
 
-#: dulab/models.py:73
+#: dulab/models.py:78
 msgid "退学"
 msgstr "Dropout"
 
-#: dulab/models.py:77
+#: dulab/models.py:79
+msgid "在职"
+msgstr "Employ"
+
+#: dulab/models.py:80
+msgid "离职"
+msgstr "Resign"
+
+#: dulab/models.py:84
 msgid "待审"
 msgstr "Pending review"
 
-#: dulab/models.py:78
+#: dulab/models.py:85
 msgid "通过"
 msgstr "Approved"
 
-#: dulab/models.py:84
+#: dulab/models.py:86
+msgid "锁定"
+msgstr "Locked"
+
+#: dulab/models.py:92
 msgid "中文名"
 msgstr "Chinese name"
 
-#: dulab/models.py:85
+#: dulab/models.py:93
 msgid "英文名"
 msgstr "English name"
 
-#: dulab/models.py:86
+#: dulab/models.py:94
 msgid "头衔(中文)"
 msgstr "Title(Chinese)"
 
-#: dulab/models.py:87
+#: dulab/models.py:95
 msgid "头衔(英文)"
 msgstr "Title(English)"
 
-#: dulab/models.py:88
+#: dulab/models.py:96
 msgid "电话"
 msgstr "Phone"
 
-#: dulab/models.py:89
+#: dulab/models.py:97
 msgid "QQ号"
 msgstr "QQ number"
 
-#: dulab/models.py:90
+#: dulab/models.py:98
 msgid "微信号"
 msgstr "Weixin number"
 
-#: dulab/models.py:91
+#: dulab/models.py:99
 msgid "学号或工号"
 msgstr "Student or staff No."
 
-#: dulab/models.py:92
+#: dulab/models.py:100
 msgid "专业(中文)"
 msgstr "Major(Chinese)"
 
-#: dulab/models.py:93
+#: dulab/models.py:101
 msgid "专业(英文)"
 msgstr "Major(English)"
 
-#: dulab/models.py:94
+#: dulab/models.py:102
 msgid "年级"
 msgstr "Grade"
 
-#: dulab/models.py:95
+#: dulab/models.py:103
 msgid "学位"
 msgstr "Degree"
 
-#: dulab/models.py:96
-msgid "职位"
+#: dulab/models.py:104
+msgid "职称"
 msgstr "Position"
 
-#: dulab/models.py:98
+#: dulab/models.py:106
+msgid "身份"
+msgstr "Identity"
+
+#: dulab/models.py:107
 msgid "研究方向(中文)"
 msgstr "Research Interests(Chinese)"
 
-#: dulab/models.py:99
+#: dulab/models.py:108
 msgid "研究方向(英文)"
 msgstr "Research Interests(English)"
 
-#: dulab/models.py:106
+#: dulab/models.py:115
 msgid "资格审查"
 msgstr "Eligibility review"
 
-#: dulab/models.py:126
+#: dulab/models.py:135
 msgid "等待审核"
 msgstr "Awaiting review"
 
-#: dulab/models.py:127
+#: dulab/models.py:136
 msgid "通过审核"
 msgstr "Approved"
 
-#: dulab/models.py:128
+#: dulab/models.py:137
 msgid "退回修改"
 msgstr "Returned for revision"
 
-#: dulab/models.py:131
+#: dulab/models.py:140
 msgid "文章缩写名"
 msgstr "Post slug"
 
-#: dulab/models.py:132
+#: dulab/models.py:141
 msgid "标题(中文)"
 msgstr "Title(Chinese)"
 
-#: dulab/models.py:133
+#: dulab/models.py:142
 msgid "标题(英文)"
 msgstr "Title(English)"
 
-#: dulab/models.py:134
+#: dulab/models.py:143
 msgid "内容(中文)"
 msgstr "Content(Chinese)"
 
-#: dulab/models.py:135
+#: dulab/models.py:144
 msgid "内容(英文)"
 msgstr "Content(English)"
 
-#: dulab/models.py:136
+#: dulab/models.py:145
 msgid "缩略图"
 msgstr "Thumbnail"
 
-#: dulab/models.py:137
+#: dulab/models.py:146
 msgid "Banner图"
 msgstr "Banner"
 
-#: dulab/models.py:168
+#: dulab/models.py:177
 msgid "软件"
 msgstr "Software"
 
-#: dulab/models.py:169
+#: dulab/models.py:178
 msgid "数据库"
 msgstr "Database"
+
+#~ msgid "未设置"
+#~ msgstr "No settings"
+
+#~ msgid "职位"
+#~ msgstr "Position"

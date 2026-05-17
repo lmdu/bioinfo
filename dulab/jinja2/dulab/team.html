@@ -3,22 +3,24 @@
 {% block title %}{{ _("团队成员") }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
-	<div class="row row-cards">
-		{% for m in object_list %}
+	{% set category = ['', _('教职工'), _('研究生'), _('本科生'), _('毕业生')] %}
+	{% for i, ms in object_list | groupby('identity') %}
+	<h2 class="border-bottom border-1 mb-3 mt-5">{{ category[i] }}</h2>
+	<div class="row row-cards gap-3">
+		{% for m in ms %}
 		<div class="col-md-6 col-lg-3">
 			<div class="card">
 				<div class="card-body p-4 text-center">
 					{% if m.avatar %}
-					<span class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ m.avatar.url }});"></span>
+					<div class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ m.avatar.url }});"></div>
 					{% else %}
-					<span class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ static('dulab/avatar.png') }});"></span>
+					<div class="avatar avatar-xl rounded-circle mb-3" style="background-image: url({{ static('dulab/avatar.png') }});"></div>
 					{% endif %}
-					<h2 class="m-0 mb-1">
-						<a href="{{ url('dulab:member', kwargs={'slug': user.username}) }}">{{ m.name }}</a>
-					</h2>
-					
+					<h3 class="m-0 mb-1">
+						<a href="{{ url('dulab:member', kwargs={'slug': m.user.username}) }}">{{ m.name }}</a>
+					</h3>
 					<div class="text-secondary">
-						{% if m.position > 9 %}
+						{% if m.identity > 1 %}
 						{% if lang %}
 						{{ m.grade }}{{ _("级") }} {{ m.major }}
 						{% else %}
@@ -30,12 +32,21 @@
 					</div>
 
 					<div class="mt-3">
-						<span class="badge {% if m.position <= 7 %}bg-blue-lt{% else %}bg-green-lt{% endif %}">{{ m.get_position_display() }}</span>
+						<span class="badge {% if m.identity == 1 %}bg-purple-lt{% elif m.identity == 4 %}bg-blue-lt{% else %}bg-green-lt{% endif %}">
+							{% if m.identity == 1 %}
+							{{ m.get_position_display() }}
+							{% elif m.identity == 2 %}
+							{{ m.get_degree_display() }}{% if lang %}{{ m.get_identity_display() }}{% endif %}
+							{% else %}
+							{{ m.get_identity_display() }}
+							{% endif %}
+						</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		{% endfor %}
-	</div>
+	</div>	
+	{% endfor %}
 </div>
 {% endblock %}

@@ -1,21 +1,23 @@
-{% set pange_name = "big:about" %}
-{% extends "big/base.html" %}
-{% block title %}{{ page.title }} - {% endblock %}
+{% set pange_name = "dulab:about" %}
+{% extends "dulab/base.html" %}
+{% block title %}{{ object.title }} - {% endblock %}
 {% block main %}
 <div class="container mt-5">
 	<div class="row">
 		<div class="col">
-			{% if page %}
-			<div class="text-center">
-				<h2 class="text-success">{{ page.title }}</h2>
-				<div class="mt-5">
-					<img src="{{ static('big/image/dnabar.png') }}" class="img-fluid" width="500">
+			<div class="card card-lg">
+				<div class="card-body">
+					<div class="text-center">
+						<h1>{{ object.title }}</h1>
+						<div class="mt-5">
+							<img src="{{ static('dulab/img/dnabar.png') }}" class="img-fluid" width="500">
+						</div>
+					</div>
+					<div class="mt-5 lh-xl">
+						{{ object.content | safe }}
+					</div>
 				</div>
 			</div>
-			<div class="mt-5 lh-lg">
-				{{ page.content | safe }}
-			</div>
-			{% endif %}
 		</div>
 	</div>
 </div>

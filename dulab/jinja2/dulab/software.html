@@ -83,7 +83,7 @@
 									<div class="btn-list">
 									{% with colors = {1: 'azure', 2: 'secondary', 3: 'yellow'} %}	
 									{% for d in v.downloads.all().order_by('system') %}
-										<a class="btn btn-sm btn-outline-{{ colors.get(d.system, 'yellow') }}" href="{{ d.package.url }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ d.package.name.split('/')[-1] }}">
+										<a class="btn btn-sm btn-outline-{{ colors.get(d.system, 'yellow') }}" href="{{ url('dulab:download', kwargs={'did': d.pk}) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ d.package.name.split('/')[-1] }}">
 											{% if d.system == 1 %}
 											<img src="{{ static('dulab/img/win.svg') }}" class="img-fluid" width="20"> 
 											{% elif d.system == 2 %}

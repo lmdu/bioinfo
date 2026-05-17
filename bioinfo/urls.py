@@ -21,9 +21,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('dulab.urls')),
-    path('i18n', include('django.conf.urls.i18n')),
+    path('bioinfo/admin/', admin.site.urls),
+    path('bioinfo/', include('dulab.urls')),
+    path('bioinfo/i18n', include('django.conf.urls.i18n')),
 ]
 
 if settings.DEBUG:

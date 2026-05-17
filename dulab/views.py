@@ -1,7 +1,7 @@
 import os
 
 from django.urls import reverse, reverse_lazy
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
@@ -97,13 +97,17 @@ class SignupView(CreateView):
 	success_url = reverse_lazy('dulab:signin')
 	template_name = 'dulab/signup.html'
 
-def signout(request):
-	logout(request)
-	return redirect('dulab:index')
+class SignoutView(LogoutView):
+	next_page = reverse_lazy('dulab:index')
 
 class PasswordSetView(LoginRequiredMixin, PasswordChangeView):
 	template_name = 'dulab/setpasswd.html'
-	success_url = reverse_lazy('dulab:setpasswd')
+	success_url = reverse_lazy('dulab:signin')
+
+	def form_valid(self, form):
+		response = super().form_valid(form)
+		logout(self.request)
+		return response
 
 class ProfileView(LoginRequiredMixin, UpdateView):
 	model = Member
@@ -178,84 +182,14 @@ class PostEditView(LoginRequiredMixin, UpdateView):
 		form.instance.approve = 0
 		return super().form_valid(form)
 
-@login_required
-def upload(request):
-	if request.method == 'POST':
-		files = request.FILES.getlist('files')
+class DownloadView(View):
+	def get(self, request, did):
+		d = get_object_or_404(Download, pk=did)
+		d.visitor = F('visitor') + 1
+		d.save()
 
-		medias = []
-		isimgs = []
-		msgs = []
-		for file in files:
-			media = Media.objects.create(
-				name = file.name,
-				file = file,
-				ctype = file.content_type,
-				size = file.size,
-			)
+		return FileResponse(d.package.open(), 
+			as_attachment = True,
+			filename = os.path.basename(d.package.name)
+		)
 
-			medias.append(media.file.url)
-			isimgs.append(media.ctype.startswith('image'))
-			msgs.append(media.name)
-
-		return JsonResponse({
-			'success': True,
-			'time': '',
-			'data': {
-				'baseurl': '',
-				'files': medias,
-				'isImages': isimgs,
-				'messages': msgs,
-			}
-		})
-
-@login_required
-def browser(request):
-	if request.method == 'POST':
-		medias = []
-		for media in Media.objects.all():
-			medias.append({
-				'file': media.file.url,
-				'name': media.name,
-				'size': media.size,
-				'isImage': media.ctype.startswith('image'),
-			})
-
-		return JsonResponse({
-			'success': True,
-			'time': '',
-			'data': {
-				'sources': {
-					'a': {
-						'path': '',
-						'baseurl': '',
-						'files': medias,
-						'folders': '',
-					}
-				},
-				'code': 200,
-				'path': '',
-				'name': '',
-				'source': '',
-			}
-		})
-
-@login_required(login_url='/signin')
-def fund(request):
-	funds = Fund.objects.all()
-	return render(request, 'big/fund.html', {'funds':funds})
-
-@login_required(login_url='/signin')
-def expense(request, fid):
-	fid = int(fid)
-	fund = Fund.objects.get(pk=fid)
-	expenses = Expense.objects.filter(fund__pk=fid)
-	expend = Expense.objects.filter(fund__pk=fid).aggregate(money=Sum('amount'))
-
-	if expend['money'] is None:
-		expend['money'] = 0
-
-	return render(request, 'big/expense.html', {
-		'expenses':expenses, 'fund':fund,
-		'expend': expend
-	})
